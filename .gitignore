@@ -32,3 +32,6 @@
 
 # Vim swap files
 *.swp
+
+# Project executable
+src/minmod_component
