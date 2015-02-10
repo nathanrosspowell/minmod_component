@@ -42,4 +42,5 @@ install:
 script: 
   - cd src
   - make
+  - ./minmod_component
 
