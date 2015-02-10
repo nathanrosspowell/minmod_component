@@ -1,12 +1,12 @@
 language: cpp
 compiler:
   - clang
-  - gcc
+#  - gcc
 
 # Setup different environments to test
 env:
-  - CPP14=0
   - CPP14=1
+#  - CPP14=1
 
 # Setup repos etc before installation
 before_install:
