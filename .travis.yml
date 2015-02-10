@@ -1,2 +1,7 @@
 language: cpp
-script: make
+compiler:
+  - clang
+before_script: 
+  - pushd src
+script: 
+  - make
