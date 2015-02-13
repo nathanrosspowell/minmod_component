@@ -12,7 +12,7 @@ class ComponentManager
 {
 public:
     using OwnerId = std:: int32_t;
-    using InterfacePtr = ComponentInterface*;
+    using InterfacePtr = std::shared_ptr< ComponentInterface >;
     using ComponentMap = std::unordered_map< ComponentId::Id, InterfacePtr >;
     using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
 

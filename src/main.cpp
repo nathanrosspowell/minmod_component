@@ -14,8 +14,10 @@ int main(int argc, char* argv[])
 
     // Bobs stuff.
     ComponentManager::OwnerId bobby = 42;
+    std::shared_ptr<ComponentInterface> testPtr;
+    testPtr.reset(new TestComponent());
     ComponentManager::ComponentMap bobsComponents = {
-        { 0, static_cast< ComponentInterface* >( new TestComponent() ) }
+        { 0, testPtr }
     };
 
     // Component Manager.
