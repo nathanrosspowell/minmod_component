@@ -18,7 +18,7 @@ public:
 
     ComponentManager();
 
-    OwnerId Add( OwnerId ownerId, ComponentMap& map );
+    OwnerId Add( OwnerId ownerId, Json );
 
 private:
     OwnerMap m_ownerMap;
