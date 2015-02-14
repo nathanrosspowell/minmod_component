@@ -674,14 +674,14 @@ vector<Json> Json::parse_multi(const string &in, string &err) {
 /* * * * * * * * * * * * * * * * * * * *
  * Shape-checking
  */
-
+/*
 bool Json::has_shape(const shape & types, string & err) const {
     if (!is_object()) {
         err = "expected JSON object, got " + dump();
         return false;
     }
 
-    for (const auto & item : types) {
+    for (auto & item : types) {
         if ((*this)[item.first].type() != item.second) {
             err = "bad type for " + item.first + " in " + dump();
             return false;
@@ -690,5 +690,5 @@ bool Json::has_shape(const shape & types, string & err) const {
 
     return true;
 }
-
+*/
 } // namespace json11
