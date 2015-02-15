@@ -17,11 +17,9 @@ namespace minmod
     private:
         virtual Component::Id GetId() const { return GetStaticId(); }
         virtual std::string GetName() const { return GetStaticName(); }
+        virtual void Deserialize(json11::Json json) override;
+        virtual json11::Json Serialize() const override;
         virtual void Create() override {}
-        virtual void Load(json11::Json /*json*/) override {}
-        virtual void Ready() override {}
-        virtual void Update() override {}
-        virtual void Unload()  override {}
         virtual void Destroy()  override {}
 
     private: 

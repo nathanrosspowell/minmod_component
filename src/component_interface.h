@@ -12,6 +12,7 @@ namespace minmod
     class ComponentInterface
     {
     public:
+        friend class ComponentManager;
         using SharedPtr = std::shared_ptr< ComponentInterface >;
 
     public:
@@ -22,12 +23,11 @@ namespace minmod
     private:
         virtual Component::Id GetId() const = 0;
         virtual std::string GetName() const = 0;
+        virtual void Deserialize(json11::Json json) =0;
+        virtual json11::Json Serialize() const = 0;
         virtual void Create() = 0;
-        virtual void Load(json11::Json json) = 0;
-        virtual void Ready() = 0;
-        virtual void Update() = 0;
-        virtual void Unload() = 0;
         virtual void Destroy() = 0;
+
     };
 }
 

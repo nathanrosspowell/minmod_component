@@ -35,3 +35,5 @@
 
 # Project executable
 src/minmod_component
+*.o_time
+*.exe.stackdump
