@@ -21,14 +21,10 @@ namespace minmod
         {
             const auto id = COMPONENT::GetStaticId();
             ms_stringMap[ COMPONENT::GetStaticName() ] = id;
-            std::cout << "  Insert : " << id <<  " name : " << COMPONENT::GetStaticName() << std::endl;
             ms_map[ id ] = [&id]()
                 {
-                    std::cout << "  Create: 1 " << id << std::endl;
                     std::shared_ptr<ComponentInterface> ptr;
-                    std::cout << "  Create: 2 " << id << std::endl;
                     ptr.reset(new COMPONENT());
-                    std::cout << "  Create: 3 " << id << std::endl;
                     return ptr;
                 };
         }

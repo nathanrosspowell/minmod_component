@@ -13,10 +13,6 @@ int main(int argc, char* argv[])
     // Suppress warnings.
     (void)argc; (void)argv;
 
-    // Test print.
-    auto add = [](auto x, auto y) {return x + y;};
-    std::cout << "Hello World! From C++ " << add( 8, 6 ) << std::endl;
-
     // Bobs stuff.
     OwnerId bobby = 42; // Hook into id generator.
     ComponentManager::ComponentMap bobsComponents = {

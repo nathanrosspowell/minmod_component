@@ -5,7 +5,6 @@ namespace minmod
     const bool TestComponent::ms_id = true;
     ComponentRegistrant<TestComponent> TestComponent::ms_registrant;
 
-
     void TestComponent::Deserialize(json11::Json json)
     {
         x = json["x"].int_value();
