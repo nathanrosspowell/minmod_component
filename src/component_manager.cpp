@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream> // Debug
 #include "json11.hpp"
+#include "component_factory.h"
 
 ComponentManager::ComponentManager() 
 {
@@ -28,7 +29,9 @@ auto ComponentManager::Add( OwnerId ownerId, const char* const filePath ) -> Own
     std::cout << filePath << "   FILE:" << fileJson.dump() << "   COMP:" << json11::Json( comps ).dump() << std::endl;
     for ( const auto& comp : comps.array_items() )
     {
-        std::cout << "NAME:" << comp["name"].string_value()  << std::endl;
+        auto name = comp["name"].string_value();
+        std::cout << "NAME:" << name << std::endl;
+        auto c = ComponentFactory::Create( name );
     }
     // Insert the map.
     m_ownerMap.insert( std::make_pair( ownerId, map ) );

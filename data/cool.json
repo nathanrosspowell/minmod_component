@@ -2,17 +2,11 @@
     "name" : "cool beans",
     "components" : [
         {
-            "name" : "position",
+            "name" : "test",
             "data" : {
                 "x" : 5,
                 "y" : 10,
                 "z" : 0
-            }
-        },
-        {
-            "name" : "render",
-            "data" : {
-                "texture" : "cool.jpg"
             }
         }
     ]

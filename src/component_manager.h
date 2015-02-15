@@ -20,6 +20,8 @@ public:
 
     OwnerId Add( OwnerId ownerId, ComponentMap& map );
     OwnerId Add( OwnerId ownerId, const char* const filePath );
+    OwnerId Add( OwnerId /*ownerId*/, ComponentInterface::Id /*id*/ ) {return 0;}
+    void Remove( OwnerId /*ownerId*/, ComponentInterface::Id /*id*/ ) {}
 
 private:
     OwnerMap m_ownerMap;
