@@ -1,0 +1,19 @@
+{
+    "name" : "cool beans",
+    "components" : [
+        {
+            "name" : "position",
+            "data" : {
+                "x" : 5,
+                "y" : 10,
+                "z" : 0
+            }
+        },
+        {
+            "name" : "render",
+            "data" : {
+                "texture" : "cool.jpg"
+            }
+        }
+    ]
+}

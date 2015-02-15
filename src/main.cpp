@@ -26,12 +26,8 @@ int main(int argc, char* argv[])
     // Component Manager.
     ComponentManager cm;
     cm.Add( bobby, bobsComponents );
+    ComponentManager::OwnerId sam = 44;
+    cm.Add( sam, "../data/cool.json" );
 
-    std::ifstream in("../data/test.json");
-    std::string test((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
-    std::string err;
-
-    json11::Json testJson = json11::Json::parse(test, err);
-    std::cout << testJson.dump() << std::endl;
     return 0;
 }

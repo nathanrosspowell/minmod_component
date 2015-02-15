@@ -1,6 +1,6 @@
+#pragma once
 #ifndef MINMOD_COMPONENT__COMPONENT_MANAGER
 #define MINMOD_COMPONENT__COMPONENT_MANAGER
-#pragma once
 
 #include <cstdint>
 #include <unordered_map>
@@ -19,6 +19,7 @@ public:
     ComponentManager();
 
     OwnerId Add( OwnerId ownerId, ComponentMap& map );
+    OwnerId Add( OwnerId ownerId, const char* const filePath );
 
 private:
     OwnerMap m_ownerMap;
