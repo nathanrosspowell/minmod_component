@@ -2,19 +2,22 @@
 
 #include <cassert> 
 
-std::unordered_map< ComponentInterface::Id, ComponentFactory::CreateFunction > ComponentFactory::ms_map;
-std::unordered_map< std::string, ComponentInterface::Id> ComponentFactory::ms_stringMap;
-
-std::shared_ptr< ComponentInterface > ComponentFactory::Create( ComponentInterface::Id id )
+namespace minmod
 {
-    assert( ms_map.find( id ) != ms_map.end() );
-    std::cout << "  Create: 1 " << id << std::endl;
-    return std::move( ms_map[ id ]() );
-}
+    std::unordered_map< Component::Id, ComponentFactory::CreateFunction > ComponentFactory::ms_map;
+    std::unordered_map< std::string, Component::Id> ComponentFactory::ms_stringMap;
 
-std::shared_ptr< ComponentInterface > ComponentFactory::Create( std::string name )
-{
-    assert( ms_stringMap.find( name ) != ms_stringMap.end() );
-    std::cout << "  Create: 1 " << name << std::endl;
-    return std::move( Create( ms_stringMap[ name ] ) );
+    std::shared_ptr< ComponentInterface > ComponentFactory::Create( Component::Id id )
+    {
+        assert( ms_map.find( id ) != ms_map.end() );
+        std::cout << "  Create: 1 " << id << std::endl;
+        return std::move( ms_map[ id ]() );
+    }
+
+    std::shared_ptr< ComponentInterface > ComponentFactory::Create( std::string name )
+    {
+        assert( ms_stringMap.find( name ) != ms_stringMap.end() );
+        std::cout << "  Create: 1 " << name << std::endl;
+        return std::move( Create( ms_stringMap[ name ] ) );
+    }
 }

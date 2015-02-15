@@ -5,26 +5,27 @@
 #include <cstdint>
 #include <unordered_map>
 #include <memory>
-#include "component_id.h"
+#include "component_types.h"
 #include "component_interface.h"
 
-class ComponentManager
+namespace minmod
 {
-public:
-    using OwnerId = std:: int32_t;
-    using InterfacePtr = std::shared_ptr< ComponentInterface >;
-    using ComponentMap = std::unordered_map< ComponentId::Id, InterfacePtr >;
-    using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
+  class ComponentManager
+  {
+     public:
+       using ComponentMap = std::unordered_map< Component::Id, ComponentInterface::SharedPtr >;
+       using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
 
-    ComponentManager();
+       ComponentManager();
 
-    OwnerId Add( OwnerId ownerId, ComponentMap& map );
-    OwnerId Add( OwnerId ownerId, const char* const filePath );
-    OwnerId Add( OwnerId /*ownerId*/, ComponentInterface::Id /*id*/ ) {return 0;}
-    void Remove( OwnerId /*ownerId*/, ComponentInterface::Id /*id*/ ) {}
+       OwnerId Add( OwnerId ownerId, ComponentMap& map );
+       OwnerId Add( OwnerId ownerId, const char* const filePath );
+       OwnerId Add( OwnerId /*ownerId*/, Component::Id /*id*/ ) {return 0;}
+       void Remove( OwnerId /*ownerId*/, Component::Id /*id*/ ) {}
 
-private:
-    OwnerMap m_ownerMap;
-};
+     private:
+       OwnerMap m_ownerMap;
+  };
+}
 
 #endif 

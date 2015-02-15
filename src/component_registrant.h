@@ -4,19 +4,22 @@
 
 #include "component_factory.h"
 
-template< class COMPONENT >
-class ComponentRegistrant
+namespace minmod
 {
-  public:
-    ComponentRegistrant()
+    template< class COMPONENT >
+    class ComponentRegistrant
     {
-        ComponentFactory::Insert<COMPONENT>();
-    }
+    public:
+        ComponentRegistrant()
+        {
+            ComponentFactory::Insert<COMPONENT>();
+        }
 
-    ~ComponentRegistrant()
-    {
-        ComponentFactory::Erase<COMPONENT>();
-    }
-};
+        ~ComponentRegistrant()
+        {
+            ComponentFactory::Erase<COMPONENT>();
+        }
+    };
+}
 
 #endif

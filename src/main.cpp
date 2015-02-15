@@ -8,6 +8,8 @@
 
 int main(int argc, char* argv[])
 {
+    using namespace minmod;
+
     // Suppress warnings.
     (void)argc; (void)argv;
 
@@ -16,17 +18,17 @@ int main(int argc, char* argv[])
     std::cout << "Hello World! From C++ " << add( 8, 6 ) << std::endl;
 
     // Bobs stuff.
-    ComponentManager::OwnerId bobby = 42;
-    std::shared_ptr<ComponentInterface> testPtr;
-    testPtr.reset(new TestComponent());
+    OwnerId bobby = 42; // Hook into id generator.
     ComponentManager::ComponentMap bobsComponents = {
-        { 0, testPtr }
+        { TestComponent::GetStaticId(), ComponentFactory::Create<TestComponent>() } // Make pair function.
     };
+
+    // Sam.
+    OwnerId sam = 44; // Hook into id generator.
 
     // Component Manager.
     ComponentManager cm;
     cm.Add( bobby, bobsComponents );
-    ComponentManager::OwnerId sam = 44;
     cm.Add( sam, "../data/cool.json" );
 
     return 0;
