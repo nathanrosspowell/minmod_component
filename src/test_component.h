@@ -11,16 +11,20 @@ namespace minmod
     class TestComponent : public ComponentInterface
     {
     public:
-        static Component::Id GetStaticId() { return reinterpret_cast<Component::Id>(&ms_id);  }
+        // ComponentInterface.
+        static Component::Id GetStaticId() { return reinterpret_cast<Component::Id>(&ms_id); }
         static std::string GetStaticName() { return "test"; }
 
     private:
+        // ComponentInterface.
         virtual Component::Id GetId() const { return GetStaticId(); }
         virtual std::string GetName() const { return GetStaticName(); }
         virtual void Deserialize(json11::Json json) override;
         virtual json11::Json Serialize() const override;
         virtual void Create() override {}
         virtual void Destroy()  override {}
+        virtual void OnAddComponent( ComponentInterface::WeakPtr /*ptr*/ ) override {}
+        virtual void OnRemoveComponent( ComponentInterface::WeakPtr /*ptr*/ ) override {}
 
     private: 
         static const bool ms_id;

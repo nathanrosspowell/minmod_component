@@ -15,8 +15,8 @@ int main(int argc, char* argv[])
 
     // Bobs stuff.
     OwnerId bobby = 42; // Hook into id generator.
-    ComponentManager::ComponentMap bobsComponents = {
-        { TestComponent::GetStaticId(), ComponentFactory::Create<TestComponent>() } // Make pair function.
+    ComponentManager::ComponentList bobsComponents = {
+        { TestComponent::GetStaticId(), json11::Json() }
     };
 
     // Sam.

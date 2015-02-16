@@ -7,17 +7,25 @@
 #include "component_factory.h"
 namespace minmod 
 {
-    ComponentManager::ComponentManager() 
+    OwnerId ComponentManager::Add( OwnerId ownerId, ComponentList& componentList )
     {
+        // Create the map.
+        ComponentMap map;
+        // Loop all the components.
+        for ( const auto& pair : componentList )
+        {
+            auto comp = ComponentFactory::Create( pair.first );
+            if ( comp )
+            {
+                comp->Deserialize( pair.second );
+                map[ comp->GetId() ] = comp;
+                std::cout << comp->Serialize().dump() << std::endl;
+            } 
+        }
+        return Add( ownerId, map );
     }
 
-    auto ComponentManager::Add( OwnerId ownerId, ComponentMap& map ) -> OwnerId
-    {
-        m_ownerMap.insert( std::make_pair( ownerId, map ) );
-        return ownerId;
-    }
-
-    auto ComponentManager::Add( OwnerId ownerId, const char* const filePath ) -> OwnerId
+    OwnerId ComponentManager::Add( OwnerId ownerId, const char* const filePath )
     {
         // Get the json structure.
         std::ifstream in(filePath);
@@ -36,9 +44,28 @@ namespace minmod
             {
                 c->Deserialize( comp["data"] );
                 map[ c->GetId() ] = c;
+                std::cout << c->Serialize().dump() << std::endl;
             } 
         }
-        // Insert the map.
+        return Add( ownerId, map );
+    }
+
+    OwnerId ComponentManager::Add( OwnerId ownerId, ComponentMap& map )
+    {
+        // Inform all the other components about each other.
+        for ( auto& it1 : map )
+        {
+            for ( auto& it2 : map )
+            {
+                it1.second->OnAddComponent( it2.second );
+            }
+        }
+        // Create.
+        for ( auto& it: map )
+        {
+            it.second->Create();
+        }
+        // Call create.
         m_ownerMap.insert( std::make_pair( ownerId, map ) );
         return ownerId;
     }

@@ -14,6 +14,7 @@ namespace minmod
     public:
         friend class ComponentManager;
         using SharedPtr = std::shared_ptr< ComponentInterface >;
+        using WeakPtr = std::weak_ptr< ComponentInterface >;
 
     public:
         // It work with the interface, each component mush have the following static function:
@@ -21,13 +22,18 @@ namespace minmod
         // static std::string GetStaticName() = 0;
 
     private:
+        // Id functions.
         virtual Component::Id GetId() const = 0;
         virtual std::string GetName() const = 0;
+        // Serialization.
         virtual void Deserialize(json11::Json json) =0;
         virtual json11::Json Serialize() const = 0;
+        // Constructor and destructor replacements.
         virtual void Create() = 0;
         virtual void Destroy() = 0;
-
+        // Add/Remove other components.
+        virtual void OnAddComponent( ComponentInterface::WeakPtr ptr ) = 0;
+        virtual void OnRemoveComponent( ComponentInterface::WeakPtr ptr ) = 0;
     };
 }
 
