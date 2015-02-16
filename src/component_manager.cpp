@@ -30,12 +30,13 @@ namespace minmod
         auto& comps = fileJson["components"];
         for ( const auto& comp : comps.array_items() )
         {
-            /*
             auto name = comp["name"].string_value();
             auto c = ComponentFactory::Create( name );
-            c->Deserialize( comp["data"] );
-            map[ c->GetId() ] = c;
-            */
+            if ( c )
+            {
+                c->Deserialize( comp["data"] );
+                map[ c->GetId() ] = c;
+            } 
         }
         // Insert the map.
         m_ownerMap.insert( std::make_pair( ownerId, map ) );
