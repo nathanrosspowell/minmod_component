@@ -31,10 +31,10 @@ namespace minmod
         // Constructor and destructor replacements.
         virtual void Create() = 0;
         virtual void Destroy() = 0;
-        // Add/Remove other components.
-        virtual void OnAddComponent( ComponentInterface::WeakPtr ptr ) = 0;
-        virtual void OnRemoveComponent( ComponentInterface::WeakPtr ptr ) = 0;
+        // Insert/Erase other components.
+        virtual void OnInsertComponent( ComponentInterface::WeakPtr ptr ) = 0;
+        virtual void OnEraseComponent( ComponentInterface::WeakPtr ptr ) = 0;
     };
 }
 
-#endif 
+#endif

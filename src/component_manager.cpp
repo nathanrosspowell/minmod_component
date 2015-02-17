@@ -9,7 +9,7 @@
 
 namespace minmod 
 {
-    OwnerId ComponentManager::Add( OwnerId ownerId, const char* const filePath )
+    OwnerId ComponentManager::Insert( OwnerId ownerId, const char* const filePath )
     {
         std::ifstream in(filePath);
         std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
@@ -28,10 +28,10 @@ namespace minmod
                 std::cout << c->Serialize().dump() << std::endl;
             } 
         }
-        return Add( ownerId, map );
+        return Insert( ownerId, map );
     }
 
-    OwnerId ComponentManager::Add( OwnerId ownerId, const AddComponents& componentList )
+    OwnerId ComponentManager::Insert( OwnerId ownerId, const InsertComponents& componentList )
     {
         ComponentMap map;
         for ( const auto& pair : componentList )
@@ -44,10 +44,10 @@ namespace minmod
                 std::cout << comp->Serialize().dump() << std::endl;
             } 
         }
-        return Add( ownerId, map );
+        return Insert( ownerId, map );
     }
 
-    void ComponentManager::Remove( OwnerId ownerId, const RemoveComponents& componentList )
+    void ComponentManager::Erase( OwnerId ownerId, const EraseComponents& componentList )
     {
         auto& map = m_ownerMap[ ownerId ];
         for ( const auto& removeId : componentList )
@@ -55,19 +55,19 @@ namespace minmod
             auto& removeComp = map[ removeId ];
             for ( auto& it : map )
             {
-                it.second->OnRemoveComponent( removeComp );
+                it.second->OnEraseComponent( removeComp );
             }
             map.erase( removeId );
         }
     }
 
-    OwnerId ComponentManager::Add( OwnerId ownerId, const ComponentMap& map )
+    OwnerId ComponentManager::Insert( OwnerId ownerId, const ComponentMap& map )
     {
         for ( auto& it1 : map )
         {
             for ( auto& it2 : map )
             {
-                it1.second->OnAddComponent( it2.second );
+                it1.second->OnInsertComponent( it2.second );
             }
         }
         for ( auto& it: map )

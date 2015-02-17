@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 
     // Bobs stuff.
     OwnerId bobby = 42; // Hook into id generator.
-    ComponentManager::AddComponents bobsComponents = {
+    ComponentManager::InsertComponents bobsComponents = {
         { TestComponent::GetStaticId(), json11::Json::object{ { "x",  99 }, { "z", 101 } } }
     };
 
@@ -24,12 +24,12 @@ int main(int argc, char* argv[])
 
     // Component Manager.
     ComponentManager cm;
-    cm.Add( bobby, bobsComponents );
-    cm.Add( sam, "../data/cool.json" );
-    ComponentManager::RemoveComponents samsComponents = {
+    cm.Insert( bobby, bobsComponents );
+    cm.Insert( sam, "../data/cool.json" );
+    ComponentManager::EraseComponents samsComponents = {
         { TestComponent::GetStaticId() } 
     };
-    cm.Remove( sam, samsComponents );
+    cm.Erase( sam, samsComponents );
 
     return 0;
 }
