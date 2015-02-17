@@ -31,9 +31,9 @@ namespace minmod
         static ComponentRegistrant<TestComponent> ms_registrant;
 
     private:
-        int x = 0;
-        int y = 0;
-        int z = 0;
+        int m_x = 0;
+        int m_y = 0;
+        int m_z = 0;
     };
 }
 #endif 

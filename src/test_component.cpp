@@ -7,17 +7,17 @@ namespace minmod
 
     void TestComponent::Deserialize(json11::Json json)
     {
-        x = json["x"].int_value();
-        y = json["y"].int_value();
-        z = json["z"].int_value();
+        m_x = json["x"].int_value();
+        m_y = json["y"].int_value();
+        m_z = json["z"].int_value();
     }
 
     json11::Json TestComponent::Serialize() const
     {
         return json11::Json::object {
-            { "x", x },
-            { "y", y },
-            { "z", z }
+            { "x", m_x },
+            { "y", m_y },
+            { "z", m_z }
         };
     }
 }
