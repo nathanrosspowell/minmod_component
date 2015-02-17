@@ -2,29 +2,13 @@
 
 #include <utility>
 #include <fstream>
-#include <iostream> // Debug
 #include "json11.hpp"
 #include "component_factory.h"
+
+#include <iostream> // Debug
+
 namespace minmod 
 {
-    OwnerId ComponentManager::Add( OwnerId ownerId, ComponentList& componentList )
-    {
-        // Create the map.
-        ComponentMap map;
-        // Loop all the components.
-        for ( const auto& pair : componentList )
-        {
-            auto comp = ComponentFactory::Create( pair.first );
-            if ( comp )
-            {
-                comp->Deserialize( pair.second );
-                map[ comp->GetId() ] = comp;
-                std::cout << comp->Serialize().dump() << std::endl;
-            } 
-        }
-        return Add( ownerId, map );
-    }
-
     OwnerId ComponentManager::Add( OwnerId ownerId, const char* const filePath )
     {
         // Get the json structure.
@@ -48,6 +32,33 @@ namespace minmod
             } 
         }
         return Add( ownerId, map );
+    }
+
+    OwnerId ComponentManager::Add( OwnerId ownerId, ComponentList& componentList )
+    {
+        // Create the map.
+        ComponentMap map;
+        // Loop all the components.
+        for ( const auto& pair : componentList )
+        {
+            auto comp = ComponentFactory::Create( pair.first );
+            if ( comp )
+            {
+                comp->Deserialize( pair.second );
+                map[ comp->GetId() ] = comp;
+                std::cout << comp->Serialize().dump() << std::endl;
+            } 
+        }
+        return Add( ownerId, map );
+    }
+
+    void ComponentManager::Remove( OwnerId ownerId, ComponentList& componentList )
+    {
+        auto& map = m_ownerMap[ ownerId ];
+        for ( const auto& pair : componentList )
+        {
+            map.erase( pair.first );
+        }
     }
 
     OwnerId ComponentManager::Add( OwnerId ownerId, ComponentMap& map )

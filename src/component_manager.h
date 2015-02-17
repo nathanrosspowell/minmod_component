@@ -17,10 +17,9 @@ namespace minmod
        using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
        using ComponentList = std::vector< std::pair< Component::Id, json11::Json > >;
 
-       OwnerId Add( OwnerId ownerId, ComponentList& componentList );
        OwnerId Add( OwnerId ownerId, const char* const filePath );
-       OwnerId Add( OwnerId /*ownerId*/, Component::Id /*id*/ ) {return 0;}
-       void Remove( OwnerId /*ownerId*/, Component::Id /*id*/ ) {}
+       OwnerId Add( OwnerId ownerId, ComponentList& componentList );
+       void Remove( OwnerId ownerId, ComponentList& componentList );
 
      private:
        OwnerId Add( OwnerId ownerId, ComponentMap& map );
