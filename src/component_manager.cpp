@@ -11,14 +11,11 @@ namespace minmod
 {
     OwnerId ComponentManager::Add( OwnerId ownerId, const char* const filePath )
     {
-        // Get the json structure.
         std::ifstream in(filePath);
         std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
         std::string err;
         json11::Json fileJson = json11::Json::parse(file, err);
-        // Create the map.
         ComponentMap map;
-        // Loop all the components.
         auto& comps = fileJson["components"];
         for ( const auto& comp : comps.array_items() )
         {
@@ -34,11 +31,9 @@ namespace minmod
         return Add( ownerId, map );
     }
 
-    OwnerId ComponentManager::Add( OwnerId ownerId, ComponentList& componentList )
+    OwnerId ComponentManager::Add( OwnerId ownerId, const AddComponents& componentList )
     {
-        // Create the map.
         ComponentMap map;
-        // Loop all the components.
         for ( const auto& pair : componentList )
         {
             auto comp = ComponentFactory::Create( pair.first );
@@ -52,18 +47,22 @@ namespace minmod
         return Add( ownerId, map );
     }
 
-    void ComponentManager::Remove( OwnerId ownerId, ComponentList& componentList )
+    void ComponentManager::Remove( OwnerId ownerId, const RemoveComponents& componentList )
     {
         auto& map = m_ownerMap[ ownerId ];
-        for ( const auto& pair : componentList )
+        for ( const auto& removeId : componentList )
         {
-            map.erase( pair.first );
+            auto& removeComp = map[ removeId ];
+            for ( auto& it : map )
+            {
+                it.second->OnRemoveComponent( removeComp );
+            }
+            map.erase( removeId );
         }
     }
 
-    OwnerId ComponentManager::Add( OwnerId ownerId, ComponentMap& map )
+    OwnerId ComponentManager::Add( OwnerId ownerId, const ComponentMap& map )
     {
-        // Inform all the other components about each other.
         for ( auto& it1 : map )
         {
             for ( auto& it2 : map )
@@ -71,12 +70,10 @@ namespace minmod
                 it1.second->OnAddComponent( it2.second );
             }
         }
-        // Create.
         for ( auto& it: map )
         {
             it.second->Create();
         }
-        // Call create.
         m_ownerMap.insert( std::make_pair( ownerId, map ) );
         return ownerId;
     }

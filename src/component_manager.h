@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <unordered_map>
 #include <memory>
+#include <vector>
 #include "component_types.h"
 #include "component_interface.h"
 
@@ -15,14 +16,15 @@ namespace minmod
      public:
        using ComponentMap = std::unordered_map< Component::Id, ComponentInterface::SharedPtr >;
        using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
-       using ComponentList = std::vector< std::pair< Component::Id, json11::Json > >;
+       using RemoveComponents = std::vector<Component::Id>;
+       using AddComponents = std::vector< std::pair< Component::Id, json11::Json > >;
 
        OwnerId Add( OwnerId ownerId, const char* const filePath );
-       OwnerId Add( OwnerId ownerId, ComponentList& componentList );
-       void Remove( OwnerId ownerId, ComponentList& componentList );
+       OwnerId Add( OwnerId ownerId, const AddComponents& componentList );
+       void Remove( OwnerId ownerId, const RemoveComponents& componentList );
 
      private:
-       OwnerId Add( OwnerId ownerId, ComponentMap& map );
+       OwnerId Add( OwnerId ownerId, const ComponentMap& map );
 
      private:
        OwnerMap m_ownerMap;
