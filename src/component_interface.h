@@ -17,7 +17,7 @@ namespace minmod
         using WeakPtr = std::weak_ptr< ComponentInterface >;
 
     public:
-        // It work with the interface, each component mush have the following static function:
+        // To work with the interface, each component mush have the following static function:
         // static ComponentInterface::Id GetStaticId() = 0;
         // static std::string GetStaticName() = 0;
 
