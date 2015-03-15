@@ -20,4 +20,14 @@ namespace minmod
             { "z", m_z }
         };
     }
+
+    void TestComponent::OnInsertComponent( ComponentInterface::WeakPtr ptr ) 
+    {
+        (void)ptr;
+    }
+
+    void TestComponent::OnEraseComponent( ComponentInterface::WeakPtr ptr )
+    {
+        (void)ptr;
+    }
 }

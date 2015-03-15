@@ -11,12 +11,16 @@ int main(int argc, char* argv[])
     using namespace minmod;
 
     // Suppress warnings.
-    (void)argc; (void)argv;
+    (void)argc; 
+    (void)argv;
 
     // Bobs stuff.
     OwnerId bobby = 42; // Hook into id generator.
     ComponentManager::InsertComponents bobsComponents = {
-        { TestComponent::GetStaticId(), json11::Json::object{ { "x",  99 }, { "z", 101 } } }
+        {
+            TestComponent::GetStaticId(), 
+            json11::Json::object{ { "x",  99 }, { "z", 101 } } 
+        }
     };
 
     // Sam.

@@ -7,8 +7,6 @@
 #include <string> 
 #include "component_interface.h"
 
-#include <iostream> // Debug
-
 namespace minmod
 {
     class ComponentFactory
