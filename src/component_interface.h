@@ -1,7 +1,4 @@
 #pragma once
-#ifndef MINMOD_COMPONENT__COMPONENT_INTERFACE
-#define MINMOD_COMPONENT__COMPONENT_INTERFACE
-
 #include <cstdint>
 #include <string>
 #include "json11.hpp"
@@ -9,32 +6,35 @@
 
 namespace minmod 
 {
-    class ComponentInterface
+    namespace Component
     {
-    public:
-        friend class ComponentManager;
-        using SharedPtr = std::shared_ptr< ComponentInterface >;
-        using WeakPtr = std::weak_ptr< ComponentInterface >;
+        class Interface;
+        using SharedPtr = std::shared_ptr< Interface >;
+        using WeakPtr = std::weak_ptr< Interface >;
 
-    public:
-        // To work with the interface, each component mush have the following static function:
-        // static ComponentInterface::Id GetStaticId() = 0;
-        // static std::string GetStaticName() = 0;
+        class Interface
+        {
+        public:
+            friend class Manager;
 
-    private:
-        // Id functions.
-        virtual Component::Id GetId() const = 0;
-        virtual std::string GetName() const = 0;
-        // Serialization.
-        virtual void Deserialize(json11::Json json) =0;
-        virtual json11::Json Serialize() const = 0;
-        // Constructor and destructor replacements.
-        virtual void Create() = 0;
-        virtual void Destroy() = 0;
-        // Insert/Erase other components.
-        virtual void OnInsertComponent( ComponentInterface::WeakPtr ptr ) = 0;
-        virtual void OnEraseComponent( ComponentInterface::WeakPtr ptr ) = 0;
-    };
+        public:
+            // To work with the interface, each component mush have the following static function:
+            // static Interface::Id GetStaticId() = 0;
+            // static std::string GetStaticName() = 0;
+
+        private:
+            // Id functions.
+            virtual Id GetId() const = 0;
+            virtual std::string GetName() const = 0;
+            // Serialization.
+            virtual void Deserialize(json11::Json json) =0;
+            virtual json11::Json Serialize() const = 0;
+            // Constructor and destructor replacements.
+            virtual void Create() = 0;
+            virtual void Destroy() = 0;
+            // Insert/Erase other components.
+            virtual void OnInsertComponent( Component::WeakPtr ptr ) = 0;
+            virtual void OnEraseComponent( Component::WeakPtr ptr ) = 0;
+        };
+    }
 }
-
-#endif

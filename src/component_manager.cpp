@@ -1,80 +1,87 @@
 #include "component_manager.h"
-
+// stl
 #include <utility>
 #include <fstream>
+// json
 #include "json11.hpp"
+// minmod
 #include "component_factory.h"
-
-#include <iostream> // Debug
+#include "component_types.h"
+#include "component_interface.h"
+// Debug
+#include <iostream> 
 
 namespace minmod 
 {
-    OwnerId ComponentManager::Insert( OwnerId ownerId, const char* const filePath )
+    namespace Component
     {
-        std::ifstream in(filePath);
-        std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
-        std::string err;
-        json11::Json fileJson = json11::Json::parse(file, err);
-        ComponentMap map;
-        auto& comps = fileJson["components"];
-        for ( const auto& comp : comps.array_items() )
+        OwnerId Manager::Insert( OwnerId ownerId, const char* const filePath )
         {
-            auto name = comp["name"].string_value();
-            auto c = ComponentFactory::Create( name );
-            if ( c )
+            std::ifstream in(filePath);
+            std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
+            std::string err;
+            json11::Json fileJson = json11::Json::parse(file, err);
+            ComponentMap map;
+            auto& comps = fileJson["components"];
+            for ( const auto& comp : comps.array_items() )
             {
-                c->Deserialize( comp["data"] );
-                map[ c->GetId() ] = c;
-                std::cout << c->Serialize().dump() << std::endl;
-            } 
-        }
-        return Insert( ownerId, map );
-    }
-
-    OwnerId ComponentManager::Insert( OwnerId ownerId, const InsertComponents& componentList )
-    {
-        ComponentMap map;
-        for ( const auto& pair : componentList )
-        {
-            auto comp = ComponentFactory::Create( pair.first );
-            if ( comp )
-            {
-                comp->Deserialize( pair.second );
-                map[ comp->GetId() ] = comp;
-                std::cout << comp->Serialize().dump() << std::endl;
-            } 
-        }
-        return Insert( ownerId, map );
-    }
-
-    void ComponentManager::Erase( OwnerId ownerId, const EraseComponents& componentList )
-    {
-        auto& map = m_ownerMap[ ownerId ];
-        for ( const auto& removeId : componentList )
-        {
-            auto& removeComp = map[ removeId ];
-            for ( auto& it : map )
-            {
-                it.second->OnEraseComponent( removeComp );
+                auto name = comp["name"].string_value();
+                auto c = Factory::Create( name );
+                if ( c )
+                {
+                    c->Deserialize( comp["data"] );
+                    map[ c->GetId() ] = c;
+                    std::cout << c->Serialize().dump() << std::endl;
+                } 
             }
-            map.erase( removeId );
+            return Insert( ownerId, map );
         }
-    }
 
-    OwnerId ComponentManager::Insert( OwnerId ownerId, const ComponentMap& map )
-    {
-        for ( auto& it1 : map )
+        OwnerId Manager::Insert( OwnerId ownerId, const InsertComponents& componentList )
         {
-            for ( auto& it2 : map )
+            ComponentMap map;
+            for ( const auto& pair : componentList )
             {
-                it1.second->OnInsertComponent( it2.second );
+                auto comp = Factory::Create( pair.first );
+                if ( comp )
+                {
+                    comp->Deserialize( pair.second );
+                    map[ comp->GetId() ] = comp;
+                    std::cout << comp->Serialize().dump() << std::endl;
+                } 
+            }
+            return Insert( ownerId, map );
+        }
+
+        void Manager::Erase( OwnerId ownerId, const EraseComponents& componentList )
+        {
+            auto& map = m_ownerMap[ ownerId ];
+            for ( const auto& removeId : componentList )
+            {
+                auto& removeComp = map[ removeId ];
+                for ( auto& it : map )
+                {
+                    it.second->OnEraseComponent( removeComp );
+                }
+                map.erase( removeId );
             }
         }
-        for ( auto& it: map )
+
+        OwnerId Manager::Insert( OwnerId ownerId, const ComponentMap& map )
         {
-            it.second->Create();
+            for ( auto& it1 : map )
+            {
+                for ( auto& it2 : map )
+                {
+                    it1.second->OnInsertComponent( it2.second );
+                }
+            }
+            for ( auto& it: map )
+            {
+                it.second->Create();
+            }
+            m_ownerMap.insert( std::make_pair( ownerId, map ) );
+            return ownerId;
         }
-        m_ownerMap.insert( std::make_pair( ownerId, map ) );
-        return ownerId;
     }
 }

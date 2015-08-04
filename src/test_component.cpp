@@ -3,7 +3,7 @@
 namespace minmod
 {
     const bool TestComponent::ms_id = true;
-    ComponentRegistrant<TestComponent> TestComponent::ms_registrant;
+    Component::Registrant<TestComponent> TestComponent::ms_registrant;
 
     void TestComponent::Deserialize(json11::Json json)
     {
@@ -21,13 +21,11 @@ namespace minmod
         };
     }
 
-    void TestComponent::OnInsertComponent( ComponentInterface::WeakPtr ptr ) 
+    void TestComponent::OnInsertComponent( Component::WeakPtr /*ptr*/ ) 
     {
-        (void)ptr;
     }
 
-    void TestComponent::OnEraseComponent( ComponentInterface::WeakPtr ptr )
+    void TestComponent::OnEraseComponent( Component::WeakPtr /*ptr*/ )
     {
-        (void)ptr;
     }
 }

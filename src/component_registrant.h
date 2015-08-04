@@ -1,25 +1,23 @@
-#ifndef MINMOD_COMPONENT__COMPONENT_REGISTRANT
-#define MINMOD_COMPONENT__COMPONENT_REGISTRANT
 #pragma once
-
 #include "component_factory.h"
 
 namespace minmod
 {
-    template< class COMPONENT >
-    class ComponentRegistrant
+    namespace Component
     {
-    public:
-        ComponentRegistrant()
+        template< class COMPONENT >
+        class Registrant
         {
-            ComponentFactory::Insert<COMPONENT>();
-        }
+        public:
+            Registrant()
+            {
+                Factory::Insert<COMPONENT>();
+            }
 
-        ~ComponentRegistrant()
-        {
-            ComponentFactory::Erase<COMPONENT>();
-        }
-    };
+            ~Registrant()
+            {
+                Factory::Erase<COMPONENT>();
+            }
+        };
+    }
 }
-
-#endif

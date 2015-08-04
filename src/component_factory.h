@@ -1,7 +1,4 @@
-#ifndef MINMOD_COMPONENT__COMPONENT_FACTORY
-#define MINMOD_COMPONENT__COMPONENT_FACTORY
 #pragma once
-
 #include <unordered_map> 
 #include <functional> 
 #include <string> 
@@ -9,45 +6,45 @@
 
 namespace minmod
 {
-    class ComponentFactory
+    namespace Component
     {
-    public:
-        using CreateFunction = std::function<std::shared_ptr< ComponentInterface >()>;
-
-        template< class COMPONENT >
-        static void Insert()
+        class Factory
         {
-            const auto id = COMPONENT::GetStaticId();
-            ms_stringMap[ COMPONENT::GetStaticName() ] = id;
-            ms_map[ id ] = [&id]()
-                {
-                    std::shared_ptr<ComponentInterface> ptr;
-                    ptr.reset(new COMPONENT());
-                    return ptr;
-                };
-        }
+        public:
+            using CreateFunction = std::function<std::shared_ptr< Interface >()>;
 
-        template< class COMPONENT >
-        static void Erase()
-        {
-            ms_stringMap.erase( COMPONENT::GetStaticName() );
-            ms_map.erase( COMPONENT::GetStaticId() );
-        }
+            template< class COMPONENT >
+            static void Insert()
+            {
+                const auto id = COMPONENT::GetStaticId();
+                ms_stringMap[ COMPONENT::GetStaticName() ] = id;
+                ms_map[ id ] = [&id]()
+                    {
+                        std::shared_ptr<Interface> ptr;
+                        ptr.reset(new COMPONENT());
+                        return ptr;
+                    };
+            }
 
-        template< class COMPONENT >
-        static std::shared_ptr< ComponentInterface > Create()
-        {
-            return Create( COMPONENT::GetStaticId() );
-        }
+            template< class COMPONENT >
+            static void Erase()
+            {
+                ms_stringMap.erase( COMPONENT::GetStaticName() );
+                ms_map.erase( COMPONENT::GetStaticId() );
+            }
 
-        static std::shared_ptr< ComponentInterface > Create( Component::Id id );
-        static std::shared_ptr< ComponentInterface > Create( std::string name );
+            template< class COMPONENT >
+            static std::shared_ptr< Interface > Create()
+            {
+                return Create( COMPONENT::GetStaticId() );
+            }
 
-    private:
-        static std::unordered_map< std::string, Component::Id> ms_stringMap;
-        static std::unordered_map< Component::Id, CreateFunction > ms_map;
-    };
+            static std::shared_ptr< Interface > Create( Id id );
+            static std::shared_ptr< Interface > Create( std::string name );
 
+        private:
+            static std::unordered_map< std::string, Id> ms_stringMap;
+            static std::unordered_map< Id, CreateFunction > ms_map;
+        };
+    }
 }
-
-#endif
