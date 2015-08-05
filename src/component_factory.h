@@ -11,7 +11,7 @@ namespace minmod
         class Factory
         {
         public:
-            using CreateFunction = std::function<std::shared_ptr< Interface >()>;
+            using CreateFunction = std::function<SharedPtr()>;
 
             template< class COMPONENT >
             static void Insert()
@@ -20,7 +20,7 @@ namespace minmod
                 ms_stringMap[ COMPONENT::GetStaticName() ] = id;
                 ms_map[ id ] = [&id]()
                     {
-                        std::shared_ptr<Interface> ptr;
+                        SharedPtr ptr;
                         ptr.reset(new COMPONENT());
                         return ptr;
                     };
