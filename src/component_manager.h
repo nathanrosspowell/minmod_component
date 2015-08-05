@@ -15,7 +15,7 @@ namespace minmod
         class Manager
         {
         public:
-            using ComponentMap = std::unordered_map< Id, SharedPtr >;
+            using ComponentMap = std::unordered_map< Id, UniquePtr >;
             using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
             using EraseComponents = std::vector<Id>;
             using InsertComponents = std::vector< std::pair< Id, json11::Json > >;
@@ -25,7 +25,7 @@ namespace minmod
             OwnerId Insert( OwnerId ownerId, const InsertComponents& componentList );
 
         private:
-            OwnerId Insert( OwnerId ownerId, const ComponentMap& map );
+            OwnerId Insert( OwnerId ownerId, ComponentMap map );
 
         private:
             OwnerMap m_ownerMap;

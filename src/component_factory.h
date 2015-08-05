@@ -11,7 +11,7 @@ namespace minmod
         class Factory
         {
         public:
-            using CreateFunction = std::function<SharedPtr()>;
+            using CreateFunction = std::function<UniquePtr()>;
 
             template< class COMPONENT >
             static void Insert()
@@ -20,9 +20,7 @@ namespace minmod
                 ms_stringMap[ COMPONENT::GetStaticName() ] = id;
                 ms_map[ id ] = [&id]()
                     {
-                        SharedPtr ptr;
-                        ptr.reset(new COMPONENT());
-                        return ptr;
+                        return std::make_unique<COMPONENT>();
                     };
             }
 
@@ -33,8 +31,8 @@ namespace minmod
                 ms_map.erase( COMPONENT::GetStaticId() );
             }
 
-            static std::shared_ptr< Interface > Create( Id id );
-            static std::shared_ptr< Interface > Create( std::string name );
+            static UniquePtr Create( Id id );
+            static UniquePtr Create( std::string name );
             template< class COMPONENT >
             static auto Create()
             {

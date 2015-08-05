@@ -21,11 +21,11 @@ namespace minmod
         };
     }
 
-    void TestComponent::OnInsertComponent( Component::WeakPtr /*ptr*/ ) 
+    void TestComponent::OnInsertComponent( Interface* /*ptr*/ ) 
     {
     }
 
-    void TestComponent::OnEraseComponent( Component::WeakPtr /*ptr*/ )
+    void TestComponent::OnEraseComponent( Interface* /*ptr*/ )
     {
     }
 }

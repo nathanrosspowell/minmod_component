@@ -20,8 +20,8 @@ namespace minmod
         virtual json11::Json Serialize() const override;
         virtual void Create() override {}
         virtual void Destroy()  override {}
-        virtual void OnInsertComponent( Component::WeakPtr ptr ) override;
-        virtual void OnEraseComponent( Component::WeakPtr ptr ) override;
+        virtual void OnInsertComponent( Interface* ptr ) override;
+        virtual void OnEraseComponent( Interface* ptr ) override;
 
     private: 
         static const bool ms_id; // Address of this variable as a cheap unique id per class.

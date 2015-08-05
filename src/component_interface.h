@@ -8,10 +8,6 @@ namespace minmod
 {
     namespace Component
     {
-        class Interface;
-        using SharedPtr = std::shared_ptr< Interface >;
-        using WeakPtr = std::weak_ptr< Interface >;
-
         class Interface
         {
         public:
@@ -33,8 +29,10 @@ namespace minmod
             virtual void Create() = 0;
             virtual void Destroy() = 0;
             // Insert/Erase other components.
-            virtual void OnInsertComponent( Component::WeakPtr ptr ) = 0;
-            virtual void OnEraseComponent( Component::WeakPtr ptr ) = 0;
+            virtual void OnInsertComponent( Interface* ptr ) = 0;
+            virtual void OnEraseComponent( Interface* ptr ) = 0;
         };
+
+        using UniquePtr = std::unique_ptr< Interface >;
     }
 }

@@ -23,7 +23,7 @@ namespace minmod
                 auto& removeComp = map[ removeId ];
                 for ( auto& it : map )
                 {
-                    it.second->OnEraseComponent( removeComp );
+                    it.second->OnEraseComponent( removeComp.get() );
                 }
                 map.erase( removeId );
             }
@@ -44,11 +44,11 @@ namespace minmod
                 if ( component )
                 {
                     component->Deserialize( comp["data"] );
-                    map[ component->GetId() ] = component;
                     std::cout << component->Serialize().dump() << std::endl;
+                    map[ component->GetId() ] = std::move(component);
                 } 
             }
-            return Insert( ownerId, map );
+            return Insert( ownerId, std::move(map));
         }
 
         OwnerId Manager::Insert( OwnerId ownerId, const InsertComponents& componentList )
@@ -56,31 +56,31 @@ namespace minmod
             ComponentMap map;
             for ( const auto& pair : componentList )
             {
-                auto comp = Factory::Create( pair.first );
-                if ( comp )
+                auto component = Factory::Create( pair.first );
+                if ( component )
                 {
-                    comp->Deserialize( pair.second );
-                    map[ comp->GetId() ] = comp;
-                    std::cout << comp->Serialize().dump() << std::endl;
+                    component->Deserialize( pair.second );
+                    map[ component->GetId() ] = std::move(component);
+                    std::cout << component->Serialize().dump() << std::endl;
                 } 
             }
-            return Insert( ownerId, map );
+            return Insert( ownerId, std::move(map) );
         }
 
-        OwnerId Manager::Insert( OwnerId ownerId, const ComponentMap& map )
+        OwnerId Manager::Insert( OwnerId ownerId, ComponentMap map )
         {
             for ( auto& it1 : map )
             {
                 for ( auto& it2 : map )
                 {
-                    it1.second->OnInsertComponent( it2.second );
+                    it1.second->OnInsertComponent( it2.second.get() );
                 }
             }
             for ( auto& it: map )
             {
                 it.second->Create();
             }
-            m_ownerMap.insert( std::make_pair( ownerId, map ) );
+            m_ownerMap.insert( std::make_pair( ownerId, std::move(map) ) );
             return ownerId;
         }
     }
