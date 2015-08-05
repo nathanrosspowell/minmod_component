@@ -15,6 +15,20 @@ namespace minmod
 {
     namespace Component
     {
+        void Manager::Erase( OwnerId ownerId, const EraseComponents& componentList )
+        {
+            auto& map = m_ownerMap[ ownerId ];
+            for ( const auto& removeId : componentList )
+            {
+                auto& removeComp = map[ removeId ];
+                for ( auto& it : map )
+                {
+                    it.second->OnEraseComponent( removeComp );
+                }
+                map.erase( removeId );
+            }
+        }
+
         OwnerId Manager::Insert( OwnerId ownerId, const char* const filePath )
         {
             std::ifstream in(filePath);
@@ -26,12 +40,12 @@ namespace minmod
             for ( const auto& comp : comps.array_items() )
             {
                 auto name = comp["name"].string_value();
-                auto c = Factory::Create( name );
-                if ( c )
+                auto component = Factory::Create( name );
+                if ( component )
                 {
-                    c->Deserialize( comp["data"] );
-                    map[ c->GetId() ] = c;
-                    std::cout << c->Serialize().dump() << std::endl;
+                    component->Deserialize( comp["data"] );
+                    map[ component->GetId() ] = component;
+                    std::cout << component->Serialize().dump() << std::endl;
                 } 
             }
             return Insert( ownerId, map );
@@ -51,20 +65,6 @@ namespace minmod
                 } 
             }
             return Insert( ownerId, map );
-        }
-
-        void Manager::Erase( OwnerId ownerId, const EraseComponents& componentList )
-        {
-            auto& map = m_ownerMap[ ownerId ];
-            for ( const auto& removeId : componentList )
-            {
-                auto& removeComp = map[ removeId ];
-                for ( auto& it : map )
-                {
-                    it.second->OnEraseComponent( removeComp );
-                }
-                map.erase( removeId );
-            }
         }
 
         OwnerId Manager::Insert( OwnerId ownerId, const ComponentMap& map )

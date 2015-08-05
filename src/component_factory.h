@@ -33,14 +33,13 @@ namespace minmod
                 ms_map.erase( COMPONENT::GetStaticId() );
             }
 
+            static std::shared_ptr< Interface > Create( Id id );
+            static std::shared_ptr< Interface > Create( std::string name );
             template< class COMPONENT >
-            static std::shared_ptr< Interface > Create()
+            static auto Create()
             {
                 return Create( COMPONENT::GetStaticId() );
             }
-
-            static std::shared_ptr< Interface > Create( Id id );
-            static std::shared_ptr< Interface > Create( std::string name );
 
         private:
             static std::unordered_map< std::string, Id> ms_stringMap;

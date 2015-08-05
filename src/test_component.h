@@ -8,12 +8,12 @@ namespace minmod
     class TestComponent : public Component::Interface
     {
     public:
-        // ComponentInterface.
+        // Component::Factory Registration.
         static Component::Id GetStaticId() { return reinterpret_cast<Component::Id>(&ms_id); }
         static std::string GetStaticName() { return "test"; }
 
     private:
-        // ComponentInterface.
+        // Component::Interface.
         virtual Component::Id GetId() const { return GetStaticId(); }
         virtual std::string GetName() const { return GetStaticName(); }
         virtual void Deserialize(json11::Json json) override;
@@ -24,7 +24,7 @@ namespace minmod
         virtual void OnEraseComponent( Component::WeakPtr ptr ) override;
 
     private: 
-        static const bool ms_id;
+        static const bool ms_id; // Address of this variable as a cheap unique id per class.
         static Component::Registrant<TestComponent> ms_registrant;
 
     private:

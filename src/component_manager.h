@@ -20,9 +20,9 @@ namespace minmod
             using EraseComponents = std::vector<Id>;
             using InsertComponents = std::vector< std::pair< Id, json11::Json > >;
 
+            void Erase( OwnerId ownerId, const EraseComponents& componentList );
             OwnerId Insert( OwnerId ownerId, const char* const filePath );
             OwnerId Insert( OwnerId ownerId, const InsertComponents& componentList );
-            void Erase( OwnerId ownerId, const EraseComponents& componentList );
 
         private:
             OwnerId Insert( OwnerId ownerId, const ComponentMap& map );
