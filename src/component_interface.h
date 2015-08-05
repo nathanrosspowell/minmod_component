@@ -1,8 +1,12 @@
 #pragma once
+// stl
 #include <cstdint>
 #include <string>
+// json
 #include "json11.hpp"
+// minmod
 #include "component_types.h"
+#include "component_serializer.h"
 
 namespace minmod 
 {
