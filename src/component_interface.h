@@ -8,7 +8,7 @@ namespace minmod
 {
     namespace Component
     {
-        class Interface
+        class Interface : public Serializer
         {
         public:
             friend class Manager;
@@ -22,9 +22,6 @@ namespace minmod
             // Id functions.
             virtual Id GetId() const = 0;
             virtual std::string GetName() const = 0;
-            // Serialization.
-            virtual void Deserialize(json11::Json json) =0;
-            virtual json11::Json Serialize() const = 0;
             // Constructor and destructor replacements.
             virtual void Create() = 0;
             virtual void Destroy() = 0;
