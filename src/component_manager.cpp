@@ -15,7 +15,7 @@ namespace minmod
 {
     namespace Component
     {
-        void Manager::Erase( OwnerId ownerId, const EraseComponents& componentList )
+        void Manager::Erase( OwnerId ownerId, const EraseList& componentList )
         {
             auto& map = m_ownerMap[ ownerId ];
             for ( const auto& removeId : componentList )
@@ -23,7 +23,7 @@ namespace minmod
                 auto& removeComp = map[ removeId ];
                 for ( auto& it : map )
                 {
-                    it.second->OnEraseComponent( removeComp.get() );
+                    //it.second->OnEraseComponent( removeComp.get() );
                 }
                 map.erase( removeId );
             }
@@ -51,7 +51,7 @@ namespace minmod
             return Insert( ownerId, std::move(map));
         }
 
-        OwnerId Manager::Insert( OwnerId ownerId, const InsertComponents& componentList )
+        OwnerId Manager::Insert( OwnerId ownerId, const InsertList& componentList )
         {
             ComponentMap map;
             for ( const auto& pair : componentList )
@@ -69,16 +69,17 @@ namespace minmod
 
         OwnerId Manager::Insert( OwnerId ownerId, ComponentMap map )
         {
+            // Set up all links, then pass all knows components, then 'create'/'init'
+            for ( auto& it: map )
+            {
+                it.second->Create(m_linkerMap[ownerId]);
+            }
             for ( auto& it1 : map )
             {
                 for ( auto& it2 : map )
                 {
-                    it1.second->OnInsertComponent( it2.second.get() );
+                    //it1.second->OnInsertComponent( it2.second.get() );
                 }
-            }
-            for ( auto& it: map )
-            {
-                it.second->Create();
             }
             m_ownerMap.insert( std::make_pair( ownerId, std::move(map) ) );
             return ownerId;

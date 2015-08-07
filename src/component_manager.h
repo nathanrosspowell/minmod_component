@@ -7,6 +7,7 @@
 // minmod
 #include "component_types.h"
 #include "component_interface.h"
+#include "component_linker.h"
 
 namespace minmod
 {
@@ -15,20 +16,24 @@ namespace minmod
         class Manager
         {
         public:
-            using ComponentMap = std::unordered_map< Id, UniquePtr >;
+            // change to vector of pairs - doesn't use any of the good features of a map right now.
+            using ComponentMap = std::unordered_map< Id, UniquePtr >; 
             using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
-            using EraseComponents = std::vector<Id>;
-            using InsertComponents = std::vector< std::pair< Id, json11::Json > >;
+            using LinkerMap = std::unordered_map< OwnerId, Linker>;
+            using EraseList = std::vector<Id>;
+            using InsertList = std::vector< std::pair< Id, json11::Json > >;
+            using OnAddMap = std::unordered_map< Id, std::function<void(Interface*)> >;
 
-            void Erase( OwnerId ownerId, const EraseComponents& componentList );
+            void Erase( OwnerId ownerId, const EraseList& componentList );
             OwnerId Insert( OwnerId ownerId, const char* const filePath );
-            OwnerId Insert( OwnerId ownerId, const InsertComponents& componentList );
+            OwnerId Insert( OwnerId ownerId, const InsertList& componentList );
 
         private:
             OwnerId Insert( OwnerId ownerId, ComponentMap map );
 
         private:
             OwnerMap m_ownerMap;
+            LinkerMap m_linkerMap;
         };
     }
 }

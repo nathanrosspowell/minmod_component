@@ -12,6 +12,7 @@ namespace minmod
 {
     namespace Component
     {
+        class Linker;
         class Interface : public Serializer
         {
         public:
@@ -27,11 +28,8 @@ namespace minmod
             virtual Id GetId() const = 0;
             virtual std::string GetName() const = 0;
             // Constructor and destructor replacements.
-            virtual void Create() = 0;
+            virtual void Create(Linker& linker) = 0;
             virtual void Destroy() = 0;
-            // Insert/Erase other components.
-            virtual void OnInsertComponent( Interface* ptr ) = 0;
-            virtual void OnEraseComponent( Interface* ptr ) = 0;
         };
 
         using UniquePtr = std::unique_ptr< Interface >;

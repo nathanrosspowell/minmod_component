@@ -1,7 +1,9 @@
 #include "test_component.h"
+#include "component_linker.h"
 
 namespace minmod
 {
+    Component::Registrant<TestComponent> TestComponent::ms_registrant;
     const bool TestComponent::ms_id = true; // Address of this variable as a cheap unique id per class.
 
     void TestComponent::Deserialize(json11::Json json)
@@ -20,11 +22,7 @@ namespace minmod
         };
     }
 
-    void TestComponent::OnInsertComponent( Interface* /*ptr*/ ) 
-    {
-    }
-
-    void TestComponent::OnEraseComponent( Interface* /*ptr*/ )
+    void TestComponent::Create(Component::Linker& /*linker*/)
     {
     }
 }

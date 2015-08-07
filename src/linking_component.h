@@ -1,16 +1,17 @@
-#pragma once
+#pragma once 
 #include "component_interface.h"
 #include "component_registrant.h"
 #include "json11.hpp"
 
 namespace minmod
 {
-    class TestComponent : public Component::Interface
+    class TestComponent;
+    class LinkingComponent : public Component::Interface
     {
     public:
         // Component::Factory Registration.
         static Component::Id GetStaticId() { return reinterpret_cast<Component::Id>(&ms_id); }
-        static std::string GetStaticName() { return "test"; }
+        static std::string GetStaticName() { return "link"; }
 
     private:
         // Component::Interface.
@@ -22,12 +23,8 @@ namespace minmod
         virtual void Destroy()  override {}
 
     private: 
+        static Component::Registrant<LinkingComponent> ms_registrant;
         static const bool ms_id; // Address of this variable as a cheap unique id per class.
-        static Component::Registrant<TestComponent> ms_registrant;
-
-    private:
-        int m_x = 0;
-        int m_y = 0;
-        int m_z = 0;
+        TestComponent* m_test;
     };
 }
