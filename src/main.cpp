@@ -32,7 +32,7 @@ int main()
     // Sams stuff. 
     cm.Insert( sam, "../data/cool.json" ); // Create from strings.
     Manager::EraseList samsComponents = {
-        { TestComponent::GetStaticId() } // Erase by number.
+        TestComponent::GetStaticId() // Erase by number.
     };
     cm.Erase( sam, samsComponents ); // Erase list of components.
     return 0;

@@ -1,7 +1,10 @@
 #pragma once
+// stl
 #include <unordered_map> 
 #include <functional> 
+#include <memory> 
 #include <string> 
+// minmod
 #include "component_interface.h"
 
 namespace minmod
