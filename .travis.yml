@@ -1,6 +1,6 @@
 language: cpp
 compiler:
-  - clang
+  - clang++
 addons:
   apt:
     sources:
@@ -14,6 +14,7 @@ sudo: false
 script: 
   - $CXX --version
   - echo $CXXFLAGS
+  - clang --version
   - cd src
   - make
   - ./minmod_component
