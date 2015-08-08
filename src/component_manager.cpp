@@ -18,14 +18,15 @@ namespace minmod
         void Manager::Erase( OwnerId ownerId, const EraseList& componentList )
         {
             auto& map = m_ownerMap[ ownerId ];
+            auto& linker = m_linkerMap[ownerId];
             for ( const auto& removeId : componentList )
             {
-                auto& removeComp = map[ removeId ];
-                for ( auto& it : map )
+                const auto& pair = map.find(removeId);
+                if ( pair != map.end())
                 {
-                    //it.second->OnEraseComponent( removeComp.get() );
+                    linker.Remove(pair->second.get());
+                    map.erase( removeId );
                 }
-                map.erase( removeId );
             }
         }
 
