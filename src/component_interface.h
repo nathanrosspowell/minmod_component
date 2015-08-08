@@ -16,14 +16,17 @@ namespace minmod
         class Interface : public Serializer
         {
         public:
-            friend class Manager;
             // Id functions.
             virtual Id GetId() const = 0;
             virtual std::string GetName() const = 0;
 
         private:
+            friend class Linker;
             // Where to define dependencies on other components, may be called multiple times.
             virtual void MakeLinks(Linker& linker) = 0;
+
+        private:
+            friend class Manager;
             // Constructor and destructor replacements. Only ever calle once.
             virtual void Create() = 0;
             virtual void Destroy() = 0;

@@ -77,7 +77,7 @@ namespace minmod
                 // Set up all links, then pass all knows components, then 'create'/'inpair'
                 for ( auto& pair : map )
                 {
-                    pair.second->MakeLinks(subLinker);
+                    subLinker.Link(pair.second.get());
                 }
                 auto& currentMap = currentComponent->second;
                 for ( auto& pair : currentMap )
@@ -88,7 +88,7 @@ namespace minmod
             auto& linker = m_linkerMap[ownerId];
             for ( auto& pair: map )
             {
-                pair.second->MakeLinks(linker); 
+                linker.Link(pair.second.get());
             }
             for ( auto& pair: map )
             {

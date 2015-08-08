@@ -18,11 +18,10 @@ namespace minmod
         public:
             // change to vector of pairs - doesn't use any of the good features of a map right now.
             using ComponentMap = std::unordered_map< Id, UniquePtr >; 
-            using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
-            using LinkerMap = std::unordered_map< OwnerId, Linker>;
             using EraseList = std::vector<Id>;
             using InsertList = std::vector< std::pair< Id, json11::Json > >;
-            using OnAddMap = std::unordered_map< Id, std::function<void(Interface*)> >;
+            using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
+            using LinkerMap = std::unordered_map< OwnerId, Linker>;
 
             void Erase( OwnerId ownerId, const EraseList& componentList );
             OwnerId Insert( OwnerId ownerId, const char* const filePath );
