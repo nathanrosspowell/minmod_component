@@ -15,8 +15,9 @@ install:
   - sudo apt-get -qq --allow-unauthenticated install libstdc++-${LIBSTDC_VERSION}-dev
   - sudo apt-get -qq --allow-unauthenticated install clang-${CLANG_VERSION}
 script:
-  - clang++ --version
   - clang --version
+  - clang++ --version
+  - clang++-3;5 --version
   - cd src
   - make
   - ./minmod_component
