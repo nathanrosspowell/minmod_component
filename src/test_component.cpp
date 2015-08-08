@@ -21,8 +21,4 @@ namespace minmod
             { "z", m_z }
         };
     }
-
-    void TestComponent::Create(Component::Linker& /*linker*/)
-    {
-    }
 }

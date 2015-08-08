@@ -16,7 +16,7 @@ namespace minmod
         return json11::Json::object{};
     }
 
-    void LinkingComponent::Create(Component::Linker& linker)
+    void LinkingComponent::MakeLinks(Component::Linker& linker)
     {
         linker.Link<TestComponent>([this](auto ptr){ m_test = ptr; },[this](){ m_test = nullptr;});
     }

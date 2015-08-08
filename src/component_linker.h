@@ -30,19 +30,20 @@ namespace minmod
             }
 
         private:
+            friend class Manager;
             // Functions for Manager
-            void Add( Id id, Interface* interfacePtr) const
+            void Add( Interface* interfacePtr) const
             {
-                auto it = m_onAddMap.find(id);
+                auto it = m_onAddMap.find(interfacePtr->GetId());
                 if ( it != m_onAddMap.end() )
                 {
                     it->second(interfacePtr);
                 }
             }
 
-            void Remove( Id id ) const
+            void Remove( Interface* interfacePtr ) const
             {
-                auto it = m_onRemoveMap.find(id);
+                auto it = m_onRemoveMap.find(interfacePtr->GetId());
                 if ( it != m_onRemoveMap.end() )
                 {
                     it->second();

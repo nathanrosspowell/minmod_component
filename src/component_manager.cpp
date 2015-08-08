@@ -69,17 +69,33 @@ namespace minmod
 
         OwnerId Manager::Insert( OwnerId ownerId, ComponentMap map )
         {
-            // Set up all links, then pass all knows components, then 'create'/'init'
-            for ( auto& it: map )
+            auto currentComponent = m_ownerMap.find(ownerId);
+            if ( currentComponent != m_ownerMap.end()) 
             {
-                it.second->Create(m_linkerMap[ownerId]);
-            }
-            for ( auto& it1 : map )
-            {
-                for ( auto& it2 : map )
+                Linker subLinker;
+                // Set up all links, then pass all knows components, then 'create'/'inpair'
+                for ( auto& pair : map )
                 {
-                    //it1.second->OnInsertComponent( it2.second.get() );
+                    pair.second->MakeLinks(subLinker);
                 }
+                auto& currentMap = currentComponent->second;
+                for ( auto& pair : currentMap )
+                {
+                    subLinker.Add(pair.second.get());
+                }
+            }
+            auto& linker = m_linkerMap[ownerId];
+            for ( auto& pair: map )
+            {
+                pair.second->MakeLinks(linker); 
+            }
+            for ( auto& pair: map )
+            {
+                linker.Add(pair.second.get());
+            }
+            for ( auto& pair: map )
+            {
+                pair.second->Create();
             }
             m_ownerMap.insert( std::make_pair( ownerId, std::move(map) ) );
             return ownerId;

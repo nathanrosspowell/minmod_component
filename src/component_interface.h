@@ -17,21 +17,17 @@ namespace minmod
         {
         public:
             friend class Manager;
-
-        public:
-            // To work with the interface, each component mush have the following static function:
-            // static Interface::Id GetStaticId() = 0;
-            // static std::string GetStaticName() = 0;
-
-        private:
             // Id functions.
             virtual Id GetId() const = 0;
             virtual std::string GetName() const = 0;
+
+        private:
+            // Where to define dependencies on other components.
+            virtual void MakeLinks(Linker& linker) = 0;
             // Constructor and destructor replacements.
-            virtual void Create(Linker& linker) = 0;
+            virtual void Create() = 0;
             virtual void Destroy() = 0;
         };
-
         using UniquePtr = std::unique_ptr< Interface >;
     }
 }
