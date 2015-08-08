@@ -1,3 +1,4 @@
+#include <cassert>
 #include "linking_component.h"
 #include "test_component.h"
 #include "component_linker.h"
@@ -18,6 +19,16 @@ namespace minmod
 
     void LinkingComponent::MakeLinks(Component::Linker& linker)
     {
-        linker.Link<TestComponent>([this](auto ptr){ m_test = ptr; },[this](){ m_test = nullptr;});
+        linker.Link<TestComponent>(
+			[this](auto ptr)
+		    {
+				m_test = ptr;
+				assert(m_test != nullptr);
+		    },
+			[this]()
+			{ 
+				m_test = nullptr;
+			}
+		);
     }
 }

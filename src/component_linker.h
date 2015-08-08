@@ -1,56 +1,36 @@
 #pragma once
 // stl
-#include <cstdint>
 #include <unordered_map>
-#include <memory>
-#include <vector>
+#include <functional>
 // minmod
 #include "component_types.h"
-#include "component_interface.h"
 
 namespace minmod
 {
     namespace Component
     {
+        class Interface;
         class Linker
         {
         public:
-            using OnAddMap = std::unordered_map< Id, std::function<void(Interface*)> >;
-            using OnRemoveMap = std::unordered_map< Id, std::function<void()> >;
-
             template< class COMPONENT >
             void Link(std::function<void(COMPONENT*)> add, std::function<void()> remove )
             {
-                m_onAddMap[ COMPONENT::GetStaticId() ] = [&add](auto interfacePtr)
-                {
-                    auto ptr = static_cast<COMPONENT*>(interfacePtr);
-                    add(ptr);
-                };
+				m_onAddMap[COMPONENT::GetStaticId()] = [add](Interface* ptr) 
+                    { 
+                        add(static_cast<COMPONENT*>(ptr));
+                    };
                 m_onRemoveMap[ COMPONENT::GetStaticId() ] = remove;
             }
 
         private:
             friend class Manager;
-            // Functions for Manager
-            void Add( Interface* interfacePtr) const
-            {
-                auto it = m_onAddMap.find(interfacePtr->GetId());
-                if ( it != m_onAddMap.end() )
-                {
-                    it->second(interfacePtr);
-                }
-            }
-
-            void Remove( Interface* interfacePtr ) const
-            {
-                auto it = m_onRemoveMap.find(interfacePtr->GetId());
-                if ( it != m_onRemoveMap.end() )
-                {
-                    it->second();
-                }
-            }
+            void Add( Interface* interfacePtr) const;
+            void Remove( Interface* interfacePtr ) const;
 
         private:
+            using OnAddMap = std::unordered_map< Id, std::function<void(Interface*)> >;
+            using OnRemoveMap = std::unordered_map< Id, std::function<void()> >;
             OnAddMap m_onAddMap;
             OnRemoveMap m_onRemoveMap;
         };

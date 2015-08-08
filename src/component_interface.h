@@ -22,9 +22,9 @@ namespace minmod
             virtual std::string GetName() const = 0;
 
         private:
-            // Where to define dependencies on other components.
+            // Where to define dependencies on other components, may be called multiple times.
             virtual void MakeLinks(Linker& linker) = 0;
-            // Constructor and destructor replacements.
+            // Constructor and destructor replacements. Only ever calle once.
             virtual void Create() = 0;
             virtual void Destroy() = 0;
         };

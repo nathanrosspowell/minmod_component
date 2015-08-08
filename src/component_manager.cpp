@@ -60,8 +60,8 @@ namespace minmod
                 if ( component )
                 {
                     component->Deserialize( pair.second );
+					std::cout << component->Serialize().dump() << std::endl;
                     map[ component->GetId() ] = std::move(component);
-                    std::cout << component->Serialize().dump() << std::endl;
                 } 
             }
             return Insert( ownerId, std::move(map) );
