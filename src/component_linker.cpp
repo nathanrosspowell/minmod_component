@@ -6,7 +6,7 @@ namespace minmod
 {
     namespace component
     {
-        void Linker::AddLink( Interface* interfacePtr) const
+        void Linker::AddComponent( Interface* interfacePtr) const
         {
             auto it = m_onAddMap.find(interfacePtr->GetId());
             if ( it != m_onAddMap.end() )
@@ -15,7 +15,7 @@ namespace minmod
             }
         }
 
-        void Linker::RemoveLink( Interface* interfacePtr ) const
+        void Linker::RemoveComponent( Interface* interfacePtr ) const
         {
             auto it = m_onRemoveMap.find(interfacePtr->GetId());
             if ( it != m_onRemoveMap.end() )

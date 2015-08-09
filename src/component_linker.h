@@ -25,8 +25,8 @@ namespace minmod
 
         private:
             friend class Manager;
-            void AddLink( Interface* interfacePtr) const;
-            void RemoveLink( Interface* interfacePtr ) const;
+            void AddComponent( Interface* interfacePtr) const;
+            void RemoveComponent( Interface* interfacePtr ) const;
             void UnLink( Id id );
             void MoveLinks( Linker&& linker );
 

@@ -18,15 +18,15 @@ namespace minmod
         void Manager::Erase( OwnerId ownerId, const EraseList& eraseList )
         {
             auto& entry = m_map[ ownerId ];
-            auto& cl = entry.m_componentList;
+            auto& cl = entry.m_componentMap;
             for ( const auto& removeId : eraseList )
             {
-                const auto& pair = entry.m_componentList.find(removeId);
-                if ( pair != entry.m_componentList.end())
+                const auto& pair = entry.m_componentMap.find(removeId);
+                if ( pair != entry.m_componentMap.end())
                 {
-                    entry.m_linker.RemoveLink(pair->second.get());
+                    entry.m_linker.RemoveComponent(pair->second.get());
                     entry.m_linker.UnLink(pair->first);
-                    entry.m_componentList.erase( removeId );
+                    entry.m_componentMap.erase( removeId );
                 }
             }
         }
@@ -37,9 +37,9 @@ namespace minmod
             std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
             std::string err;
             json11::Json fileJson = json11::Json::parse(file, err);
-            ComponentList componentList;
-            auto& jsonComponentList = fileJson["componentList"];
-            for ( const auto& jsonComponent : jsonComponentList.array_items() )
+            ComponentMap componentMap;
+            auto& jsonComponentMap = fileJson["componentMap"];
+            for ( const auto& jsonComponent : jsonComponentMap.array_items() )
             {
                 auto name = jsonComponent["name"].string_value();
                 auto component = Factory::Create( name );
@@ -47,15 +47,15 @@ namespace minmod
                 {
                     component->Deserialize( jsonComponent["data"] );
                     std::cout << component->Serialize().dump() << std::endl;
-                    componentList[ component->GetId() ] = std::move(component);
+                    componentMap[ component->GetId() ] = std::move(component);
                 } 
             }
-            return Insert( ownerId, std::move(componentList));
+            return Insert( ownerId, std::move(componentMap));
         }
 
         OwnerId Manager::Insert( OwnerId ownerId, const InsertList& insertList )
         {
-            ComponentList componentList;
+            ComponentMap componentMap;
             for ( const auto& pair : insertList )
             {
                 auto component = Factory::Create( pair.first );
@@ -63,45 +63,45 @@ namespace minmod
                 {
                     component->Deserialize( pair.second );
 					std::cout << component->Serialize().dump() << std::endl;
-                    componentList[ component->GetId() ] = std::move(component);
+                    componentMap[ component->GetId() ] = std::move(component);
                 } 
             }
-            return Insert( ownerId, std::move(componentList) );
+            return Insert( ownerId, std::move(componentMap) );
         }
 
-        OwnerId Manager::Insert( OwnerId ownerId, ComponentList componentList )
+        OwnerId Manager::Insert( OwnerId ownerId, ComponentMap componentMap )
         {
             auto& entry = m_map[ownerId]; // Get or create an entry.
             // Link all the existing copmonents against the new ones.
-            for ( auto& pair: componentList)
+            for ( auto& pair: componentMap)
             {
-                entry.m_linker.AddLink(pair.second.get());
+                entry.m_linker.AddComponent(pair.second.get());
             }
             // Make a temp linker for the new components.
             Linker tempLinker;
-            for ( auto& pair : componentList )
+            for ( auto& pair : componentMap )
             {
                 pair.second->MakeLinks(tempLinker); 
             }
             // Link all the old,
-            for ( auto& pair: entry.m_componentList)
+            for ( auto& pair: entry.m_componentMap)
             {
-                tempLinker.AddLink(pair.second.get());
+                tempLinker.AddComponent(pair.second.get());
             }
             // and the new components.
-            for ( auto& pair: componentList)
+            for ( auto& pair: componentMap)
             {
-                tempLinker.AddLink(pair.second.get());
+                tempLinker.AddComponent(pair.second.get());
             }
             // Call create on the new components now they are linked.
-            for ( auto& pair: componentList)
+            for ( auto& pair: componentMap)
             {
                 pair.second->Create();
             }
             // Insert the new components.
-            for ( auto& pair: componentList)
+            for ( auto& pair: componentMap)
             {
-                entry.m_componentList[ pair.first] = std::move(pair.second);
+                entry.m_componentMap[ pair.first] = std::move(pair.second);
             }
             // Add the new links to the stored linker.
             entry.m_linker.MoveLinks(std::move(tempLinker));

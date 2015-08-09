@@ -455,7 +455,7 @@ struct JsonParser {
                 long codepoint = strtol(esc.data(), nullptr, 16);
 
                 // JSON specifies that characters outside the BMP shall be encoded as a pair
-                // of 4-hex-digit \u escapes encoding their surrogate pair componentList. Check
+                // of 4-hex-digit \u escapes encoding their surrogate pair componentMap. Check
                 // whether we're in the middle of such a beast: the previous codepoint was an
                 // escaped lead (high) surrogate, and this is a trail (low) surrogate.
                 if (in_range(last_escaped_codepoint, 0xD800, 0xDBFF)

@@ -18,21 +18,21 @@ namespace minmod
         public:
             using EraseList = std::vector<Id>;
             using InsertList = std::vector< std::pair< Id, json11::Json > >;
-            using ComponentList = std::unordered_map< Id, UniquePtr>;
+            using ComponentMap = std::unordered_map< Id, UniquePtr>;
 
             struct Entry
             {
-                ComponentList m_componentList;
+                ComponentMap m_componentMap;
                 Linker m_linker;
             };
             using Map = std::unordered_map< OwnerId, Entry >;
 
-            void Erase( OwnerId ownerId, const EraseList& componentList );
+            void Erase( OwnerId ownerId, const EraseList& componentMap );
             OwnerId Insert( OwnerId ownerId, const char* const filePath );
-            OwnerId Insert( OwnerId ownerId, const InsertList& componentList );
+            OwnerId Insert( OwnerId ownerId, const InsertList& componentMap );
 
         private:
-            OwnerId Insert( OwnerId ownerId, ComponentList componentList );
+            OwnerId Insert( OwnerId ownerId, ComponentMap componentMap );
 
         private:
             Map m_map;

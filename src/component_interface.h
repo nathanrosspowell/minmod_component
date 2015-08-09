@@ -22,7 +22,7 @@ namespace minmod
 
         private:
             friend class Linker;
-            // Where to define dependencies on other componentList, may be called multiple times.
+            // Where to define dependencies on other componentMap, may be called multiple times.
             virtual void MakeLinks(Linker& linker) = 0;
 
         private:
