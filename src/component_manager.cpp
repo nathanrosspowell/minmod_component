@@ -88,21 +88,20 @@ namespace minmod
                 }
             }
             auto& map = m_map[ownerId];
-            auto& components = std::get<Components>(map);
             auto& linker = std::get<Linker>(map);
-            for ( auto& pair: components )
+            for ( auto& pair: componentMap)
             {
                 linker.Link(pair.second.get());
             }
-            for ( auto& pair: components )
+            for ( auto& pair: componentMap)
             {
                 linker.Add(pair.second.get());
             }
-            for ( auto& pair: components )
+            for ( auto& pair: componentMap)
             {
                 pair.second->Create();
             }
-            m_ownerMap.insert( std::make_pair( ownerId, std::move(components) ) );
+            m_ownerMap.insert( std::make_pair( ownerId, std::move(componentMap) ) );
             return ownerId;
         }
     }
