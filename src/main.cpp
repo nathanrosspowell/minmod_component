@@ -7,6 +7,8 @@
 #include "test_component.h"
 #include "linking_component.h"
 #include "json11.hpp"
+// Debug
+#include <iostream> 
 
 int main()
 {
@@ -14,6 +16,7 @@ int main()
     using namespace minmod;
     using namespace minmod::component;
     // Component Manager.
+    std::cout << "Create Component::Manager" << std::endl;
     Manager cm;
     OwnerId bobby = 42; // Hook into id generator.
     OwnerId sam = 44; // Hook into id generator.
@@ -35,5 +38,6 @@ int main()
         TestComponent::GetStaticId() // Erase by number.
     };
     cm.Erase( sam, samsComponentMap ); // Erase list of componentMap.
+    std::cout << "End of main() scope" << std::endl;
     return 0;
 }

@@ -12,6 +12,8 @@ namespace minmod
         static component::Id GetStaticId() { return reinterpret_cast<component::Id>(&ms_id); }
         static std::string GetStaticName() { return "test"; }
 
+        void Print();
+
     private:
         // component::Interface.
         virtual component::Id GetId() const { return GetStaticId(); }

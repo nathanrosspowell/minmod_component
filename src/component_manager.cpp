@@ -10,6 +10,8 @@
 #include "component_interface.h"
 // Debug
 #include <iostream> 
+using std::cout;
+using std::endl;
 
 namespace minmod 
 {
@@ -17,13 +19,14 @@ namespace minmod
     {
         void Manager::Erase( OwnerId ownerId, const EraseList& eraseList )
         {
+            TRACE("For ownerId: "<<ownerId<<". "<<eraseList.size()<<" to remove");
             auto& entry = m_map[ ownerId ];
             for ( const auto& removeId : eraseList )
             {
                 const auto& pair = entry.m_componentMap.find(removeId);
                 if ( pair != entry.m_componentMap.end())
                 {
-                    entry.m_linker.RemoveComponent(pair->second.get());
+                    entry.m_linker.RemoveComponent(pair->first);
                     entry.m_linker.UnLink(pair->first);
                     entry.m_componentMap.erase( removeId );
                 }
@@ -32,12 +35,13 @@ namespace minmod
 
         OwnerId Manager::Insert( OwnerId ownerId, const char* const filePath )
         {
+            TRACE("For ownerId: "<<ownerId<<". From filePath: "<<filePath);
             std::ifstream in(filePath);
             std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
             std::string err;
             json11::Json fileJson = json11::Json::parse(file, err);
             ComponentMap componentMap;
-            auto& jsonComponentMap = fileJson["componentMap"];
+            auto& jsonComponentMap = fileJson["components"];
             for ( const auto& jsonComponent : jsonComponentMap.array_items() )
             {
                 auto name = jsonComponent["name"].string_value();
@@ -45,7 +49,8 @@ namespace minmod
                 if ( component )
                 {
                     component->Deserialize( jsonComponent["data"] );
-                    std::cout << component->Serialize().dump() << std::endl;
+                    TRACE("  Deserialize of: "<<component->GetName());
+                    TRACE("    "<<component->Serialize().dump());
                     componentMap[ component->GetId() ] = std::move(component);
                 } 
             }
@@ -54,6 +59,7 @@ namespace minmod
 
         OwnerId Manager::Insert( OwnerId ownerId, const InsertList& insertList )
         {
+            TRACE("For ownerId: "<<ownerId<<". "<<insertList.size()<<" to insert");
             ComponentMap componentMap;
             for ( const auto& pair : insertList )
             {
@@ -61,7 +67,8 @@ namespace minmod
                 if ( component )
                 {
                     component->Deserialize( pair.second );
-					std::cout << component->Serialize().dump() << std::endl;
+                    TRACE("  Deserialize of: "<<component->GetName());
+                    TRACE("    "<<component->Serialize().dump());
                     componentMap[ component->GetId() ] = std::move(component);
                 } 
             }

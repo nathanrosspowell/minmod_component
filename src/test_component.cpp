@@ -1,11 +1,20 @@
 #include "test_component.h"
+// minmod
 #include "component_linker.h"
+// Debug
+#include <iostream> 
+using std::cout;
+using std::endl;
 
 namespace minmod
 {
     component::Registrant<TestComponent> TestComponent::ms_registrant;
     const bool TestComponent::ms_id = true; // Address of this variable as a cheap unique id per class.
 
+    void TestComponent::Print()
+    {
+        TRACE("X:"<<m_x<<" Y:"<<m_y<<" Z:"<<m_z);
+    }
     void TestComponent::Deserialize(json11::Json json)
     {
         m_x = json["x"].int_value();

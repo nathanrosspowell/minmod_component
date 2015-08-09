@@ -13,7 +13,8 @@ namespace minmod
         class Linker
         {
         public:
-            Linker() : m_currentlyLinking( 0 ) {}
+            Linker();
+            ~Linker();
             template< class COMPONENT >
             void Link(std::function<void(COMPONENT*)> add, std::function<void()> remove )
             {
@@ -30,7 +31,7 @@ namespace minmod
             void Link( Interface* interfacePtr);
             void UnLink( Id id );
             void AddComponent( Interface* interfacePtr) const;
-            void RemoveComponent( Interface* interfacePtr );
+            void RemoveComponent( Id id);
             void MoveLinks( Linker&& linker );
 
         private:
