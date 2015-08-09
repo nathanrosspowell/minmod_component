@@ -10,7 +10,7 @@
 
 namespace minmod 
 {
-    namespace Component
+    namespace component
     {
         class Linker;
         class Interface : public Serializer

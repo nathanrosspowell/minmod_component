@@ -4,7 +4,7 @@
 
 namespace minmod
 {
-    namespace Component
+    namespace component
     {
         template< class COMPONENT >
         class Registrant

@@ -12,7 +12,7 @@ int main()
 {
     // Using statements just for the main scope block.
     using namespace minmod;
-    using namespace minmod::Component;
+    using namespace minmod::component;
     // Component Manager.
     Manager cm;
     OwnerId bobby = 42; // Hook into id generator.

@@ -8,7 +8,7 @@
 
 namespace minmod
 {
-    namespace Component
+    namespace component
     {
         class Interface;
         class Linker

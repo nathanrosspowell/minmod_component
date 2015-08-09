@@ -4,7 +4,7 @@
 
 namespace minmod
 {
-    namespace Component
+    namespace component
     {
         Linker::Linker() : m_currentlyLinking(0) {}
 

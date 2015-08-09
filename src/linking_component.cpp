@@ -5,7 +5,7 @@
 
 namespace minmod
 {
-    Component::Registrant<LinkingComponent> LinkingComponent::ms_registrant;
+    component::Registrant<LinkingComponent> LinkingComponent::ms_registrant;
     const bool LinkingComponent::ms_id = true; // Address of this variable as a cheap unique id per class.
 
     void LinkingComponent::Deserialize(json11::Json /*json*/)
@@ -17,7 +17,7 @@ namespace minmod
         return json11::Json::object{};
     }
 
-    void LinkingComponent::MakeLinks(Component::Linker& linker)
+    void LinkingComponent::MakeLinks(component::Linker& linker)
     {
         linker.Link<TestComponent>(
 			[this](auto ptr)

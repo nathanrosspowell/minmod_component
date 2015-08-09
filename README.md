@@ -3,9 +3,8 @@
 [![Build Status](https://travis-ci.org/nathanrosspowell/minmod_component.svg?branch=master)](https://travis-ci.org/nathanrosspowell/minmod_component)
 
 A minimal modern C++ component system.
-
-Minimal: What I decided as the basic needs for the system and nothing more
-Modern: Using features from C++11/14/17 when it makes sense, not just for the sake of it.
+- Minimal: What I decided as the basic needs for the system and nothing more
+- Modern: Using features from C++11/14/17 when it makes sense, not just for the sake of it.
 
 # Design choices
 

@@ -9,7 +9,7 @@
 
 namespace minmod
 {
-    namespace Component
+    namespace component
     {
         class Factory
         {

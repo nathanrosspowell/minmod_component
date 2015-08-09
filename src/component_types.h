@@ -2,7 +2,7 @@
 
 namespace minmod
 {
-    namespace Component
+    namespace component
     {
         using OwnerId = std::size_t;
         using Id = std::size_t;

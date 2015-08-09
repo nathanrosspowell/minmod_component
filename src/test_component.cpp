@@ -3,7 +3,7 @@
 
 namespace minmod
 {
-    Component::Registrant<TestComponent> TestComponent::ms_registrant;
+    component::Registrant<TestComponent> TestComponent::ms_registrant;
     const bool TestComponent::ms_id = true; // Address of this variable as a cheap unique id per class.
 
     void TestComponent::Deserialize(json11::Json json)

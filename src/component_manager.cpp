@@ -13,12 +13,12 @@
 
 namespace minmod 
 {
-    namespace Component
+    namespace component
     {
         void Manager::Erase( OwnerId ownerId, const EraseList& componentList )
         {
             auto& map = m_map[ ownerId ];
-            auto& components = std::get<ComponentMap>(map);
+            auto& components = std::get<Components>(map);
             auto& linker = std::get<Linker>(map);
             for ( const auto& removeId : componentList )
             {
@@ -37,7 +37,7 @@ namespace minmod
             std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
             std::string err;
             json11::Json fileJson = json11::Json::parse(file, err);
-            ComponentMap components;
+            Components components;
             auto& jsonComponents = fileJson["components"];
             for ( const auto& jsonComponent : jsonComponents.array_items() )
             {
@@ -55,7 +55,7 @@ namespace minmod
 
         OwnerId Manager::Insert( OwnerId ownerId, const InsertList& componentList )
         {
-            ComponentMap components;
+            Components components;
             for ( const auto& pair : componentList )
             {
                 auto component = Factory::Create( pair.first );
@@ -69,7 +69,7 @@ namespace minmod
             return Insert( ownerId, std::move(components) );
         }
 
-        OwnerId Manager::Insert( OwnerId ownerId, ComponentMap componentMap )
+        OwnerId Manager::Insert( OwnerId ownerId, Components componentMap )
         {
             auto currentComponent = m_ownerMap.find(ownerId);
             bool alreadyInMap = currentComponent != m_ownerMap.end();
@@ -88,7 +88,7 @@ namespace minmod
                 }
             }
             auto& map = m_map[ownerId];
-            auto& components = std::get<ComponentMap>(map);
+            auto& components = std::get<Components>(map);
             auto& linker = std::get<Linker>(map);
             for ( auto& pair: components )
             {

@@ -4,7 +4,7 @@
 
 namespace minmod
 {
-    namespace Component
+    namespace component
     {
         std::unordered_map< Id, Factory::CreateFunction > Factory::ms_map;
         std::unordered_map< std::string, Id> Factory::ms_stringMap;
