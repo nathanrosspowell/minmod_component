@@ -6,27 +6,50 @@ namespace minmod
 {
     namespace component
     {
+        void Linker::Link( Interface* interfacePtr)
+        {
+            m_currentlyLinking = interfacePtr->GetId();
+            interfacePtr->MakeLinks(*this);
+            m_currentlyLinking = 0;
+        }
+
+        void Linker::UnLink( Id id )
+        {
+            for (auto& addMap : m_onAddMap)
+            {
+                addMap.second.erase(id);
+            }
+            for (auto& removeMap : m_onRemoveMap)
+            {
+                removeMap.second.erase(id);
+            }
+        }
+
         void Linker::AddComponent( Interface* interfacePtr) const
         {
             auto it = m_onAddMap.find(interfacePtr->GetId());
             if ( it != m_onAddMap.end() )
             {
-                it->second(interfacePtr);
+                for ( const auto& pair : it->second )
+                {
+                    pair.second(interfacePtr);
+                }
             }
         }
 
-        void Linker::RemoveComponent( Interface* interfacePtr ) const
+        void Linker::RemoveComponent( Interface* interfacePtr )
         {
             auto it = m_onRemoveMap.find(interfacePtr->GetId());
             if ( it != m_onRemoveMap.end() )
             {
-                it->second();
+                for ( const auto& pair : it->second )
+                {
+                    pair.second();
+                }
             }
+            UnLink(interfacePtr->GetId());
         }
 
-        void Linker::UnLink( Id /*id*/ )
-        {
-        }
 
         void Linker::MoveLinks( Linker&& linker )
         {

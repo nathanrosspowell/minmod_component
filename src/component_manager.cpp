@@ -18,7 +18,6 @@ namespace minmod
         void Manager::Erase( OwnerId ownerId, const EraseList& eraseList )
         {
             auto& entry = m_map[ ownerId ];
-            auto& cl = entry.m_componentMap;
             for ( const auto& removeId : eraseList )
             {
                 const auto& pair = entry.m_componentMap.find(removeId);
