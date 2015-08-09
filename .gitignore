@@ -39,3 +39,4 @@ src/minmod_component
 *.exe.stackdump
 *.suo
 *.minmod_component_time
+*

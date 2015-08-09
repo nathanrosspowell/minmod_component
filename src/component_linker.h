@@ -2,6 +2,7 @@
 // stl
 #include <unordered_map>
 #include <functional>
+#include <cassert>
 // minmod
 #include "component_types.h"
 
@@ -13,11 +14,11 @@ namespace minmod
         class Linker
         {
         public:
-            Linker();
             ~Linker();
             template< class COMPONENT >
             void Link(std::function<void(COMPONENT*)> add, std::function<void()> remove )
             {
+                assert(m_currentlyLinking != INVALID_ID);
 				m_onAddMap[COMPONENT::GetStaticId()][m_currentlyLinking] = 
                     [add](Interface* ptr) 
                     { 
@@ -43,7 +44,7 @@ namespace minmod
             using OnRemoveMap = std::unordered_map< Id, RemoveMap>;
             OnAddMap m_onAddMap;
             OnRemoveMap m_onRemoveMap;
-            Id m_currentlyLinking;
+            Id m_currentlyLinking = INVALID_ID;
         };
     }
 }

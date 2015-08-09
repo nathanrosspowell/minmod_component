@@ -15,6 +15,7 @@ namespace minmod
     {
         TRACE("X:"<<m_x<<" Y:"<<m_y<<" Z:"<<m_z);
     }
+
     void TestComponent::Deserialize(json11::Json json)
     {
         m_x = json["x"].int_value();

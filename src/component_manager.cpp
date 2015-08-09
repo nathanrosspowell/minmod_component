@@ -2,6 +2,7 @@
 // stl
 #include <utility>
 #include <fstream>
+#include <cassert>
 // json
 #include "json11.hpp"
 // minmod
@@ -20,28 +21,29 @@ namespace minmod
         void Manager::Erase( OwnerId ownerId, const EraseList& eraseList )
         {
             TRACE("For ownerId: "<<ownerId<<". "<<eraseList.size()<<" to remove");
+            assert(ownerId != INVALID_ID);
             auto& entry = m_map[ ownerId ];
             for ( const auto& removeId : eraseList )
             {
                 const auto& pair = entry.m_componentMap.find(removeId);
-                if ( pair != entry.m_componentMap.end())
-                {
-                    entry.m_linker.RemoveComponent(pair->first);
-                    entry.m_linker.UnLink(pair->first);
-                    entry.m_componentMap.erase( removeId );
-                }
+                assert(pair != entry.m_componentMap.end());
+                entry.m_linker.RemoveComponent(pair->first);
+                entry.m_linker.UnLink(pair->first);
+                entry.m_componentMap.erase( removeId );
             }
         }
 
         OwnerId Manager::Insert( OwnerId ownerId, const char* const filePath )
         {
             TRACE("For ownerId: "<<ownerId<<". From filePath: "<<filePath);
+            assert(ownerId != INVALID_ID);
             std::ifstream in(filePath);
             std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
             std::string err;
             json11::Json fileJson = json11::Json::parse(file, err);
             ComponentMap componentMap;
             auto& jsonComponentMap = fileJson["components"];
+            assert(jsonComponentMap.array_items().size() > 0);
             for ( const auto& jsonComponent : jsonComponentMap.array_items() )
             {
                 auto name = jsonComponent["name"].string_value();
@@ -60,6 +62,8 @@ namespace minmod
         OwnerId Manager::Insert( OwnerId ownerId, const InsertList& insertList )
         {
             TRACE("For ownerId: "<<ownerId<<". "<<insertList.size()<<" to insert");
+            assert(ownerId != INVALID_ID);
+            assert(insertList.size() > 0);
             ComponentMap componentMap;
             for ( const auto& pair : insertList )
             {
@@ -77,6 +81,8 @@ namespace minmod
 
         OwnerId Manager::Insert( OwnerId ownerId, ComponentMap componentMap )
         {
+            assert(ownerId != INVALID_ID);
+            assert(componentMap.size() > 0);
             auto& entry = m_map[ownerId]; // Get or create an entry.
             // Link all the existing copmonents against the new ones.
             for ( auto& pair: componentMap)
@@ -87,7 +93,7 @@ namespace minmod
             Linker tempLinker;
             for ( auto& pair : componentMap )
             {
-                pair.second->MakeLinks(tempLinker); 
+				tempLinker.Link(pair.second.get());
             }
             // Link all the old,
             for ( auto& pair: entry.m_componentMap)
@@ -107,6 +113,7 @@ namespace minmod
             // Insert the new components.
             for ( auto& pair: componentMap)
             {
+                assert(entry.m_componentMap.find(pair.first) == entry.m_componentMap.end());
                 entry.m_componentMap[ pair.first] = std::move(pair.second);
             }
             // Add the new links to the stored linker.

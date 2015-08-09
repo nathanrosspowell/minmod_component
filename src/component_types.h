@@ -6,8 +6,11 @@ namespace minmod
     {
         using OwnerId = std::size_t;
         using Id = std::size_t;
+        static const Id INVALID_ID = 0;
     }
 }
+
+
 
 // Debug traces
 #define TRACE( format ) cout<<"["<<__FILE__<<"("<<__LINE__<<")::"<<__FUNCTION__<<"]"<<format<<endl;

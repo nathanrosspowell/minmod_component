@@ -12,10 +12,6 @@ namespace minmod
 {
     namespace component
     {
-        Linker::Linker() : m_currentlyLinking( 0 )
-        {
-        }
-
         Linker::~Linker()
         {
             TRACE("Clean up Linker");
@@ -42,6 +38,7 @@ namespace minmod
 
         void Linker::Link( Interface* interfacePtr)
         {
+            assert(interfacePtr != nullptr);
             TRACE("Name: "<<interfacePtr->GetName()<<", Id: "<<interfacePtr->GetId());
             m_currentlyLinking = interfacePtr->GetId();
             interfacePtr->MakeLinks(*this);
@@ -50,6 +47,7 @@ namespace minmod
 
         void Linker::UnLink( Id id )
         {
+            assert(id != INVALID_ID);
             TRACE("Id: "<<id);
             for (auto& addMap : m_onAddMap)
             {
@@ -63,6 +61,7 @@ namespace minmod
 
         void Linker::AddComponent( Interface* interfacePtr) const
         {
+            assert(interfacePtr != nullptr);
             TRACE("Name: "<<interfacePtr->GetName()<<", Id: "<<interfacePtr->GetId());
             auto it = m_onAddMap.find(interfacePtr->GetId());
             if ( it != m_onAddMap.end() )
@@ -77,6 +76,7 @@ namespace minmod
         void Linker::RemoveComponent( Id id )
         {
             TRACE("Id: "<<id);
+            assert(id != INVALID_ID);
             auto it = m_onRemoveMap.find(id);
             if ( it != m_onRemoveMap.end() )
             {
