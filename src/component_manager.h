@@ -22,6 +22,7 @@ namespace minmod
             using InsertList = std::vector< std::pair< Id, json11::Json > >;
             using OwnerMap = std::unordered_map< OwnerId, ComponentMap >;
             using LinkerMap = std::unordered_map< OwnerId, Linker>;
+            using Map = std::unordered_map< OwnerId, std::tuple<ComponentMap, Linker>>;
 
             void Erase( OwnerId ownerId, const EraseList& componentList );
             OwnerId Insert( OwnerId ownerId, const char* const filePath );
@@ -33,6 +34,7 @@ namespace minmod
         private:
             OwnerMap m_ownerMap;
             LinkerMap m_linkerMap;
+            Map m_map;
         };
     }
 }
