@@ -21,6 +21,7 @@
 
 #include "json11.hpp"
 #include <cassert>
+#include <cmath>
 #include <cstdlib>
 #include <cstdio>
 #include <limits>
@@ -45,9 +46,13 @@ static void dump(std::nullptr_t, string &out) {
 }
 
 static void dump(double value, string &out) {
-    char buf[32];
-    snprintf(buf, sizeof buf, "%.17g", value);
-    out += buf;
+    if (std::isfinite(value)) {
+        char buf[32];
+        snprintf(buf, sizeof buf, "%.17g", value);
+        out += buf;
+    } else {
+        out += "null";
+    }
 }
 
 static void dump(int value, string &out) {
@@ -381,19 +386,19 @@ struct JsonParser {
             return;
 
         if (pt < 0x80) {
-            out += pt;
+            out += static_cast<char>(pt);
         } else if (pt < 0x800) {
-            out += (pt >> 6) | 0xC0;
-            out += (pt & 0x3F) | 0x80;
+            out += static_cast<char>((pt >> 6) | 0xC0);
+            out += static_cast<char>((pt & 0x3F) | 0x80);
         } else if (pt < 0x10000) {
-            out += (pt >> 12) | 0xE0;
-            out += ((pt >> 6) & 0x3F) | 0x80;
-            out += (pt & 0x3F) | 0x80;
+            out += static_cast<char>((pt >> 12) | 0xE0);
+            out += static_cast<char>(((pt >> 6) & 0x3F) | 0x80);
+            out += static_cast<char>((pt & 0x3F) | 0x80);
         } else {
-            out += (pt >> 18) | 0xF0;
-            out += ((pt >> 12) & 0x3F) | 0x80;
-            out += ((pt >> 6) & 0x3F) | 0x80;
-            out += (pt & 0x3F) | 0x80;
+            out += static_cast<char>((pt >> 18) | 0xF0);
+            out += static_cast<char>(((pt >> 12) & 0x3F) | 0x80);
+            out += static_cast<char>(((pt >> 6) & 0x3F) | 0x80);
+            out += static_cast<char>((pt & 0x3F) | 0x80);
         }
     }
 
@@ -435,6 +440,12 @@ struct JsonParser {
             if (ch == 'u') {
                 // Extract 4-byte escape sequence
                 string esc = str.substr(i, 4);
+                // Explicitly check length of the substring. The following loop
+                // relies on std::string returning the terminating NUL when
+                // accessing str[length]. Checking here reduces brittleness.
+                if (esc.length() < 4) {
+                    return fail("bad \\u escape: " + esc, "");
+                }
                 for (int j = 0; j < 4; j++) {
                     if (!in_range(esc[j], 'a', 'f') && !in_range(esc[j], 'A', 'F')
                             && !in_range(esc[j], '0', '9'))
@@ -444,7 +455,7 @@ struct JsonParser {
                 long codepoint = strtol(esc.data(), nullptr, 16);
 
                 // JSON specifies that characters outside the BMP shall be encoded as a pair
-                // of 4-hex-digit \u escapes encoding their surrogate pair components. Check
+                // of 4-hex-digit \u escapes encoding their surrogate pair componentList. Check
                 // whether we're in the middle of such a beast: the previous codepoint was an
                 // escaped lead (high) surrogate, and this is a trail (low) surrogate.
                 if (in_range(last_escaped_codepoint, 0xD800, 0xDBFF)
@@ -536,7 +547,7 @@ struct JsonParser {
                 i++;
         }
 
-        return std::atof(str.c_str() + start_pos);
+        return std::strtod(str.c_str() + start_pos, nullptr);
     }
 
     /* expect(str, res)
@@ -674,7 +685,7 @@ vector<Json> Json::parse_multi(const string &in, string &err) {
 /* * * * * * * * * * * * * * * * * * * *
  * Shape-checking
  */
-/*
+
 bool Json::has_shape(const shape & types, string & err) const {
     if (!is_object()) {
         err = "expected JSON object, got " + dump();
@@ -690,5 +701,5 @@ bool Json::has_shape(const shape & types, string & err) const {
 
     return true;
 }
-*/
+
 } // namespace json11

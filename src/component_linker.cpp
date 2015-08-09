@@ -6,31 +6,32 @@ namespace minmod
 {
     namespace component
     {
-        Linker::Linker() : m_currentlyLinking(0) {}
-
-        void Linker::Link( Interface* interfacePtr)
-        {
-            m_currentlyLinking = interfacePtr->GetId();
-            interfacePtr->MakeLinks(*this);
-            m_currentlyLinking = 0;
-        }
-
-        void Linker::Add( Interface* interfacePtr) const
+        void Linker::AddLink( Interface* interfacePtr) const
         {
             auto it = m_onAddMap.find(interfacePtr->GetId());
             if ( it != m_onAddMap.end() )
             {
-                std::get<AddFunc>(it->second)(interfacePtr);
+                it->second(interfacePtr);
             }
         }
 
-        void Linker::Remove( Interface* interfacePtr ) const
+        void Linker::RemoveLink( Interface* interfacePtr ) const
         {
             auto it = m_onRemoveMap.find(interfacePtr->GetId());
             if ( it != m_onRemoveMap.end() )
             {
-                std::get<RemoveFunc>(it->second)();
+                it->second();
             }
+        }
+
+        void Linker::UnLink( Id /*id*/ )
+        {
+        }
+
+        void Linker::MoveLinks( Linker&& linker )
+        {
+            m_onAddMap.insert( linker.m_onAddMap.begin(), linker.m_onAddMap.end());
+            m_onRemoveMap.insert( linker.m_onRemoveMap.begin(), linker.m_onRemoveMap.end());
         }
     }
 }

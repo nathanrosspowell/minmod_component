@@ -15,18 +15,18 @@ namespace minmod
 {
     namespace component
     {
-        void Manager::Erase( OwnerId ownerId, const EraseList& componentList )
+        void Manager::Erase( OwnerId ownerId, const EraseList& eraseList )
         {
-            auto& map = m_map[ ownerId ];
-            auto& components = std::get<Components>(map);
-            auto& linker = std::get<Linker>(map);
-            for ( const auto& removeId : componentList )
+            auto& entry = m_map[ ownerId ];
+            auto& cl = entry.m_componentList;
+            for ( const auto& removeId : eraseList )
             {
-                const auto& pair = components.find(removeId);
-                if ( pair != components.end())
+                const auto& pair = entry.m_componentList.find(removeId);
+                if ( pair != entry.m_componentList.end())
                 {
-                    linker.Remove(pair->second.get());
-                    components.erase( removeId );
+                    entry.m_linker.RemoveLink(pair->second.get());
+                    entry.m_linker.UnLink(pair->first);
+                    entry.m_componentList.erase( removeId );
                 }
             }
         }
@@ -37,9 +37,9 @@ namespace minmod
             std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()); 
             std::string err;
             json11::Json fileJson = json11::Json::parse(file, err);
-            Components components;
-            auto& jsonComponents = fileJson["components"];
-            for ( const auto& jsonComponent : jsonComponents.array_items() )
+            ComponentList componentList;
+            auto& jsonComponentList = fileJson["componentList"];
+            for ( const auto& jsonComponent : jsonComponentList.array_items() )
             {
                 auto name = jsonComponent["name"].string_value();
                 auto component = Factory::Create( name );
@@ -47,61 +47,64 @@ namespace minmod
                 {
                     component->Deserialize( jsonComponent["data"] );
                     std::cout << component->Serialize().dump() << std::endl;
-                    components[ component->GetId() ] = std::move(component);
+                    componentList[ component->GetId() ] = std::move(component);
                 } 
             }
-            return Insert( ownerId, std::move(components));
+            return Insert( ownerId, std::move(componentList));
         }
 
-        OwnerId Manager::Insert( OwnerId ownerId, const InsertList& componentList )
+        OwnerId Manager::Insert( OwnerId ownerId, const InsertList& insertList )
         {
-            Components components;
-            for ( const auto& pair : componentList )
+            ComponentList componentList;
+            for ( const auto& pair : insertList )
             {
                 auto component = Factory::Create( pair.first );
                 if ( component )
                 {
                     component->Deserialize( pair.second );
 					std::cout << component->Serialize().dump() << std::endl;
-                    components[ component->GetId() ] = std::move(component);
+                    componentList[ component->GetId() ] = std::move(component);
                 } 
             }
-            return Insert( ownerId, std::move(components) );
+            return Insert( ownerId, std::move(componentList) );
         }
 
-        OwnerId Manager::Insert( OwnerId ownerId, Components componentMap )
+        OwnerId Manager::Insert( OwnerId ownerId, ComponentList componentList )
         {
-            auto currentComponent = m_ownerMap.find(ownerId);
-            bool alreadyInMap = currentComponent != m_ownerMap.end();
-            if ( alreadyInMap ) 
+            auto& entry = m_map[ownerId]; // Get or create an entry.
+            // Link all the existing copmonents against the new ones.
+            for ( auto& pair: componentList)
             {
-                Linker subLinker;
-                // Set up all links, then pass all knows components, then 'create'/'inpair'
-                for ( auto& pair : componentMap )
-                {
-                    subLinker.Link(pair.second.get());
-                }
-                auto& currentMap = currentComponent->second;
-                for ( auto& pair : currentMap )
-                {
-                    subLinker.Add(pair.second.get());
-                }
+                entry.m_linker.AddLink(pair.second.get());
             }
-            auto& map = m_map[ownerId];
-            auto& linker = std::get<Linker>(map);
-            for ( auto& pair: componentMap)
+            // Make a temp linker for the new components.
+            Linker tempLinker;
+            for ( auto& pair : componentList )
             {
-                linker.Link(pair.second.get());
+                pair.second->MakeLinks(tempLinker); 
             }
-            for ( auto& pair: componentMap)
+            // Link all the old,
+            for ( auto& pair: entry.m_componentList)
             {
-                linker.Add(pair.second.get());
+                tempLinker.AddLink(pair.second.get());
             }
-            for ( auto& pair: componentMap)
+            // and the new components.
+            for ( auto& pair: componentList)
+            {
+                tempLinker.AddLink(pair.second.get());
+            }
+            // Call create on the new components now they are linked.
+            for ( auto& pair: componentList)
             {
                 pair.second->Create();
             }
-            m_ownerMap.insert( std::make_pair( ownerId, std::move(componentMap) ) );
+            // Insert the new components.
+            for ( auto& pair: componentList)
+            {
+                entry.m_componentList[ pair.first] = std::move(pair.second);
+            }
+            // Add the new links to the stored linker.
+            entry.m_linker.MoveLinks(std::move(tempLinker));
             return ownerId;
         }
     }
