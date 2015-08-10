@@ -18,19 +18,19 @@ namespace minmod
     {
         TRACE("Adding TestComponent");
         linker.Link<TestComponent>(
-			[this](auto ptr)
-		    {
+            [this](auto ptr)
+            {
                 TRACE("Linking pointer for TestComponent");
-				assert(m_test == nullptr);
-				assert(ptr != nullptr);
-				m_test = ptr;
+                assert(m_test == nullptr);
+                assert(ptr != nullptr);
+                m_test = ptr;
                 m_test->Print();
-		    },
-			[this]()
-			{ 
+            },
+            [this]()
+            { 
                 TRACE("UnLinking pointer for TestComponent");
-				m_test = nullptr;
-			}
-		);
+                m_test = nullptr;
+            }
+        );
     }
 }
