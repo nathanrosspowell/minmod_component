@@ -19,7 +19,7 @@ namespace minmod
             void Link(std::function<void(COMPONENT*)> add, std::function<void()> remove )
             {
                 assert(m_currentlyLinking != INVALID_ID);
-				m_onAddMap[COMPONENT::GetStaticId()][m_currentlyLinking] = 
+                m_onAddMap[COMPONENT::GetStaticId()][m_currentlyLinking] = 
                     [add](Interface* ptr) 
                     { 
                         add(static_cast<COMPONENT*>(ptr));
