@@ -25,8 +25,8 @@ A minimal modern C++ component system.
 
 ### Registering a new component
 Two options:
-* Always registered
+* Always registered:
   - Add a static `Registrant` instance to your class
-* Registered inside of a scope
+* Registered inside of a scope:
   - Create a `Registrant` inside of that scope
   - or, directy call the functions `Component::Factory::Insert<MyClass>()` and `Component::Factory::Erase<MyClass>()`
