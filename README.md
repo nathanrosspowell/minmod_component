@@ -48,4 +48,4 @@ component::Factory::GetInstance().Insert(id, name, createFunction);
   - `InsertList` is a list of pairs of `component::Id` and `json11::Json::object`
 * Insert a owner id and path to a JSON object
   - The JSON file needs a `"components"` element which is a list of pairs of `string` to `'object`.
-  - Example is [`cool.json`](data/cool.json)
+  - e.g. [cool.json](data/cool.json)
