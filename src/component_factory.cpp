@@ -6,8 +6,20 @@ namespace minmod
 {
     namespace component
     {
-        std::unordered_map< Id, Factory::CreateFunction > Factory::ms_map;
-        std::unordered_map< std::string, Id> Factory::ms_stringMap;
+        void Factory::Insert( Id id, std::string name, CreateFunction createFunc )
+        {
+            TRACE("Component: "<<id<<", "<<name);
+            ms_stringMap.insert(std::make_pair(name, id));
+            ms_map[ id ] = createFunc;
+        }
+
+        void Factory::Erase( Id id, std::string name)
+        {
+            TRACE("Component: "<<id<<", "<<name);
+            assert( ms_stringMap[id] == name );
+            ms_stringMap.erase( name );
+            ms_map.erase( id );
+        }
 
         UniquePtr Factory::Create( Id id )
         {
@@ -22,3 +34,4 @@ namespace minmod
         }
     }
 }
+

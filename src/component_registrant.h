@@ -1,6 +1,10 @@
 #pragma once
 // minmod
 #include "component_factory.h"
+// Debug
+#include <iostream> 
+using std::cout;
+using std::endl;
 
 namespace minmod
 {
@@ -12,12 +16,14 @@ namespace minmod
         public:
             Registrant()
             {
-                Factory::Insert<COMPONENT>();
+                TRACE("Insert component: "<<COMPONENT::GetStaticName());
+                Factory::GetInstance().Insert<COMPONENT>();
             }
 
             ~Registrant()
             {
-                Factory::Erase<COMPONENT>();
+                TRACE("Erase component: "<<COMPONENT::GetStaticName());
+                Factory::GetInstance().Erase<COMPONENT>();
             }
         };
     }

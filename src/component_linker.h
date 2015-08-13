@@ -22,6 +22,7 @@ namespace minmod
                 m_onAddMap[COMPONENT::GetStaticId()][m_currentlyLinking] = 
                     [add](Interface* ptr) 
                     { 
+                        assert(dynamic_cast<COMPONENT*>(ptr) != nullptr);
                         add(static_cast<COMPONENT*>(ptr));
                     };
                 m_onRemoveMap[ COMPONENT::GetStaticId() ][m_currentlyLinking] = remove;

@@ -6,6 +6,10 @@
 #include <string> 
 // minmod
 #include "component_interface.h"
+// Debug
+#include <iostream> 
+using std::cout;
+using std::endl;
 
 namespace minmod
 {
@@ -14,37 +18,46 @@ namespace minmod
         class Factory
         {
         public:
+            static Factory& GetInstance()
+            {
+                static Factory instance;
+                return instance;
+            }
+
+        public:
             using CreateFunction = std::function<UniquePtr()>;
 
+            Factory() {}
+
             template< class COMPONENT >
-            static void Insert()
+            void Insert()
             {
-                const auto id = COMPONENT::GetStaticId();
-                ms_stringMap[ COMPONENT::GetStaticName() ] = id;
-                ms_map[ id ] = [&id]()
-                    {
-                        return std::make_unique<COMPONENT>();
-                    };
+                Insert(COMPONENT::GetStaticId(), COMPONENT::GetStaticName(), [](){return std::make_unique<COMPONENT>();});
             }
 
             template< class COMPONENT >
-            static void Erase()
+            void Erase()
             {
-                ms_stringMap.erase( COMPONENT::GetStaticName() );
-                ms_map.erase( COMPONENT::GetStaticId() );
+                Erase( COMPONENT::GetStaticId(), COMPONENT::GetStaticName());
             }
 
-            static UniquePtr Create( Id id );
-            static UniquePtr Create( std::string name );
+            void Insert(Id id, std::string name, CreateFunction createFunc);
+            void Erase( Id id, std::string name );
+            UniquePtr Create( Id id );
+            UniquePtr Create( std::string name );
             template< class COMPONENT >
-            static auto Create()
+            auto Create()
             {
                 return Create( COMPONENT::GetStaticId() );
             }
 
         private:
-            static std::unordered_map< std::string, Id> ms_stringMap;
-            static std::unordered_map< Id, CreateFunction > ms_map;
+            std::unordered_map< std::string, Id> ms_stringMap;
+            std::unordered_map< Id, CreateFunction > ms_map;
+
+        private:
+            Factory(Factory const&) = delete;
+            void operator=(Factory const&) = delete;
         };
     }
 }

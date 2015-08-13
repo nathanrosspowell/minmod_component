@@ -47,7 +47,7 @@ namespace minmod
             for ( const auto& jsonComponent : jsonComponentMap.array_items() )
             {
                 auto name = jsonComponent["name"].string_value();
-                auto component = Factory::Create( name );
+                auto component = Factory::GetInstance().Create( name );
                 if ( component )
                 {
                     component->Deserialize( jsonComponent["data"] );
@@ -67,7 +67,7 @@ namespace minmod
             ComponentMap componentMap;
             for ( const auto& pair : insertList )
             {
-                auto component = Factory::Create( pair.first );
+                auto component = Factory::GetInstance().Create( pair.first );
                 if ( component )
                 {
                     component->Deserialize( pair.second );
