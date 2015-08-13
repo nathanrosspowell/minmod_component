@@ -11,6 +11,16 @@ namespace minmod
     component::Registrant<TestComponent> TestComponent::ms_registrant;
     const bool TestComponent::ms_id = true; // Address of this variable as a cheap unique id per class.
 
+    TestComponent::TestComponent()
+    {
+        TRACE("Constructor: "<<this);
+    }
+
+    TestComponent::~TestComponent()
+    {
+        TRACE("Destructor: "<<this);
+    }
+
     void TestComponent::Print()
     {
         TRACE("X:"<<m_x<<" Y:"<<m_y<<" Z:"<<m_z);

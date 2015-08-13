@@ -54,7 +54,10 @@ namespace minmod
                 assert(pair != entry.m_componentMap.end());
                 entry.m_linker.RemoveComponent(pair->first);
                 entry.m_linker.UnLink(pair->first);
-                entry.m_componentMap.erase( removeId );
+                TRACE("Removing: "<<removeId<<" from "<<ownerId);
+                pair->second.reset();
+                TRACE("Removing: "<<removeId<<" from "<<ownerId);
+                entry.m_componentMap.erase( pair );
             }
         }
 

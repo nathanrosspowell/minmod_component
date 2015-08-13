@@ -8,6 +8,9 @@ namespace minmod
     class TestComponent : public component::Interface
     {
     public:
+        TestComponent();
+        virtual ~TestComponent();
+
         void Print();
 
     public:

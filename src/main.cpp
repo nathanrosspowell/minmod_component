@@ -58,6 +58,12 @@ int main()
     }
     // Test components
     cm.Erase( sam, samsComponentMap ); // Erase list of componentMap.
+    {
+        auto component = cm.Get(sam, TestComponent::GetStaticId());
+        assert(component == nullptr);
+        std::string name = component? component->GetName() : std::string("nullptr");
+        TRACE("Got component: "<<name);
+    }
     TRACE("End main()");
     return 0;
 }
