@@ -18,6 +18,31 @@ namespace minmod
 {
     namespace component
     {
+        Interface* Manager::Get( OwnerId ownerId, Id comonentId )
+        {
+            auto ownerIt = m_map.find(ownerId);
+            if ( ownerIt != m_map.end() )
+            {
+                auto& componentMap = ownerIt->second.m_componentMap;
+                auto compIt = componentMap.find(comonentId);
+                if ( compIt != componentMap.end() )
+                {
+                    return compIt->second.get();
+                }
+            }
+            return nullptr;
+        }
+
+        Interface* Manager::Get( OwnerId ownerId, std::string componentName )
+        {
+            Id id = Factory::GetInstance().GetId(componentName);
+            if ( id != INVALID_ID)
+            {
+                return Get(ownerId, id);
+            }
+            return nullptr;
+        }
+
         void Manager::Erase( OwnerId ownerId, const EraseList& eraseList )
         {
             TRACE("For ownerId: "<<ownerId<<". "<<eraseList.size()<<" to remove");

@@ -13,10 +13,13 @@ namespace minmod
         static component::Id GetStaticId() { return reinterpret_cast<component::Id>(&ms_id); }
         static std::string GetStaticName() { return "link"; }
 
-    private:
+    public:
         // component::Interface.
         virtual component::Id GetId() const { return GetStaticId(); }
         virtual std::string GetName() const { return GetStaticName(); }
+
+    private:
+        // component::Interface.
         virtual void Deserialize(json11::Json /*json*/) override {}
         virtual json11::Json Serialize() const override { return json11::Json::object{}; }
         virtual void MakeLinks(component::Linker& liner) override;

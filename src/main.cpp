@@ -12,15 +12,17 @@
 
 int main()
 {
+    TRACE("Start main()");
     // Using statements just for the main scope block.
     using namespace minmod;
     using namespace minmod::component;
     // Component Manager.
-    std::cout << "Create Component::Manager" << std::endl;
+    TRACE("Create Component::Manager");
     Manager cm;
     OwnerId bobby = 42; // Hook into id generator.
     OwnerId sam = 44; // Hook into id generator.
     // Bobs stuff.
+    TRACE("Add bobby");
     Manager::InsertList bobsComponentMap = {
         {
             TestComponent::GetStaticId(), // Create from id.
@@ -32,12 +34,31 @@ int main()
         }
     };
     cm.Insert( bobby, bobsComponentMap ); // Insert list of componentMap.
+    // Test components
+    {
+        auto component = cm.Get<TestComponent>(bobby);
+        assert(component != nullptr);
+        TRACE("Got component: "<<component->GetName());
+    }
+    {
+        auto component = cm.Get(bobby, "link");
+        assert(component != nullptr);
+        TRACE("Got component: "<<component->GetName());
+    }
     // Sams stuff. 
+    TRACE("Add sam");
     cm.Insert( sam, "../data/cool.json" ); // Create from strings.
     Manager::EraseList samsComponentMap = {
         TestComponent::GetStaticId() // Erase by number.
     };
+    {
+        auto component = cm.Get(sam, TestComponent::GetStaticId());
+        assert(component != nullptr);
+        TRACE("Got component: "<<component->GetName());
+    }
+    // Test components
     cm.Erase( sam, samsComponentMap ); // Erase list of componentMap.
-    std::cout << "End of main() scope" << std::endl;
+    TRACE("End main()");
     return 0;
 }
+

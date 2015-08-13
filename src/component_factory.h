@@ -29,31 +29,27 @@ namespace minmod
 
             Factory() {}
 
-            template< class COMPONENT >
-            void Insert()
+            template< class COMPONENT > void Insert()
             {
                 Insert(COMPONENT::GetStaticId(), COMPONENT::GetStaticName(), [](){return std::make_unique<COMPONENT>();});
             }
-
-            template< class COMPONENT >
-            void Erase()
+            void Insert(Id id, std::string name, CreateFunction createFunc);
+            template< class COMPONENT > void Erase()
             {
                 Erase( COMPONENT::GetStaticId(), COMPONENT::GetStaticName());
             }
-
-            void Insert(Id id, std::string name, CreateFunction createFunc);
             void Erase( Id id, std::string name );
             UniquePtr Create( Id id );
             UniquePtr Create( std::string name );
-            template< class COMPONENT >
-            auto Create()
+            template< class COMPONENT > auto Create()
             {
                 return Create( COMPONENT::GetStaticId() );
             }
+            Id GetId(std::string name);
 
         private:
-            std::unordered_map< std::string, Id> ms_stringMap;
-            std::unordered_map< Id, CreateFunction > ms_map;
+            std::unordered_map< std::string, Id> m_stringMap;
+            std::unordered_map< Id, CreateFunction > m_map;
 
         private:
             Factory(Factory const&) = delete;

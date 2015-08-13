@@ -9,28 +9,38 @@ namespace minmod
         void Factory::Insert( Id id, std::string name, CreateFunction createFunc )
         {
             TRACE("Component: "<<id<<", "<<name);
-            ms_stringMap.insert(std::make_pair(name, id));
-            ms_map[ id ] = createFunc;
+            m_stringMap.insert(std::make_pair(name, id));
+            m_map[ id ] = createFunc;
         }
 
         void Factory::Erase( Id id, std::string name)
         {
             TRACE("Component: "<<id<<", "<<name);
-            assert( ms_stringMap[id] == name );
-            ms_stringMap.erase( name );
-            ms_map.erase( id );
+            assert( m_stringMap[id] == name );
+            m_stringMap.erase( name );
+            m_map.erase( id );
         }
 
         UniquePtr Factory::Create( Id id )
         {
-            assert( ms_map.find( id ) != ms_map.end() );
-            return std::move( ms_map[ id ]() );
+            assert( m_map.find( id ) != m_map.end() );
+            return std::move( m_map[ id ]() );
         }
 
         UniquePtr Factory::Create( std::string name )
         {
-            assert( ms_stringMap.find( name ) != ms_stringMap.end() );
-            return std::move( Create( ms_stringMap[ name ] ) );
+            assert( m_stringMap.find( name ) != m_stringMap.end() );
+            return std::move( Create( m_stringMap[ name ] ) );
+        }
+
+        Id Factory::GetId(std::string name)
+        {
+            auto idIt = m_stringMap.find(name);
+            if ( idIt != m_stringMap.end())
+            {
+                return idIt->second;
+            }
+            return INVALID_ID;
         }
     }
 }
