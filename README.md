@@ -6,14 +6,16 @@ A minimal modern C++ component system.
 - Minimal: What I decided as the basic needs for the system and nothing more
 - Modern: Using features from C++11/14/17 when it makes sense, not just for the sake of it.
 
+
 # Design choices
 
 * New components are easy to code
   - Derive from an interface and implement the methods
-  - No 'auto gen code' e.g. functions and types hidden in macros
-  - No need to remember to register in another file: If it compiles, it will work
+  - No 'auto generated code' e.g. functions and types hidden away in macros
+  - No files with lists of registration code
 * Components are easy to instantiate
 * All components can be deserialized and serialized
+
 
 # Guide
 
@@ -39,10 +41,11 @@ component::Id id = 10101; // Custom id.
 std::string name = "hotrod"; // Custom name.
 auto createFunction = [name]()
     {
-        auto ptr = std::make_unique<CarComponent>(name); // Uses a custom constructor.
+        return std::make_unique<CarComponent>(name); // Uses a custom constructor.
     };
 component::Factory::GetInstance().Insert(id, name, createFunction);
 ```
+
 ### Instanciating one (or many) components
 * Insert a owner id and a `component::Manager::InsertList` into the `component::Manager`
   - `InsertList` is a list of pairs of `component::Id` and `json11::Json::object`
