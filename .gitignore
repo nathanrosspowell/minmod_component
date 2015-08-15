@@ -39,4 +39,16 @@ src/minmod_component
 *.exe.stackdump
 *.suo
 *.minmod_component_time
-*
+
+# Visual studio
+/visual_studio/[Dd]ebug/
+/visual_studio/[Rr]elease/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
