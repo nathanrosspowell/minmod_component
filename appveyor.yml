@@ -5,5 +5,8 @@ environment:
      - GENERATOR: "Visual Studio 15"
        CONFIG: Release
 
+install:
+  - SET PATH=C:\Program Files (x86)\MSBuild\14.0\bin\;%PATH%
+  
 build:
   project: visual_studio\minmod_component.sln
