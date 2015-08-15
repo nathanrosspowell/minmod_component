@@ -56,6 +56,7 @@ namespace minmod
                     eraseList.push_back(component.first);
                 }
                 Erase(ownerId, eraseList);
+                m_map.erase(entryIt);
             }
         }
 
