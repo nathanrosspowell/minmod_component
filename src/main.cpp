@@ -12,18 +12,15 @@
 
 int main()
 {
-    TRACE("Start main()");
     // Using statements just for the main scope block.
     using namespace minmod;
     using namespace minmod::component;
-    // Component Manager.
+    TRACE("Start main()"); // There will be some logs from static constructors before this line.
     TRACE("Create Component::Manager");
     Manager cm;
-    OwnerId bobby = 42; // Hook into id generator.
-    OwnerId sam = 44; // Hook into id generator.
-    // Bobs stuff.
-    TRACE("Add bobby");
-    Manager::InsertList bobsComponentMap = {
+    OwnerId bob = 808; // Hook into id generator.
+    OwnerId sam = 543; // Hook into id generator.
+    Manager::InsertList bobsComponentMap = { // Create stuff for bob.
         {
             TestComponent::GetStaticId(), // Create from id.
             json11::Json::object{ { "x",  102 }, { "z", 15 } } // Create JSON data to be deserialised.
@@ -33,40 +30,34 @@ int main()
             json11::Json::object{ } // Create JSON data to be deserialised.
         }
     };
-    cm.Insert( bobby, bobsComponentMap ); // Insert list of componentMap.
-    // Test components
-    {
-        auto component = cm.Get<TestComponent>(bobby);
-        assert(component != nullptr);
-        TRACE("Got component: "<<component->GetName());
-    }
-    {
-        auto component = cm.Get(bobby, "link");
-        assert(component != nullptr);
-        TRACE("Got component: "<<component->GetName());
-    }
-    // Sams stuff. 
+    TRACE("Add bob");
+    cm.Insert( bob, bobsComponentMap ); // Insert list of componentMap.
+    TRACE("Get bobs TestComponent");
+    auto bobsTest = cm.Get<TestComponent>(bob);
+    assert(bobsTest != nullptr);
+    TRACE("Got: "<<bobsTest->GetName());
+    TRACE("Get bobs LinkingComponent");
+    auto bobsLink = cm.Get(bob, "link");
+    assert(bobsLink != nullptr);
+    TRACE("Got: "<<bobsLink->GetName());
     TRACE("Add sam");
-    cm.Insert( sam, "../data/cool.json" ); // Create from strings.
+    cm.Insert( sam, "../data/cool.json" ); // Create from json file.
+    TRACE("Get sams TestComponent");
+    auto samsTest = cm.Get(sam, TestComponent::GetStaticId());
+    assert(samsTest != nullptr);
+    TRACE("Got: "<<samsTest->GetName());
     Manager::EraseList samsComponentMap = {
         LinkingComponent::GetStaticId() // Erase by number.
     };
-    {
-        auto component = cm.Get(sam, TestComponent::GetStaticId());
-        assert(component != nullptr);
-        TRACE("Got component: "<<component->GetName());
-    }
-    // Test components
+    TRACE("Remove sams LinkingComponent");
     cm.Erase( sam, samsComponentMap ); // Erase list of componentMap.
-    {
-        auto component = cm.Get(sam, LinkingComponent::GetStaticId());
-        assert(component == nullptr);
-        std::string name = component? component->GetName() : std::string("nullptr");
-        TRACE("Got component: "<<name);
-    }
-    // Remove bobby.
-    TRACE("Remove bobby");
-    cm.Erase(bobby);
+    TRACE("Try and get sams Link");
+    auto samsLink = cm.Get(sam, LinkingComponent::GetStaticId());
+    assert(samsLink == nullptr);
+    std::string name = samsLink? samsLink->GetName() : std::string("nullptr");
+    TRACE("Got: "<<name);
+    TRACE("Remove bob");
+    cm.Erase(bob);
     TRACE("End main()");
     return 0;
 }

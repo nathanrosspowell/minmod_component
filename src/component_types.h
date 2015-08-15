@@ -11,4 +11,4 @@ namespace minmod
 }
 
 // Debug traces
-#define TRACE( format ) cout<<"["<<__FILE__<<"("<<__LINE__<<")::"<<__FUNCTION__<<"]"<<format<<endl;
+#define TRACE( format ) std::cout<<"["<<__FILE__<<"("<<__LINE__<<")::"<<__FUNCTION__<<"]"<<format<<std::endl;

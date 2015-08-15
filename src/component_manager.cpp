@@ -11,8 +11,6 @@
 #include "component_interface.h"
 // Debug
 #include <iostream> 
-using std::cout;
-using std::endl;
 
 namespace minmod 
 {

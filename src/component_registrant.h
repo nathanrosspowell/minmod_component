@@ -3,8 +3,6 @@
 #include "component_factory.h"
 // Debug
 #include <iostream> 
-using std::cout;
-using std::endl;
 
 namespace minmod
 {
