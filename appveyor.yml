@@ -1,0 +1,9 @@
+environment:
+  matrix:
+     - GENERATOR: "Visual Studio 15"
+       CONFIG: Debug
+     - GENERATOR: "Visual Studio 15"
+       CONFIG: Release
+
+build:
+  project: visual_studio\minmod_component.sln
