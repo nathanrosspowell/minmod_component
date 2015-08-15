@@ -16,24 +16,15 @@ namespace minmod
         {
             TRACE("Clean up Linker");
             std::vector<Id> toRemove;
-            std::for_each(m_onAddMap.cbegin(), m_onAddMap.cend(),
-                [&toRemove](const auto& pair)
-                {
-                    toRemove.push_back(pair.first);
-                }
-            );
-            std::for_each(toRemove.cbegin(), toRemove.cend(),
-                [this](Id id)
-                {
-                    RemoveComponent(id);
-                }
-            );
-            std::for_each(toRemove.cbegin(), toRemove.cend(),
-                [this](Id id)
-                {
-                    UnLink(id);
-                }
-            );
+            for ( const auto& pair : m_entryMap )
+            {
+                toRemove.push_back(pair.first);
+                RemoveComponent(pair.first); 
+            }
+            for ( const auto& id : toRemove )
+            {
+                UnLink(id);
+            }
         }
 
         void Linker::Link( Interface* interfacePtr)
@@ -49,13 +40,9 @@ namespace minmod
         {
             assert(id != INVALID_ID);
             TRACE("Id: "<<id);
-            for (auto& addMap : m_onAddMap)
+            for ( auto& pair : m_entryMap )
             {
-                addMap.second.erase(id);
-            }
-            for (auto& removeMap : m_onRemoveMap)
-            {
-                removeMap.second.erase(id);
+                pair.second.erase(id);
             }
         }
 
@@ -63,12 +50,13 @@ namespace minmod
         {
             assert(interfacePtr != nullptr);
             TRACE("Name: "<<interfacePtr->GetName()<<", Id: "<<interfacePtr->GetId());
-            auto it = m_onAddMap.find(interfacePtr->GetId());
-            if ( it != m_onAddMap.end() )
+            auto it = m_entryMap.find(interfacePtr->GetId());
+            if ( it != m_entryMap.end() )
             {
-                for ( const auto& pair : it->second )
+                for ( const auto& ownedPair : it->second )
                 {
-                    pair.second(interfacePtr);
+                    auto& addFun = ownedPair.second.first;
+                    addFun(interfacePtr);
                 }
             }
         }
@@ -77,23 +65,24 @@ namespace minmod
         {
             TRACE("Id: "<<id);
             assert(id != INVALID_ID);
-            auto it = m_onRemoveMap.find(id);
-            // Remove everything that linked against this component.
-            if ( it != m_onRemoveMap.end() )
+            auto it = m_entryMap.find(id);
+            if ( it != m_entryMap.end() )
             {
-                for ( const auto& pair : it->second )
+                for ( const auto& funcPair : it->second )
                 {
-                    pair.second();
+                    auto& removeFunc = funcPair.second.second;
+                    removeFunc();
                 }
             }
             // Unlink anything this component linked against.
-            for ( const auto& map : m_onRemoveMap)
+            for ( const auto& pair : m_entryMap)
             {
-                for ( const auto& pair : map.second )
+                for ( const auto& ownedPair : pair.second )
                 {
-                    if ( pair.first == id )
+                    if ( ownedPair.first ==  id )
                     {
-                        pair.second();
+                        auto& removeFunc = ownedPair.second.second;
+                        removeFunc();
                     }
                 }
             }
@@ -102,8 +91,13 @@ namespace minmod
         void Linker::MoveLinks( Linker&& linker )
         {
             TRACE("");
-            m_onAddMap.insert( linker.m_onAddMap.begin(), linker.m_onAddMap.end());
-            m_onRemoveMap.insert( linker.m_onRemoveMap.begin(), linker.m_onRemoveMap.end());
+            //m_onAddMap.insert( linker.m_onAddMap.begin(), linker.m_onAddMap.end());
+            //m_onRemoveMap.insert( linker.m_onRemoveMap.begin(), linker.m_onRemoveMap.end());
+            for ( auto& pair : linker.m_entryMap )
+            {
+                auto& ownedPairs = m_entryMap[ pair.first];
+                ownedPairs.insert( pair.second.begin(), pair.second.end());
+            }
         }
     }
 }

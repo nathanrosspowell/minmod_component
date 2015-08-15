@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <functional>
 #include <cassert>
+#include <memory>
 // minmod
 #include "component_types.h"
 
@@ -19,14 +20,24 @@ namespace minmod
             void Link(std::function<void(COMPONENT*)> add, std::function<void()> remove )
             {
                 assert(m_currentlyLinking != INVALID_ID);
-                m_onAddMap[COMPONENT::GetStaticId()][m_currentlyLinking] = 
+                auto& ownedPairs = m_entryMap[COMPONENT::GetStaticId()];
+                ownedPairs[m_currentlyLinking] = std::make_pair(
                     [add](Interface* ptr) 
                     { 
                         assert(dynamic_cast<COMPONENT*>(ptr) != nullptr);
                         add(static_cast<COMPONENT*>(ptr));
-                    };
-                m_onRemoveMap[ COMPONENT::GetStaticId() ][m_currentlyLinking] = remove;
+                    },
+                    remove );
             }
+
+        private:
+            using AddFunc = std::function<void(Interface*)>;
+            using RemoveFunc = std::function<void()>;
+            using AddMap = std::unordered_map< Id, AddFunc >;
+            using RemoveMap = std::unordered_map< Id, RemoveFunc >;
+            using FuncPair = std::pair<AddFunc, RemoveFunc>;
+            using OwnedPairs = std::unordered_map<Id, FuncPair>;
+            using EntryMap = std::unordered_map< Id, OwnedPairs>;
 
         private:
             friend class Manager;
@@ -37,14 +48,7 @@ namespace minmod
             void MoveLinks( Linker&& linker );
 
         private:
-            using AddFunc = std::function<void(Interface*)>;
-            using RemoveFunc = std::function<void()>;
-            using AddMap = std::unordered_map< Id, AddFunc >;
-            using RemoveMap = std::unordered_map< Id, RemoveFunc >;
-            using OnAddMap = std::unordered_map< Id, AddMap>;
-            using OnRemoveMap = std::unordered_map< Id, RemoveMap>;
-            OnAddMap m_onAddMap;
-            OnRemoveMap m_onRemoveMap;
+            EntryMap m_entryMap;
             Id m_currentlyLinking = INVALID_ID;
         };
     }
