@@ -1,6 +1,7 @@
 # `minmod_component`
 
 [![Build Status](https://travis-ci.org/nathanrosspowell/minmod_component.svg?branch=master)](https://travis-ci.org/nathanrosspowell/minmod_component)
+[![Build status](https://ci.appveyor.com/api/projects/status/afjoqbyjhehqqw5s?svg=true)](https://ci.appveyor.com/project/nathanrosspowell/minmod-component)
 
 A minimal modern C++ component system.
 - Minimal: What I decided as the basic needs for the system and nothing more
