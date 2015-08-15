@@ -64,6 +64,9 @@ int main()
         std::string name = component? component->GetName() : std::string("nullptr");
         TRACE("Got component: "<<name);
     }
+    // Remove bobby.
+    TRACE("Remove bobby");
+    cm.Erase(bobby);
     TRACE("End main()");
     return 0;
 }

@@ -35,6 +35,7 @@ namespace minmod
             Interface* Get( OwnerId ownerId, Id comonentId );
             Interface* Get( OwnerId ownerId, std::string componentName );
             void Erase( OwnerId ownerId, const EraseList& componentMap );
+            void Erase( OwnerId ownerId );
             OwnerId Insert( OwnerId ownerId, const char* const filePath );
             OwnerId Insert( OwnerId ownerId, const InsertList& componentMap );
 

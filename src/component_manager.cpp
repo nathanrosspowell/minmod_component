@@ -43,6 +43,22 @@ namespace minmod
             return nullptr;
         }
 
+        void Manager::Erase( OwnerId ownerId)
+        {
+            TRACE("For ownerId: "<<ownerId);
+            const auto& entryIt = m_map.find(ownerId);
+            if ( entryIt != m_map.end())
+            {
+                EraseList eraseList;
+                const auto& componentMap = entryIt->second.m_componentMap;
+                for ( const auto& component : componentMap )
+                {
+                    eraseList.push_back(component.first);
+                }
+                Erase(ownerId, eraseList);
+            }
+        }
+
         void Manager::Erase( OwnerId ownerId, const EraseList& eraseList )
         {
             TRACE("For ownerId: "<<ownerId<<". "<<eraseList.size()<<" to remove");
