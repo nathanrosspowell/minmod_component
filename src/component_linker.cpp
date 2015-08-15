@@ -78,11 +78,23 @@ namespace minmod
             TRACE("Id: "<<id);
             assert(id != INVALID_ID);
             auto it = m_onRemoveMap.find(id);
+            // Remove everything that linked against this component.
             if ( it != m_onRemoveMap.end() )
             {
                 for ( const auto& pair : it->second )
                 {
                     pair.second();
+                }
+            }
+            // Unlink anything this component linked against.
+            for ( const auto& map : m_onRemoveMap)
+            {
+                for ( const auto& pair : map.second )
+                {
+                    if ( pair.first == id )
+                    {
+                        pair.second();
+                    }
                 }
             }
         }

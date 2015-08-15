@@ -49,7 +49,7 @@ int main()
     TRACE("Add sam");
     cm.Insert( sam, "../data/cool.json" ); // Create from strings.
     Manager::EraseList samsComponentMap = {
-        TestComponent::GetStaticId() // Erase by number.
+        LinkingComponent::GetStaticId() // Erase by number.
     };
     {
         auto component = cm.Get(sam, TestComponent::GetStaticId());
@@ -59,7 +59,7 @@ int main()
     // Test components
     cm.Erase( sam, samsComponentMap ); // Erase list of componentMap.
     {
-        auto component = cm.Get(sam, TestComponent::GetStaticId());
+        auto component = cm.Get(sam, LinkingComponent::GetStaticId());
         assert(component == nullptr);
         std::string name = component? component->GetName() : std::string("nullptr");
         TRACE("Got component: "<<name);
