@@ -16,7 +16,7 @@ namespace minmod
         void Factory::Erase( Id id, std::string name)
         {
             TRACE("Component: "<<id<<", "<<name);
-            assert( m_stringMap[id] == name );
+			assert(m_stringMap[name] == id);
             m_stringMap.erase( name );
             m_map.erase( id );
         }
