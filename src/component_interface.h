@@ -8,7 +8,7 @@
 #include "component_types.h"
 #include "component_serializer.h"
 
-namespace minmod 
+namespace minmod
 {
     namespace component
     {
@@ -22,8 +22,9 @@ namespace minmod
 
         private:
             friend class Linker;
-            // Where to define dependencies on other componentMap, may be called multiple times.
-            virtual void MakeLinks(Linker& linker) = 0;
+            // Where to define dependencies on other componentMap, may be called
+            // multiple times.
+            virtual void MakeLinks(Linker &linker) = 0;
 
         private:
             friend class Manager;
@@ -31,6 +32,6 @@ namespace minmod
             virtual void Create() = 0;
             virtual void Destroy() = 0;
         };
-        using UniquePtr = std::unique_ptr< Interface >;
+        using UniquePtr = std::unique_ptr<Interface>;
     }
 }

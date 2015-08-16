@@ -2,7 +2,7 @@
 // minmod
 #include "component_linker.h"
 // Debug
-#include <iostream> 
+#include <iostream>
 
 namespace minmod
 {
@@ -11,17 +11,17 @@ namespace minmod
 
     TestComponent::TestComponent()
     {
-        TRACE("Constructor: "<<this);
+        TRACE("Constructor: " << this);
     }
 
     TestComponent::~TestComponent()
     {
-        TRACE("Destructor: "<<this);
+        TRACE("Destructor: " << this);
     }
 
     void TestComponent::Print()
     {
-        TRACE("X:"<<m_x<<" Y:"<<m_y<<" Z:"<<m_z);
+        TRACE("X:" << m_x << " Y:" << m_y << " Z:" << m_z);
     }
 
     void TestComponent::Deserialize(json11::Json json)
@@ -33,10 +33,6 @@ namespace minmod
 
     json11::Json TestComponent::Serialize() const
     {
-        return json11::Json::object {
-            { "x", m_x },
-            { "y", m_y },
-            { "z", m_z }
-        };
+        return json11::Json::object{{"x", m_x}, {"y", m_y}, {"z", m_z}};
     }
 }

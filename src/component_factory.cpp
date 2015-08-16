@@ -1,47 +1,45 @@
 #include "component_factory.h"
 // stl
-#include <cassert> 
+#include <cassert>
 
 namespace minmod
 {
     namespace component
     {
-        void Factory::Insert( Id id, std::string name, CreateFunction createFunc )
+        void Factory::Insert(Id id, std::string name, CreateFunction createFunc)
         {
-            TRACE("Component: "<<id<<", "<<name);
+            TRACE("Component: " << id << ", " << name);
             m_stringMap.insert(std::make_pair(name, id));
-            m_map[ id ] = createFunc;
+            m_map.insert(std::make_pair(id, createFunc));
         }
 
-        void Factory::Erase( Id id, std::string name)
+        void Factory::Erase(Id id, std::string name)
         {
-            TRACE("Component: "<<id<<", "<<name);
-			assert(m_stringMap[name] == id);
-            m_stringMap.erase( name );
-            m_map.erase( id );
+            TRACE("Component: " << id << ", " << name);
+            assert(m_stringMap[name] == id);
+            m_stringMap.erase(name);
+            m_map.erase(id);
         }
 
-        UniquePtr Factory::Create( Id id )
+        UniquePtr Factory::Create(Id id)
         {
-            assert( m_map.find( id ) != m_map.end() );
-            return std::move( m_map[ id ]() );
+            auto it = m_map.find(id);
+            assert(it != m_map.end());
+            return std::move(it->second());
         }
 
-        UniquePtr Factory::Create( std::string name )
+        UniquePtr Factory::Create(std::string name)
         {
-            assert( m_stringMap.find( name ) != m_stringMap.end() );
-            return std::move( Create( m_stringMap[ name ] ) );
+            auto it = m_stringMap.find(name);
+            assert(it != m_stringMap.end());
+            return std::move(Create(it->second));
         }
 
         Id Factory::GetId(std::string name)
         {
-            auto idIt = m_stringMap.find(name);
-            if ( idIt != m_stringMap.end())
-            {
-                return idIt->second;
-            }
-            return INVALID_ID;
+            auto it = m_stringMap.find(name);
+            assert(it != m_stringMap.end());
+            return it->second;
         }
     }
 }
-
