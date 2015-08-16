@@ -53,3 +53,14 @@ component::Factory::GetInstance().Insert(id, name, createFunction);
 * Insert a owner id and path to a JSON object
   - The JSON file needs a `"components"` element which is a list of pairs of `string` to `'object`.
   - e.g. [cool.json](data/cool.json)
+
+
+# To Do
+
+### Split up test code
+
+The test code should be in a seperate folder from `src`.
+
+### Build against `GCC`
+
+The current `makefile` only uses `clang`.
