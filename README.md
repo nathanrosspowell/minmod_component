@@ -54,6 +54,10 @@ component::Factory::GetInstance().Insert(id, name, createFunction);
   - The JSON file needs a `"components"` element which is a list of pairs of `string` to `'object`.
   - e.g. [cool.json](data/cool.json)
 
+# Dependencies
+
+* [json11](https://github.com/dropbox/json11) by [Dropbox](https://github.com/dropbox/) (already bundled with the source)
+
 
 # To Do
 
