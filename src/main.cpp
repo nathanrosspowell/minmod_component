@@ -15,19 +15,18 @@ int main()
     // Using statements just for the main scope block.
     using namespace minmod;
     using namespace minmod::component;
-    TRACE("Start main()"); // There will be some logs from static constructors
-    // before this line.
+    TRACE("Start main()"); // There will be some logs from static constructors before this line.
     TRACE("Create Component::Manager");
     Manager cm;
     OwnerId bob = 808; // Hook into id generator.
     OwnerId sam = 543; // Hook into id generator.
     Manager::InsertList bobsComponentMap = {{
-                                                TestComponent::GetStaticId(), // Create from id.
-                                                json11::Json::object{{"x", 102}, {"z", 15}} // Create JSON data to be deserialised.
+                                                TestComponent::GetStaticId(), // Create component from id.
+                                                json11::Json::object{{"x", 102}, {"z", 15}} // JSON data to be deserialised.
                                             },
                                             {
-                                                LinkingComponent::GetStaticId(), // Create from id.
-                                                json11::Json::object{} // Create JSON data to be deserialised.
+                                                LinkingComponent::GetStaticId(), // Create component from id.
+                                                json11::Json::object{} // JSON data to be deserialised.
                                             }};
     TRACE("Add bob");
     cm.Insert(bob, bobsComponentMap); // Insert list of componentMap.
