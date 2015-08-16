@@ -16,6 +16,7 @@ A minimal modern C++ component system.
   - No files with lists of registration code
 * Components are easy to instantiate
 * All components can be deserialized and serialized
+* Components are not tied to an 'entity' model e.g. a manager could have components
 
 
 # Guide
