@@ -27,16 +27,16 @@ namespace minmod
             };
             using Map = std::unordered_map<OwnerId, Entry>;
 
-            template <class COMPONENT> COMPONENT *Get(OwnerId ownerId)
+            template <class COMPONENT> COMPONENT* Get(OwnerId ownerId)
             {
-                return static_cast<COMPONENT *>(Get(ownerId, COMPONENT::GetStaticId()));
+                return static_cast<COMPONENT*>(Get(ownerId, COMPONENT::GetStaticId()));
             }
-            Interface *Get(OwnerId ownerId, Id comonentId);
-            Interface *Get(OwnerId ownerId, std::string componentName);
-            void Erase(OwnerId ownerId, const EraseList &componentMap);
+            Interface* Get(OwnerId ownerId, Id comonentId);
+            Interface* Get(OwnerId ownerId, std::string componentName);
+            void Erase(OwnerId ownerId, const EraseList& componentMap);
             void Erase(OwnerId ownerId);
-            OwnerId Insert(OwnerId ownerId, const char *const filePath);
-            OwnerId Insert(OwnerId ownerId, const InsertList &componentMap);
+            OwnerId Insert(OwnerId ownerId, const char* const filePath);
+            OwnerId Insert(OwnerId ownerId, const InsertList& componentMap);
 
         private:
             OwnerId Insert(OwnerId ownerId, ComponentMap componentMap);

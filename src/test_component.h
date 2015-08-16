@@ -39,7 +39,7 @@ namespace minmod
         // component::Interface.
         virtual void Deserialize(json11::Json json) override;
         virtual json11::Json Serialize() const override;
-        virtual void MakeLinks(component::Linker & /*liner*/) override
+        virtual void MakeLinks(component::Linker& /*liner*/) override
         {
         }
         virtual void Create() override

@@ -1,10 +1,12 @@
 BasedOnStyle: LLVM
 
-NamespaceIndentation: All
-IndentWidth: 4
-UseTab: Never
-BreakBeforeBraces: Allman
 AccessModifierOffset: -4
-ColumnLimit: 159
-AllowShortFunctionsOnASingleLine: false
 AlignTrailingComments: false
+AllowShortFunctionsOnASingleLine: false
+BreakBeforeBraces: Allman
+ColumnLimit: 159
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+IndentWidth: 4
+NamespaceIndentation: All
+PointerAlignment: Left
+UseTab: Never

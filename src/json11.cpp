@@ -42,12 +42,12 @@ namespace json11
      * Serialization
      */
 
-    static void dump(std::nullptr_t, string &out)
+    static void dump(std::nullptr_t, string& out)
     {
         out += "null";
     }
 
-    static void dump(double value, string &out)
+    static void dump(double value, string& out)
     {
         if (std::isfinite(value))
         {
@@ -61,19 +61,19 @@ namespace json11
         }
     }
 
-    static void dump(int value, string &out)
+    static void dump(int value, string& out)
     {
         char buf[32];
         snprintf(buf, sizeof buf, "%d", value);
         out += buf;
     }
 
-    static void dump(bool value, string &out)
+    static void dump(bool value, string& out)
     {
         out += value ? "true" : "false";
     }
 
-    static void dump(const string &value, string &out)
+    static void dump(const string& value, string& out)
     {
         out += '"';
         for (size_t i = 0; i < value.length(); i++)
@@ -131,11 +131,11 @@ namespace json11
         out += '"';
     }
 
-    static void dump(const Json::array &values, string &out)
+    static void dump(const Json::array& values, string& out)
     {
         bool first = true;
         out += "[";
-        for (const auto &value : values)
+        for (const auto& value : values)
         {
             if (!first)
                 out += ", ";
@@ -145,11 +145,11 @@ namespace json11
         out += "]";
     }
 
-    static void dump(const Json::object &values, string &out)
+    static void dump(const Json::object& values, string& out)
     {
         bool first = true;
         out += "{";
-        for (const auto &kv : values)
+        for (const auto& kv : values)
         {
             if (!first)
                 out += ", ";
@@ -161,7 +161,7 @@ namespace json11
         out += "}";
     }
 
-    void Json::dump(string &out) const
+    void Json::dump(string& out) const
     {
         m_ptr->dump(out);
     }
@@ -174,10 +174,10 @@ namespace json11
     {
     protected:
         // Constructors
-        explicit Value(const T &value) : m_value(value)
+        explicit Value(const T& value) : m_value(value)
         {
         }
-        explicit Value(T &&value) : m_value(move(value))
+        explicit Value(T&& value) : m_value(move(value))
         {
         }
 
@@ -188,17 +188,17 @@ namespace json11
         }
 
         // Comparisons
-        bool equals(const JsonValue *other) const override
+        bool equals(const JsonValue* other) const override
         {
-            return m_value == static_cast<const Value<tag, T> *>(other)->m_value;
+            return m_value == static_cast<const Value<tag, T>*>(other)->m_value;
         }
-        bool less(const JsonValue *other) const override
+        bool less(const JsonValue* other) const override
         {
-            return m_value < static_cast<const Value<tag, T> *>(other)->m_value;
+            return m_value < static_cast<const Value<tag, T>*>(other)->m_value;
         }
 
         const T m_value;
-        void dump(string &out) const override
+        void dump(string& out) const override
         {
             json11::dump(m_value, out);
         }
@@ -214,11 +214,11 @@ namespace json11
         {
             return static_cast<int>(m_value);
         }
-        bool equals(const JsonValue *other) const override
+        bool equals(const JsonValue* other) const override
         {
             return m_value == other->number_value();
         }
-        bool less(const JsonValue *other) const override
+        bool less(const JsonValue* other) const override
         {
             return m_value < other->number_value();
         }
@@ -239,11 +239,11 @@ namespace json11
         {
             return m_value;
         }
-        bool equals(const JsonValue *other) const override
+        bool equals(const JsonValue* other) const override
         {
             return m_value == other->number_value();
         }
-        bool less(const JsonValue *other) const override
+        bool less(const JsonValue* other) const override
         {
             return m_value < other->number_value();
         }
@@ -269,50 +269,50 @@ namespace json11
 
     class JsonString final : public Value<Json::STRING, string>
     {
-        const string &string_value() const override
+        const string& string_value() const override
         {
             return m_value;
         }
 
     public:
-        explicit JsonString(const string &value) : Value(value)
+        explicit JsonString(const string& value) : Value(value)
         {
         }
-        explicit JsonString(string &&value) : Value(move(value))
+        explicit JsonString(string&& value) : Value(move(value))
         {
         }
     };
 
     class JsonArray final : public Value<Json::ARRAY, Json::array>
     {
-        const Json::array &array_items() const override
+        const Json::array& array_items() const override
         {
             return m_value;
         }
-        const Json &operator[](size_t i) const override;
+        const Json& operator[](size_t i) const override;
 
     public:
-        explicit JsonArray(const Json::array &value) : Value(value)
+        explicit JsonArray(const Json::array& value) : Value(value)
         {
         }
-        explicit JsonArray(Json::array &&value) : Value(move(value))
+        explicit JsonArray(Json::array&& value) : Value(move(value))
         {
         }
     };
 
     class JsonObject final : public Value<Json::OBJECT, Json::object>
     {
-        const Json::object &object_items() const override
+        const Json::object& object_items() const override
         {
             return m_value;
         }
-        const Json &operator[](const string &key) const override;
+        const Json& operator[](const string& key) const override;
 
     public:
-        explicit JsonObject(const Json::object &value) : Value(value)
+        explicit JsonObject(const Json::object& value) : Value(value)
         {
         }
-        explicit JsonObject(Json::object &&value) : Value(move(value))
+        explicit JsonObject(Json::object&& value) : Value(move(value))
         {
         }
     };
@@ -341,13 +341,13 @@ namespace json11
         }
     };
 
-    const Statics &statics()
+    const Statics& statics()
     {
         static const Statics s{};
         return s;
     }
 
-    const Json &static_null()
+    const Json& static_null()
     {
         // This has to be separate, not in Statics, because Json() accesses statics().null.
         static const Json json_null;
@@ -373,25 +373,25 @@ namespace json11
     Json::Json(bool value) : m_ptr(value ? statics().t : statics().f)
     {
     }
-    Json::Json(const string &value) : m_ptr(make_shared<JsonString>(value))
+    Json::Json(const string& value) : m_ptr(make_shared<JsonString>(value))
     {
     }
-    Json::Json(string &&value) : m_ptr(make_shared<JsonString>(move(value)))
+    Json::Json(string&& value) : m_ptr(make_shared<JsonString>(move(value)))
     {
     }
-    Json::Json(const char *value) : m_ptr(make_shared<JsonString>(value))
+    Json::Json(const char* value) : m_ptr(make_shared<JsonString>(value))
     {
     }
-    Json::Json(const Json::array &values) : m_ptr(make_shared<JsonArray>(values))
+    Json::Json(const Json::array& values) : m_ptr(make_shared<JsonArray>(values))
     {
     }
-    Json::Json(Json::array &&values) : m_ptr(make_shared<JsonArray>(move(values)))
+    Json::Json(Json::array&& values) : m_ptr(make_shared<JsonArray>(move(values)))
     {
     }
-    Json::Json(const Json::object &values) : m_ptr(make_shared<JsonObject>(values))
+    Json::Json(const Json::object& values) : m_ptr(make_shared<JsonObject>(values))
     {
     }
-    Json::Json(Json::object &&values) : m_ptr(make_shared<JsonObject>(move(values)))
+    Json::Json(Json::object&& values) : m_ptr(make_shared<JsonObject>(move(values)))
     {
     }
 
@@ -415,23 +415,23 @@ namespace json11
     {
         return m_ptr->bool_value();
     }
-    const string &Json::string_value() const
+    const string& Json::string_value() const
     {
         return m_ptr->string_value();
     }
-    const vector<Json> &Json::array_items() const
+    const vector<Json>& Json::array_items() const
     {
         return m_ptr->array_items();
     }
-    const map<string, Json> &Json::object_items() const
+    const map<string, Json>& Json::object_items() const
     {
         return m_ptr->object_items();
     }
-    const Json &Json::operator[](size_t i) const
+    const Json& Json::operator[](size_t i) const
     {
         return (*m_ptr)[i];
     }
-    const Json &Json::operator[](const string &key) const
+    const Json& Json::operator[](const string& key) const
     {
         return (*m_ptr)[key];
     }
@@ -448,33 +448,33 @@ namespace json11
     {
         return false;
     }
-    const string &JsonValue::string_value() const
+    const string& JsonValue::string_value() const
     {
         return statics().empty_string;
     }
-    const vector<Json> &JsonValue::array_items() const
+    const vector<Json>& JsonValue::array_items() const
     {
         return statics().empty_vector;
     }
-    const map<string, Json> &JsonValue::object_items() const
+    const map<string, Json>& JsonValue::object_items() const
     {
         return statics().empty_map;
     }
-    const Json &JsonValue::operator[](size_t) const
+    const Json& JsonValue::operator[](size_t) const
     {
         return static_null();
     }
-    const Json &JsonValue::operator[](const string &) const
+    const Json& JsonValue::operator[](const string&) const
     {
         return static_null();
     }
 
-    const Json &JsonObject::operator[](const string &key) const
+    const Json& JsonObject::operator[](const string& key) const
     {
         auto iter = m_value.find(key);
         return (iter == m_value.end()) ? static_null() : iter->second;
     }
-    const Json &JsonArray::operator[](size_t i) const
+    const Json& JsonArray::operator[](size_t i) const
     {
         if (i >= m_value.size())
             return static_null();
@@ -486,7 +486,7 @@ namespace json11
      * Comparison
      */
 
-    bool Json::operator==(const Json &other) const
+    bool Json::operator==(const Json& other) const
     {
         if (m_ptr->type() != other.m_ptr->type())
             return false;
@@ -494,7 +494,7 @@ namespace json11
         return m_ptr->equals(other.m_ptr.get());
     }
 
-    bool Json::operator<(const Json &other) const
+    bool Json::operator<(const Json& other) const
     {
         if (m_ptr->type() != other.m_ptr->type())
             return m_ptr->type() < other.m_ptr->type();
@@ -538,21 +538,21 @@ namespace json11
 
         /* State
          */
-        const string &str;
+        const string& str;
         size_t i;
-        string &err;
+        string& err;
         bool failed;
 
         /* fail(msg, err_ret = Json())
          *
          * Mark this parse as failed.
          */
-        Json fail(string &&msg)
+        Json fail(string&& msg)
         {
             return fail(move(msg), Json());
         }
 
-        template <typename T> T fail(string &&msg, const T err_ret)
+        template <typename T> T fail(string&& msg, const T err_ret)
         {
             if (!failed)
                 err = std::move(msg);
@@ -588,7 +588,7 @@ namespace json11
          *
          * Encode pt as UTF-8 and add it to out.
          */
-        void encode_utf8(long pt, string &out)
+        void encode_utf8(long pt, string& out)
         {
             if (pt < 0)
                 return;
@@ -798,7 +798,7 @@ namespace json11
          * Expect that 'str' starts at the character that was just read. If it does, advance
          * the input and return res. If not, flag an error.
          */
-        Json expect(const string &expected, Json res)
+        Json expect(const string& expected, Json res)
         {
             assert(i != 0);
             i--;
@@ -911,7 +911,7 @@ namespace json11
         }
     };
 
-    Json Json::parse(const string &in, string &err)
+    Json Json::parse(const string& in, string& err)
     {
         JsonParser parser{in, 0, err, false};
         Json result = parser.parse_json(0);
@@ -925,7 +925,7 @@ namespace json11
     }
 
     // Documented in json11.hpp
-    vector<Json> Json::parse_multi(const string &in, string &err)
+    vector<Json> Json::parse_multi(const string& in, string& err)
     {
         JsonParser parser{in, 0, err, false};
 
@@ -943,7 +943,7 @@ namespace json11
      * Shape-checking
      */
 
-    bool Json::has_shape(const shape &types, string &err) const
+    bool Json::has_shape(const shape& types, string& err) const
     {
         if (!is_object())
         {
@@ -951,7 +951,7 @@ namespace json11
             return false;
         }
 
-        for (auto &item : types)
+        for (auto& item : types)
         {
             if ((*this)[item.first].type() != item.second)
             {

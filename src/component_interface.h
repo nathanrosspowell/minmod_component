@@ -24,7 +24,7 @@ namespace minmod
             friend class Linker;
             // Where to define dependencies on other componentMap, may be called
             // multiple times.
-            virtual void MakeLinks(Linker &linker) = 0;
+            virtual void MakeLinks(Linker& linker) = 0;
 
         private:
             friend class Manager;

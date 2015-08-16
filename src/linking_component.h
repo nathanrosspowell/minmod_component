@@ -39,7 +39,7 @@ namespace minmod
         {
             return json11::Json::object{};
         }
-        virtual void MakeLinks(component::Linker &liner) override;
+        virtual void MakeLinks(component::Linker& liner) override;
         virtual void Create() override
         {
         }
@@ -50,6 +50,6 @@ namespace minmod
     private:
         static component::Registrant<LinkingComponent> ms_registrant;
         static const bool ms_id; // Address of this variable as a cheap unique id per class.
-        TestComponent *m_test;
+        TestComponent* m_test;
     };
 }

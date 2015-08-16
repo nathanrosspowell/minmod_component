@@ -21,8 +21,7 @@ int main()
     Manager cm;
     OwnerId bob = 808; // Hook into id generator.
     OwnerId sam = 543; // Hook into id generator.
-    Manager::InsertList bobsComponentMap = {// Create stuff for bob.
-                                            {
+    Manager::InsertList bobsComponentMap = {{
                                                 TestComponent::GetStaticId(), // Create from id.
                                                 json11::Json::object{{"x", 102}, {"z", 15}} // Create JSON data to be deserialised.
                                             },

@@ -16,7 +16,7 @@ namespace minmod
         class Factory
         {
         public:
-            static Factory &GetInstance()
+            static Factory& GetInstance()
             {
                 static Factory instance;
                 return instance;
@@ -55,8 +55,8 @@ namespace minmod
             std::unordered_map<Id, CreateFunction> m_map;
 
         private:
-            Factory(Factory const &) = delete;
-            void operator=(Factory const &) = delete;
+            Factory(Factory const&) = delete;
+            void operator=(Factory const&) = delete;
         };
     }
 }

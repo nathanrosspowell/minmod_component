@@ -16,21 +16,21 @@ namespace minmod
         {
         public:
             ~Linker();
-            template <class COMPONENT> void Link(std::function<void(COMPONENT *)> add, std::function<void()> remove)
+            template <class COMPONENT> void Link(std::function<void(COMPONENT*)> add, std::function<void()> remove)
             {
                 assert(m_currentlyLinking != INVALID_ID);
-                auto &ownedPairs = m_entryMap[COMPONENT::GetStaticId()];
+                auto& ownedPairs = m_entryMap[COMPONENT::GetStaticId()];
                 ownedPairs[m_currentlyLinking] = std::make_pair(
-                    [add](Interface *ptr)
+                    [add](Interface* ptr)
                     {
-                        assert(dynamic_cast<COMPONENT *>(ptr) != nullptr);
-                        add(static_cast<COMPONENT *>(ptr));
+                        assert(dynamic_cast<COMPONENT*>(ptr) != nullptr);
+                        add(static_cast<COMPONENT*>(ptr));
                     },
                     remove);
             }
 
         private:
-            using AddFunc = std::function<void(Interface *)>;
+            using AddFunc = std::function<void(Interface*)>;
             using RemoveFunc = std::function<void()>;
             using AddMap = std::unordered_map<Id, AddFunc>;
             using RemoveMap = std::unordered_map<Id, RemoveFunc>;
@@ -40,11 +40,11 @@ namespace minmod
 
         private:
             friend class Manager;
-            void Link(Interface *interfacePtr);
+            void Link(Interface* interfacePtr);
             void UnLink(Id id);
-            void AddComponent(Interface *interfacePtr) const;
+            void AddComponent(Interface* interfacePtr) const;
             void RemoveComponent(Id id);
-            void MoveLinks(Linker &&linker);
+            void MoveLinks(Linker&& linker);
 
         private:
             EntryMap m_entryMap;
