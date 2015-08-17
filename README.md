@@ -69,3 +69,9 @@ The test code should be in a seperate folder from `src`.
 ### Build against `GCC`
 
 The current `makefile` only uses `clang`.
+
+### Load/Save
+
+Add a mechanism to dump everything in the `component::Manager` to a JSON file.
+Have an optimal way to read that file back in and make the needed changes - something smarter than destroying everything to then rebuild the same components from scratch.
+
