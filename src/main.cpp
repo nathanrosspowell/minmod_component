@@ -22,14 +22,8 @@ int main()
     OwnerId bob = 808; // Hook into id generator.
     OwnerId sam = 543; // Hook into id generator.
     // Pairs of id to json object.
-    Manager::InsertList bobsComponentMap = {{
-                                                TestComponent::GetStaticId(), 
-                                                json11::Json::object{{"x", 102}, {"z", 15}} 
-                                            },
-                                            {
-                                                LinkingComponent::GetStaticId(),
-                                                json11::Json::object{} 
-                                            }};
+    Manager::InsertList bobsComponentMap = {{TestComponent::GetStaticId(), json11::Json::object{{"x", 102}, {"z", 15}}},
+                                            {LinkingComponent::GetStaticId(), json11::Json::object{}}};
     TRACE("Add bob");
     cm.Insert(bob, bobsComponentMap); // Insert list of componentMap.
     TRACE("Get bobs TestComponent");
@@ -47,7 +41,7 @@ int main()
     assert(samsTest != nullptr);
     TRACE("Got: " << samsTest->GetName());
     Json cmJson = cm.Serialize();
-    TRACE("Dump Manager"<<cmJson.dump());
+    TRACE("Dump Manager" << cmJson.dump());
     Manager::EraseList samsComponentMap = {
         LinkingComponent::GetStaticId() // Erase by number.
     };
@@ -63,7 +57,7 @@ int main()
     TRACE("Clone Manager");
     Manager cloneManager;
     cloneManager.Deserialize(cmJson);
-    TRACE("Dump Clone Manager"<<cloneManager.Serialize().dump());
+    TRACE("Dump Clone Manager" << cloneManager.Serialize().dump());
     TRACE("End main()");
     return 0;
 }

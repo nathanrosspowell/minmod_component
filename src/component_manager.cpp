@@ -18,9 +18,9 @@ namespace minmod
     {
         void Manager::Deserialize(json11::Json json)
         {
-            TRACE("Deserialize "<<json.dump());
+            TRACE("Deserialize " << json.dump());
             const auto& entries = json["entries"].array_items();
-            for ( const auto& entry : entries )
+            for (const auto& entry : entries)
             {
                 auto& name = entry["name"];
                 assert(name.is_int());
@@ -35,26 +35,23 @@ namespace minmod
         {
             using namespace json11;
             Json::array entriesArray;
-            for ( const auto& entryPair : m_map )
+            for (const auto& entryPair : m_map)
             {
                 Json::array componentArray;
                 const auto& componentMap = entryPair.second.m_componentMap;
-                for ( const auto& componentPair : componentMap )
+                for (const auto& componentPair : componentMap)
                 {
                     const auto component = componentPair.second.get();
-                    componentArray.push_back(std::move( Json::object({
-                        { "name", component->GetName() },
-                        { "data", component->Serialize() },
+                    componentArray.push_back(std::move(Json::object({
+                        {"name", component->GetName()}, {"data", component->Serialize()},
                     })));
                 }
-                entriesArray.push_back(std::move( Json::object({
-                    { "name", (std::int32_t)entryPair.first },
-                    { "components", componentArray },
+                entriesArray.push_back(std::move(Json::object({
+                    {"name", (std::int32_t)entryPair.first}, {"components", componentArray},
                 })));
             }
             return Json::object({
-                { "name", "Manager" },
-                { "entries", entriesArray},
+                {"name", "Manager"}, {"entries", entriesArray},
             });
         }
 
