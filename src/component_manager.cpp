@@ -23,7 +23,7 @@ namespace minmod
             for (const auto& entry : entries)
             {
                 auto& name = entry["name"];
-                assert(name.is_int());
+                assert(name.is_number());
                 Id id = (Id)name.int_value();
                 auto& components = entry["components"];
                 assert(components.is_array());
