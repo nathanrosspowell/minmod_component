@@ -18,11 +18,16 @@ namespace minmod
     {
         void Manager::Deserialize(json11::Json json)
         {
+            TRACE("Deserialize "<<json.dump());
             const auto& entries = json["entries"].array_items();
             for ( const auto& entry : entries )
             {
-                Id id = (Id)entry["name"].int_value();
-                Insert(id, entry["components"]);
+                auto& name = entry["name"];
+                assert(name.is_int());
+                Id id = (Id)name.int_value();
+                auto& components = entry["components"];
+                assert(components.is_array());
+                Insert(id, components);
             }
         }
 
@@ -38,7 +43,7 @@ namespace minmod
                 {
                     const auto component = componentPair.second.get();
                     componentArray.push_back(std::move( Json::object({
-                        { "name", (std::int32_t)component->GetId() },
+                        { "name", component->GetName() },
                         { "data", component->Serialize() },
                     })));
                 }
@@ -122,20 +127,25 @@ namespace minmod
             std::string err;
             json11::Json fileJson = json11::Json::parse(file, err);
             auto& jsonComponentMap = fileJson["components"];
+            assert(jsonComponentMap.is_array());
             assert(jsonComponentMap.array_items().size() > 0);
             return Insert(ownerId, std::move(jsonComponentMap));
         }
 
         OwnerId Manager::Insert(OwnerId ownerId, const json11::Json json)
         {
+            TRACE("For ownerId: " << ownerId << ". From JSON: " << json.dump());
             ComponentMap componentMap;
             for (const auto& jsonComponent : json.array_items())
             {
-                auto name = jsonComponent["name"].string_value();
-                auto component = Factory::GetInstance().Create(name);
+                auto name = jsonComponent["name"];
+                assert(name.is_string());
+                auto component = Factory::GetInstance().Create(name.string_value());
                 if (component)
                 {
-                    component->Deserialize(jsonComponent["data"]);
+                    auto& data = jsonComponent["data"];
+                    assert(data.is_object());
+                    component->Deserialize(data);
                     TRACE("  Deserialize of: " << component->GetName());
                     TRACE("    " << component->Serialize().dump());
                     componentMap[component->GetId()] = std::move(component);

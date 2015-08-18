@@ -15,18 +15,20 @@ int main()
     // Using statements just for the main scope block.
     using namespace minmod;
     using namespace minmod::component;
+    using namespace json11;
     TRACE("Start main()"); // There will be some logs from static constructors before this line.
     TRACE("Create Component::Manager");
     Manager cm;
     OwnerId bob = 808; // Hook into id generator.
     OwnerId sam = 543; // Hook into id generator.
+    // Pairs of id to json object.
     Manager::InsertList bobsComponentMap = {{
-                                                TestComponent::GetStaticId(), // Create component from id.
-                                                json11::Json::object{{"x", 102}, {"z", 15}} // JSON data to be deserialised.
+                                                TestComponent::GetStaticId(), 
+                                                json11::Json::object{{"x", 102}, {"z", 15}} 
                                             },
                                             {
-                                                LinkingComponent::GetStaticId(), // Create component from id.
-                                                json11::Json::object{} // JSON data to be deserialised.
+                                                LinkingComponent::GetStaticId(),
+                                                json11::Json::object{} 
                                             }};
     TRACE("Add bob");
     cm.Insert(bob, bobsComponentMap); // Insert list of componentMap.
@@ -44,7 +46,8 @@ int main()
     auto samsTest = cm.Get(sam, TestComponent::GetStaticId());
     assert(samsTest != nullptr);
     TRACE("Got: " << samsTest->GetName());
-    TRACE("Dump Manager"<<cm.Serialize().dump());
+    Json cmJson = cm.Serialize();
+    TRACE("Dump Manager"<<cmJson.dump());
     Manager::EraseList samsComponentMap = {
         LinkingComponent::GetStaticId() // Erase by number.
     };
@@ -57,6 +60,10 @@ int main()
     TRACE("Got: " << name);
     TRACE("Remove bob");
     cm.Erase(bob);
+    TRACE("Clone Manager");
+    Manager cloneManager;
+    cloneManager.Deserialize(cmJson);
+    TRACE("Dump Clone Manager"<<cloneManager.Serialize().dump());
     TRACE("End main()");
     return 0;
 }
