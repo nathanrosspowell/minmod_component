@@ -7,7 +7,6 @@
 namespace minmod
 {
     component::Registrant<TestComponent> TestComponent::ms_registrant;
-    const bool TestComponent::ms_id = true; // Address of this variable as a cheap unique id per class.
 
     TestComponent::TestComponent()
     {

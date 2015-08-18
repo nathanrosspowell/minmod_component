@@ -16,6 +16,43 @@ namespace minmod
 {
     namespace component
     {
+        void Manager::Deserialize(json11::Json json)
+        {
+            const auto& entries = json["entries"].array_items();
+            for ( const auto& entry : entries )
+            {
+                Id id = (Id)entry["name"].int_value();
+                Insert(id, entry["components"]);
+            }
+        }
+
+        json11::Json Manager::Serialize() const
+        {
+            using namespace json11;
+            Json::array entriesArray;
+            for ( const auto& entryPair : m_map )
+            {
+                Json::array componentArray;
+                const auto& componentMap = entryPair.second.m_componentMap;
+                for ( const auto& componentPair : componentMap )
+                {
+                    const auto component = componentPair.second.get();
+                    componentArray.push_back(std::move( Json::object({
+                        { "name", (std::int32_t)component->GetId() },
+                        { "data", component->Serialize() },
+                    })));
+                }
+                entriesArray.push_back(std::move( Json::object({
+                    { "name", (std::int32_t)entryPair.first },
+                    { "components", componentArray },
+                })));
+            }
+            return Json::object({
+                { "name", "Manager" },
+                { "entries", entriesArray},
+            });
+        }
+
         Interface* Manager::Get(OwnerId ownerId, Id comonentId)
         {
             auto ownerIt = m_map.find(ownerId);
@@ -84,10 +121,15 @@ namespace minmod
             std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
             std::string err;
             json11::Json fileJson = json11::Json::parse(file, err);
-            ComponentMap componentMap;
             auto& jsonComponentMap = fileJson["components"];
             assert(jsonComponentMap.array_items().size() > 0);
-            for (const auto& jsonComponent : jsonComponentMap.array_items())
+            return Insert(ownerId, std::move(jsonComponentMap));
+        }
+
+        OwnerId Manager::Insert(OwnerId ownerId, const json11::Json json)
+        {
+            ComponentMap componentMap;
+            for (const auto& jsonComponent : json.array_items())
             {
                 auto name = jsonComponent["name"].string_value();
                 auto component = Factory::GetInstance().Create(name);

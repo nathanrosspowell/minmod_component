@@ -17,7 +17,7 @@ namespace minmod
         // component::Factory Registration.
         static component::Id GetStaticId()
         {
-            return reinterpret_cast<component::Id>(&ms_id);
+            return 0xaccf8b33; // CRC32 of "test".
         }
         static std::string GetStaticName()
         {
@@ -50,7 +50,6 @@ namespace minmod
         }
 
     private:
-        static const bool ms_id; // Address of this variable as a cheap unique id per class.
         static component::Registrant<TestComponent> ms_registrant;
 
     private:

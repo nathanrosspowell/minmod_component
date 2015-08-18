@@ -44,6 +44,7 @@ int main()
     auto samsTest = cm.Get(sam, TestComponent::GetStaticId());
     assert(samsTest != nullptr);
     TRACE("Got: " << samsTest->GetName());
+    TRACE("Dump Manager"<<cm.Serialize().dump());
     Manager::EraseList samsComponentMap = {
         LinkingComponent::GetStaticId() // Erase by number.
     };

@@ -4,8 +4,8 @@ namespace minmod
 {
     namespace component
     {
-        using OwnerId = std::size_t;
-        using Id = std::size_t;
+        using OwnerId = std::int32_t;
+        using Id = std::uint32_t;
         static const Id INVALID_ID = 0;
     }
 }

@@ -12,7 +12,7 @@ namespace minmod
         // component::Factory Registration.
         static component::Id GetStaticId()
         {
-            return reinterpret_cast<component::Id>(&ms_id);
+            return 0xd8f2a84d; // CRC32 of "link"
         }
         static std::string GetStaticName()
         {
@@ -49,7 +49,8 @@ namespace minmod
 
     private:
         static component::Registrant<LinkingComponent> ms_registrant;
-        static const bool ms_id; // Address of this variable as a cheap unique id per class.
+
+    private:
         TestComponent* m_test;
     };
 }

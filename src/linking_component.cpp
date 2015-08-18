@@ -10,7 +10,6 @@
 namespace minmod
 {
     component::Registrant<LinkingComponent> LinkingComponent::ms_registrant;
-    const bool LinkingComponent::ms_id = true; // Address of this variable as a cheap unique id per class.
 
     void LinkingComponent::MakeLinks(component::Linker& linker)
     {
