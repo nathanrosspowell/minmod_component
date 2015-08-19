@@ -162,6 +162,8 @@ namespace minmod
                 auto component = Factory::GetInstance().Create(pair.first);
                 if (component)
                 {
+                    assert(component->GetId() == pair.first);
+                    assert(Factory::GetInstance.GetId(component->GetName()) == pair.first);
                     component->Deserialize(pair.second);
                     TRACE("  Deserialize of: " << component->GetName());
                     TRACE("    " << component->Serialize().dump());
