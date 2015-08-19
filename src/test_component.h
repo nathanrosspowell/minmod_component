@@ -26,13 +26,9 @@ namespace minmod
 
     public:
         // component::Interface.
-        virtual component::Id GetId() const
+        virtual component::Interface::IdPair GetId() const override
         {
-            return GetStaticId();
-        }
-        virtual std::string GetName() const
-        {
-            return GetStaticName();
+            return std::make_pair(GetStaticId(), GetStaticName());
         }
 
     private:
