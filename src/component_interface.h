@@ -16,9 +16,9 @@ namespace minmod
         class Interface : public Serializer
         {
         public:
-            // Id function.
-            using IdPair = std::pair<Id, std::string>;
-            virtual IdPair GetId() const = 0;
+            // Id functions.
+            virtual Id GetId() const = 0;
+            virtual std::string GetName() const = 0;
 
         private:
             friend class Linker;

@@ -42,9 +42,8 @@ namespace minmod
                 for (const auto& componentPair : componentMap)
                 {
                     const auto component = componentPair.second.get();
-                    const auto& name = std::get<std::string>(component->GetId());
                     componentArray.push_back(std::move(Json::object({
-                        {"name", name}, {"data", component->Serialize()},
+                        {"name", component->GetName()}, {"data", component->Serialize()},
                     })));
                 }
                 entriesArray.push_back(std::move(Json::object({
@@ -144,11 +143,9 @@ namespace minmod
                     auto& data = jsonComponent["data"];
                     assert(data.is_object());
                     component->Deserialize(data);
-                    const auto& name = std::get<std::string>(component->GetId());
-                    const auto& id = std::get<Id>(component->GetId());
-                    TRACE("  Deserialize of: " << name );
+                    TRACE("  Deserialize of: " << component->GetName());
                     TRACE("    " << component->Serialize().dump());
-                    componentMap[id] = std::move(component);
+                    componentMap[component->GetId()] = std::move(component);
                 }
             }
             return Insert(ownerId, std::move(componentMap));
@@ -166,11 +163,9 @@ namespace minmod
                 if (component)
                 {
                     component->Deserialize(pair.second);
-                    const auto& name = std::get<std::string>(component->GetId());
-                    const auto& id = std::get<Id>(component->GetId());
-                    TRACE("  Deserialize of: " << name ); 
+                    TRACE("  Deserialize of: " << component->GetName());
                     TRACE("    " << component->Serialize().dump());
-                    componentMap[id] = std::move(component);
+                    componentMap[component->GetId()] = std::move(component);
                 }
             }
             return Insert(ownerId, std::move(componentMap));
