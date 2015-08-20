@@ -4,8 +4,9 @@
 #include <fstream>
 // minmod
 #include "component_manager.h"
-#include "test_component.h"
+#include "custom_component.h"
 #include "linking_component.h"
+#include "test_component.h"
 #include "json11.hpp"
 // Debug
 #include <iostream>
@@ -22,8 +23,8 @@ int main()
     OwnerId bob = 808; // Hook into id generator.
     OwnerId sam = 543; // Hook into id generator.
     // Pairs of id to json object.
-    Manager::InsertList bobsComponentMap = {{TestComponent::GetStaticId(), json11::Json::object{{"x", 102}, {"z", 15}}},
-                                            {LinkingComponent::GetStaticId(), json11::Json::object{}}};
+    Manager::InsertList bobsComponentMap = {{TestComponent::GetStaticId(), Json::object{{"x", 102}, {"z", 15}}},
+                                            {LinkingComponent::GetStaticId(), Json::object{}}};
     TRACE("Add bob");
     cm.Insert(bob, bobsComponentMap); // Insert list of componentMap.
     TRACE("Get bobs TestComponent");
@@ -58,6 +59,25 @@ int main()
     Manager cloneManager;
     cloneManager.Deserialize(cmJson);
     TRACE("Dump Clone Manager" << cloneManager.Serialize().dump());
+    TRACE("Custom types test, open scope");
+    {
+        Id ohFive = 2005;
+        Id ohNine = 2009;
+        CustomRegistrant custom1(ohFive, "oh-five", [](auto id, auto name)
+                                 {
+                                     return std::make_unique<CustomComponent>(id, name, 5);
+                                 });
+        CustomRegistrant custom2(ohNine, "oh-nine", [](auto id, auto name)
+                                 {
+                                     return std::make_unique<CustomComponent>(id, name, 9);
+                                 });
+
+        OwnerId ned = 232;
+        Manager::InsertList nedsComponents = {{ohFive, Json::object{{"size", 3}}}, {ohNine, Json::object{{"size", 9}}}};
+        Manager nedsManager;
+        nedsManager.Insert(ned, nedsComponents);
+    }
+    TRACE("Custom types test, close scope");
     TRACE("End main()");
     return 0;
 }

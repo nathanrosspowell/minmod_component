@@ -9,7 +9,7 @@
 
 namespace minmod
 {
-    component::Registrant<LinkingComponent> LinkingComponent::ms_registrant;
+    component::TypeRegistrant<LinkingComponent> LinkingComponent::ms_TypeRegistrant;
 
     void LinkingComponent::MakeLinks(component::Linker& linker)
     {

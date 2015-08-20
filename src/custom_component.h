@@ -5,34 +5,25 @@
 
 namespace minmod
 {
-    class TestComponent : public component::Interface
+    class CustomComponent : public component::Interface
     {
     public:
-        TestComponent();
-        virtual ~TestComponent();
+        CustomComponent(component::Id id, std::string name, std::int32_t max);
+        virtual ~CustomComponent()
+        {
+        }
 
         void Print();
-
-    public:
-        // component::Factory Registration.
-        static component::Id GetStaticId()
-        {
-            return 0xaccf8b33; // CRC32 of "test".
-        }
-        static std::string GetStaticName()
-        {
-            return "test";
-        }
 
     public:
         // component::Interface.
         virtual component::Id GetId() const
         {
-            return GetStaticId();
+            return m_id;
         }
         virtual std::string GetName() const
         {
-            return GetStaticName();
+            return m_name;
         }
 
     private:
@@ -50,11 +41,9 @@ namespace minmod
         }
 
     private:
-        static component::TypeRegistrant<TestComponent> ms_TypeRegistrant;
-
-    private:
-        int m_x = 0;
-        int m_y = 0;
-        int m_z = 0;
+        component::Id m_id;
+        std::string m_name;
+        std::int32_t m_max;
+        std::int32_t m_size;
     };
 }

@@ -48,7 +48,7 @@ namespace minmod
         }
 
     private:
-        static component::Registrant<LinkingComponent> ms_registrant;
+        static component::TypeRegistrant<LinkingComponent> ms_TypeRegistrant;
 
     private:
         TestComponent* m_test;
