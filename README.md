@@ -7,7 +7,6 @@ A minimal modern C++ component system.
 - Minimal: What I decided as the basic needs for the system and nothing more
 - Modern: Using features from C++11/14/17 when it makes sense, not just for the sake of it.
 
-
 # Design choices
 
 * New components are easy to code
@@ -66,6 +65,10 @@ component::Factory::GetInstance().Insert(id, name, createFunction);
 
 The test code should be in a seperate folder from `src`.
 
+### With test code split away, build _real_ source as a library
+
+Builds the code as a library and link against it.
+
 ### Build against `GCC`
 
 The current `makefile` only uses `clang`.
@@ -74,4 +77,8 @@ The current `makefile` only uses `clang`.
 
 Add a mechanism to dump everything in the `component::Manager` to a JSON file.
 Have an optimal way to read that file back in and make the needed changes - something smarter than destroying everything to then rebuild the same components from scratch.
+
+### Run on Travis CI with debug build
+
+I need to ensure that no asserts are being hit on Clang.
 
