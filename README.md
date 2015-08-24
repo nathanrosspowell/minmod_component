@@ -78,7 +78,10 @@ The current `makefile` only uses `clang`.
 Add a mechanism to dump everything in the `component::Manager` to a JSON file.
 Have an optimal way to read that file back in and make the needed changes - something smarter than destroying everything to then rebuild the same components from scratch.
 
-### Run on Travis CI with debug build
+### Have a component handle 
 
-I need to ensure that no asserts are being hit on Clang.
+There should be a safe way to store a 'pointer' to specific component.
+A raw pointer would become junk if the component is deleted, this is what we want to avoid.
+A weak pointer is an option, but this would need the underlying `unique_ptr` to be changed to a `shared_ptr`.
+
 
