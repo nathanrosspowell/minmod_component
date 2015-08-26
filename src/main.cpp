@@ -4,6 +4,7 @@
 #include <fstream>
 // minmod
 #include "component_manager.h"
+#include "component_handle.h"
 #include "custom_component.h"
 #include "linking_component.h"
 #include "test_component.h"
@@ -35,6 +36,20 @@ int main()
     auto bobsLink = cm.Get(bob, "link");
     assert(bobsLink != nullptr);
     TRACE("Got: " << bobsLink->GetName());
+    TRACE("Get bobs TestComponent via handle");
+    Handle<TestComponent> testHandle(cm, bob, TestComponent::GetStaticId());
+    if (auto test = testHandle.Get())
+    {
+        auto& testRef = test.Get();
+        TRACE("Got: " << testRef.GetName());
+    }
+    TRACE("Get bobs LinkingComponent via handle");
+    Handle<LinkingComponent> linkHandle(cm, bob);
+    if (auto link = linkHandle.Get())
+    {
+        auto& linkRef = link.Get();
+        TRACE("Got: " << linkRef.GetName());
+    }
     TRACE("Add sam");
     cm.Insert(sam, "../data/cool.json"); // Create from json file.
     TRACE("Get sams TestComponent");

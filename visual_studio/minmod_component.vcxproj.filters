@@ -48,6 +48,9 @@
     <ClInclude Include="..\src\custom_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\component_handle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\component_factory.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\custom_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\component_handle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

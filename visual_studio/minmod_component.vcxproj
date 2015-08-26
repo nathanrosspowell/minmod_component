@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\component_factory.h" />
+    <ClInclude Include="..\src\component_handle.h" />
     <ClInclude Include="..\src\component_interface.h" />
     <ClInclude Include="..\src\component_linker.h" />
     <ClInclude Include="..\src\component_manager.h" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\component_factory.cpp" />
+    <ClCompile Include="..\src\component_handle.cpp" />
     <ClCompile Include="..\src\component_linker.cpp" />
     <ClCompile Include="..\src\component_manager.cpp" />
     <ClCompile Include="..\src\component_registrant.cpp" />
