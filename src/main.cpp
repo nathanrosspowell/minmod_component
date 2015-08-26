@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 // minmod
+#include "component_types.h"
 #include "component_manager.h"
 #include "component_handle.h"
 #include "custom_component.h"
@@ -30,10 +31,12 @@ int main()
     cm.Insert(bob, bobsComponentMap); // Insert list of componentMap.
     TRACE("Get bobs TestComponent");
     auto bobsTest = cm.Get<TestComponent>(bob);
+    UNUSED(bobsTest);
     assert(bobsTest != nullptr);
     TRACE("Got: " << bobsTest->GetName());
     TRACE("Get bobs LinkingComponent");
     auto bobsLink = cm.Get(bob, "link");
+    UNUSED(bobsLink);
     assert(bobsLink != nullptr);
     TRACE("Got: " << bobsLink->GetName());
     TRACE("Get bobs TestComponent via handle");
@@ -41,6 +44,7 @@ int main()
     if (auto test = testHandle.Get())
     {
         auto& testRef = test.Get();
+        UNUSED(testRef);
         TRACE("Got: " << testRef.GetName());
     }
     TRACE("Get bobs LinkingComponent via handle");
@@ -48,12 +52,14 @@ int main()
     if (auto link = linkHandle.Get())
     {
         auto& linkRef = link.Get();
+        UNUSED(linkRef);
         TRACE("Got: " << linkRef.GetName());
     }
     TRACE("Add sam");
     cm.Insert(sam, "../data/cool.json"); // Create from json file.
     TRACE("Get sams TestComponent");
     auto samsTest = cm.Get(sam, TestComponent::GetStaticId());
+    UNUSED(samsTest);
     assert(samsTest != nullptr);
     TRACE("Got: " << samsTest->GetName());
     Json cmJson = cm.Serialize();

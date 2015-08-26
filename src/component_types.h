@@ -10,5 +10,10 @@ namespace minmod
     }
 }
 
-// Debug traces
-#define TRACE(format) std::cout << "[" << __FILE__ << "(" << __LINE__ << ")::" << __FUNCTION__ << "]" << format << std::endl;
+#ifdef NDEBUG
+    #define TRACE(format)
+    #define UNUSED(x) (void)(x)
+#else
+    #define TRACE(format) std::cout << "[" << __FILE__ << "(" << __LINE__ << ")::" << __FUNCTION__ << "]" << format << std::endl;
+    #define UNUSED(x)
+#endif
