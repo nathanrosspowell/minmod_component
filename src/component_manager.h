@@ -36,10 +36,7 @@ namespace minmod
 
         public:
             // Functions.
-            template <class COMPONENT> COMPONENT* Get(const OwnerId ownerId)
-            {
-                return static_cast<COMPONENT*>(Get(ownerId, COMPONENT::GetStaticId()));
-            }
+            template <class T> T* Get(const OwnerId ownerId);
             Interface* Get(const OwnerId ownerId, const Id comonentId);
             Interface* Get(const OwnerId ownerId, const Name& componentName);
             void Erase(const OwnerId ownerId, const EraseList& componentMap);
@@ -58,3 +55,6 @@ namespace minmod
         };
     }
 }
+
+// Inline file for template declarations.
+#include "component_manager.inl"
