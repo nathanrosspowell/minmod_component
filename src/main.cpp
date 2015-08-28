@@ -28,18 +28,18 @@ int main()
     OwnerId sam = 543; // Hook into id generator.
     // Pairs of id to json object.
     Manager::InsertList bobsComponentMap = {// clang-format off
-		{
-			TestComponent::GetStaticId(),
-			Json::object{
-				{ "x", 102 },
-				{ "z", 15 }
-	        }
-		},
-		{
-			LinkingComponent::GetStaticId(),
-			Json::object{}
-		}
-	}; // clang-format on
+        {
+            TestComponent::GetStaticId(),
+            Json::object{
+                { "x", 102 },
+                { "z", 15 }
+            }
+        },
+        {
+            LinkingComponent::GetStaticId(),
+            Json::object{}
+        }
+    }; // clang-format on
     TRACE("Add bob");
     cm.Insert(bob, bobsComponentMap); // Insert list of componentMap.
     TRACE("Get bobs TestComponent");
@@ -56,7 +56,7 @@ int main()
     Handle<TestComponent> testHandle(cm, bob, TestComponent::GetStaticId());
     if (Handle<TestComponent>::Adapter test = testHandle.Get())
     {
-		UNUSED(test);
+        UNUSED(test);
         TRACE("Got: " << test->GetName());
     }
     TRACE("Get bobs LinkingComponent via handle");
@@ -64,10 +64,14 @@ int main()
     if (auto link = linkHandle.Get())
     {
         auto& linkRef = link.Get();
-		UNUSED(linkRef);
+        UNUSED(linkRef);
         TRACE("Got: " << linkRef.GetName());
     }
-    linkHandle.Do([](auto& linkRef){ TRACE("Handle::Do Got: " << linkRef.GetName()); });
+    linkHandle.Do([](auto& linkRef)
+                  {
+                      UNUSED(linkRef);
+                      TRACE("Handle::Do Got: " << linkRef.GetName());
+                  });
     TRACE("Add sam");
     cm.Insert(sam, "../data/cool.json"); // Create from json file.
     TRACE("Get sams TestComponent");

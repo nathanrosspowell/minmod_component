@@ -9,7 +9,7 @@ namespace minmod
         {
         public:
             // Serialization.
-            virtual void Deserialize(json11::Json json) = 0;
+            virtual void Deserialize(const json11::Json& json) = 0;
             virtual json11::Json Serialize() const = 0;
         };
     }

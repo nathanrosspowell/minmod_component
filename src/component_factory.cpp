@@ -6,14 +6,14 @@ namespace minmod
 {
     namespace component
     {
-        void Factory::Insert(Id id, Name name, CreateFunction createFunc)
+        void Factory::Insert(const Id id, const Name& name, CreateFunction createFunc)
         {
             TRACE("Component: " << id << ", " << name);
             m_stringMap.insert(std::make_pair(name, id));
             m_map.insert(std::make_pair(id, createFunc));
         }
 
-        void Factory::Erase(Id id, Name name)
+        void Factory::Erase(const Id id, const Name& name)
         {
             TRACE("Component: " << id << ", " << name);
             assert(m_stringMap[name] == id);
@@ -21,21 +21,19 @@ namespace minmod
             m_map.erase(id);
         }
 
-        UniquePtr Factory::Create(Id id)
+        UniquePtr Factory::Create(const Id id)
         {
             auto it = m_map.find(id);
             assert(it != m_map.end());
             return std::move(it->second());
         }
 
-        UniquePtr Factory::Create(Name name)
+        UniquePtr Factory::Create(const Name& name)
         {
-            auto it = m_stringMap.find(name);
-            assert(it != m_stringMap.end());
-            return std::move(Create(it->second));
+            return std::move(Create(GetId(name)));
         }
 
-        Id Factory::GetId(Name name)
+        Id Factory::GetId(const Name& name)
         {
             auto it = m_stringMap.find(name);
             assert(it != m_stringMap.end());

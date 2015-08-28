@@ -11,13 +11,13 @@ namespace minmod
         class ScopedRegistrant
         {
         public:
-            using Func = std::function<UniquePtr(Id, std::string)>;
-            ScopedRegistrant(Id id, std::string name, Func func);
+            using Func = std::function<UniquePtr(const Id, const Name)>;
+            explicit ScopedRegistrant(const Id id, const Name& name, Func func);
             ~ScopedRegistrant();
 
         private:
-            Id m_id;
-            std::string m_name;
+            const Id m_id;
+            const Name m_name;
         };
     }
 }

@@ -88,5 +88,8 @@
     <None Include="..\src\component_handle.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="..\src\component_factory.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

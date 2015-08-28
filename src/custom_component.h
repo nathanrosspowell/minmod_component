@@ -8,10 +8,8 @@ namespace minmod
     class CustomComponent : public component::Interface
     {
     public:
-        CustomComponent(component::Id id, component::Name name, std::int32_t max);
-        virtual ~CustomComponent()
-        {
-        }
+        CustomComponent(const component::Id id, const component::Name& name, const std::int32_t max);
+        virtual ~CustomComponent() = default;
 
         void Print();
 
@@ -28,7 +26,7 @@ namespace minmod
 
     private:
         // component::Interface.
-        virtual void Deserialize(json11::Json json) override;
+        virtual void Deserialize(const json11::Json& json) override;
         virtual json11::Json Serialize() const override;
         virtual void MakeLinks(component::Linker& /*liner*/) override
         {
@@ -41,8 +39,8 @@ namespace minmod
         }
 
     private:
-        component::Id m_id;
-        component::Name m_name;
+        const component::Id m_id;
+        const component::Name m_name;
         std::int32_t m_max;
         std::int32_t m_size;
     };

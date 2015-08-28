@@ -16,16 +16,16 @@ namespace minmod
 {
     namespace component
     {
-        void Manager::Deserialize(json11::Json json)
+        void Manager::Deserialize(const json11::Json& json)
         {
             TRACE("Deserialize " << json.dump());
             const auto& entries = json["entries"].array_items();
             for (const auto& entry : entries)
             {
-                auto& name = entry["name"];
+                const auto& name = entry["name"];
                 assert(name.is_number());
                 Id id = (Id)name.int_value();
-                auto& components = entry["components"];
+                const auto& components = entry["components"];
                 assert(components.is_array());
                 Insert(id, components);
             }
@@ -55,13 +55,13 @@ namespace minmod
             });
         }
 
-        Interface* Manager::Get(OwnerId ownerId, Id comonentId)
+        Interface* Manager::Get(const OwnerId ownerId, const Id comonentId)
         {
-            auto ownerIt = m_map.find(ownerId);
+            const auto ownerIt = m_map.find(ownerId);
             if (ownerIt != m_map.end())
             {
-                auto& componentMap = ownerIt->second.m_componentMap;
-                auto compIt = componentMap.find(comonentId);
+                const auto& componentMap = ownerIt->second.m_componentMap;
+                const auto compIt = componentMap.find(comonentId);
                 if (compIt != componentMap.end())
                 {
                     return compIt->second.get();
@@ -70,7 +70,7 @@ namespace minmod
             return nullptr;
         }
 
-        Interface* Manager::Get(OwnerId ownerId, Name componentName)
+        Interface* Manager::Get(const OwnerId ownerId, const Name& componentName)
         {
             Id id = Factory::GetInstance().GetId(componentName);
             if (id != INVALID_ID)
@@ -80,7 +80,7 @@ namespace minmod
             return nullptr;
         }
 
-        void Manager::Erase(OwnerId ownerId)
+        void Manager::Erase(const OwnerId ownerId)
         {
             TRACE("For ownerId: " << ownerId);
             const auto& entryIt = m_map.find(ownerId);
@@ -97,7 +97,7 @@ namespace minmod
             }
         }
 
-        void Manager::Erase(OwnerId ownerId, const EraseList& eraseList)
+        void Manager::Erase(const OwnerId ownerId, const EraseList& eraseList)
         {
             TRACE("For ownerId: " << ownerId << ". " << eraseList.size() << " to remove");
             assert(ownerId != INVALID_ID);
@@ -115,13 +115,13 @@ namespace minmod
             }
         }
 
-        OwnerId Manager::Insert(OwnerId ownerId, const char* const filePath)
+        OwnerId Manager::Insert(const OwnerId ownerId, const char* const filePath)
         {
             TRACE("For ownerId: " << ownerId << ". From filePath: " << filePath);
             assert(ownerId != INVALID_ID);
             std::ifstream in(filePath);
-            Name file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
-            Name err;
+            std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+            std::string err;
             json11::Json fileJson = json11::Json::parse(file, err);
             auto& jsonComponentMap = fileJson["components"];
             assert(jsonComponentMap.is_array());
@@ -129,7 +129,7 @@ namespace minmod
             return Insert(ownerId, std::move(jsonComponentMap));
         }
 
-        OwnerId Manager::Insert(OwnerId ownerId, const json11::Json json)
+        OwnerId Manager::Insert(const OwnerId ownerId, const json11::Json& json)
         {
             TRACE("For ownerId: " << ownerId << ". From JSON: " << json.dump());
             ComponentMap componentMap;
@@ -151,7 +151,7 @@ namespace minmod
             return Insert(ownerId, std::move(componentMap));
         }
 
-        OwnerId Manager::Insert(OwnerId ownerId, const InsertList& insertList)
+        OwnerId Manager::Insert(const OwnerId ownerId, const InsertList& insertList)
         {
             TRACE("For ownerId: " << ownerId << ". " << insertList.size() << " to insert");
             assert(ownerId != INVALID_ID);
@@ -173,7 +173,7 @@ namespace minmod
             return Insert(ownerId, std::move(componentMap));
         }
 
-        OwnerId Manager::Insert(OwnerId ownerId, ComponentMap componentMap)
+        OwnerId Manager::Insert(const OwnerId ownerId, ComponentMap&& componentMap)
         {
             assert(ownerId != INVALID_ID);
             assert(componentMap.size() > 0);

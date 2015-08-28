@@ -31,26 +31,26 @@ namespace minmod
 
         public:
             // Serialization.
-            virtual void Deserialize(json11::Json json) override;
+            virtual void Deserialize(const json11::Json& json) override;
             virtual json11::Json Serialize() const override;
 
         public:
             // Functions.
-            template <class COMPONENT> COMPONENT* Get(OwnerId ownerId)
+            template <class COMPONENT> COMPONENT* Get(const OwnerId ownerId)
             {
                 return static_cast<COMPONENT*>(Get(ownerId, COMPONENT::GetStaticId()));
             }
-            Interface* Get(OwnerId ownerId, Id comonentId);
-            Interface* Get(OwnerId ownerId, Name componentName);
-            void Erase(OwnerId ownerId, const EraseList& componentMap);
-            void Erase(OwnerId ownerId);
-            OwnerId Insert(OwnerId ownerId, const char* const filePath);
-            OwnerId Insert(OwnerId ownerId, const json11::Json json);
-            OwnerId Insert(OwnerId ownerId, const InsertList& componentMap);
+            Interface* Get(const OwnerId ownerId, const Id comonentId);
+            Interface* Get(const OwnerId ownerId, const Name& componentName);
+            void Erase(const OwnerId ownerId, const EraseList& componentMap);
+            void Erase(const OwnerId ownerId);
+            OwnerId Insert(const OwnerId ownerId, const char* const filePath);
+            OwnerId Insert(const OwnerId ownerId, const json11::Json& json);
+            OwnerId Insert(const OwnerId ownerId, const InsertList& componentMap);
 
         private:
             // Functions.
-            OwnerId Insert(OwnerId ownerId, ComponentMap componentMap);
+            OwnerId Insert(const OwnerId ownerId, ComponentMap&& componentMap);
 
         private:
             // Data.

@@ -6,7 +6,7 @@
 
 namespace minmod
 {
-    CustomComponent::CustomComponent(component::Id id, component::Name name, std::int32_t max) : m_id(id), m_name(name), m_max(max), m_size(0)
+    CustomComponent::CustomComponent(const component::Id id, const component::Name& name, const std::int32_t max) : m_id(id), m_name(name), m_max(max), m_size(0)
     {
     }
 
@@ -15,7 +15,7 @@ namespace minmod
         TRACE("Size: " << m_size << " Max: " << m_max);
     }
 
-    void CustomComponent::Deserialize(json11::Json json)
+    void CustomComponent::Deserialize(const json11::Json& json)
     {
         m_size = json["size"].int_value();
     }

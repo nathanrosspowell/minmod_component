@@ -32,7 +32,7 @@ namespace minmod
 
     private:
         // component::Interface.
-        virtual void Deserialize(json11::Json /*json*/) override
+        virtual void Deserialize(const json11::Json& /*json*/) override
         {
         }
         virtual json11::Json Serialize() const override

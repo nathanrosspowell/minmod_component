@@ -19,7 +19,7 @@ namespace minmod
             class Adapter
             {
             public:
-                explicit Adapter(T* ptr);
+                explicit Adapter(T* const ptr);
                 explicit operator bool() const;
                 T* operator ->();
                 const T* operator ->() const;

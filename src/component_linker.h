@@ -30,7 +30,7 @@ namespace minmod
             }
 
         private:
-            using AddFunc = std::function<void(Interface*)>;
+            using AddFunc = std::function<void(Interface* const)>;
             using RemoveFunc = std::function<void()>;
             using AddMap = std::unordered_map<Id, AddFunc>;
             using RemoveMap = std::unordered_map<Id, RemoveFunc>;
@@ -40,11 +40,11 @@ namespace minmod
 
         private:
             friend class Manager;
-            void Link(Interface* interfacePtr);
-            void UnLink(Id id);
-            void AddComponent(Interface* interfacePtr) const;
-            void RemoveComponent(Id id);
-            void MoveLinks(Linker&& linker);
+            void Link(Interface* const interfacePtr);
+            void UnLink(const Id id);
+            void AddComponent(Interface* const interfacePtr) const;
+            void RemoveComponent(const Id id);
+            void MoveLinks(const Linker&& linker);
 
         private:
             EntryMap m_entryMap;

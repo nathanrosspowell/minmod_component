@@ -37,7 +37,7 @@ namespace minmod
 
     private:
         // component::Interface.
-        virtual void Deserialize(json11::Json json) override;
+        virtual void Deserialize(const json11::Json& json) override;
         virtual json11::Json Serialize() const override;
         virtual void MakeLinks(component::Linker& /*liner*/) override
         {
@@ -53,8 +53,8 @@ namespace minmod
         static component::StaticRegistrant<TestComponent> ms_StaticRegistrant;
 
     private:
-        int m_x = 0;
-        int m_y = 0;
-        int m_z = 0;
+        std::int32_t m_x = 0;
+        std::int32_t m_y = 0;
+        std::int32_t m_z = 0;
     };
 }

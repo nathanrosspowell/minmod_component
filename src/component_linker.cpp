@@ -25,16 +25,16 @@ namespace minmod
             }
         }
 
-        void Linker::Link(Interface* interfacePtr)
+        void Linker::Link(Interface* const interfacePtr)
         {
             assert(interfacePtr != nullptr);
             TRACE("Name: " << interfacePtr->GetName() << ", Id: " << interfacePtr->GetId());
             m_currentlyLinking = interfacePtr->GetId();
             interfacePtr->MakeLinks(*this);
-            m_currentlyLinking = 0;
+            m_currentlyLinking = INVALID_ID;
         }
 
-        void Linker::UnLink(Id id)
+        void Linker::UnLink(const Id id)
         {
             assert(id != INVALID_ID);
             TRACE("Id: " << id);
@@ -44,7 +44,7 @@ namespace minmod
             }
         }
 
-        void Linker::AddComponent(Interface* interfacePtr) const
+        void Linker::AddComponent(Interface* const interfacePtr) const
         {
             assert(interfacePtr != nullptr);
             TRACE("Name: " << interfacePtr->GetName() << ", Id: " << interfacePtr->GetId());
@@ -59,7 +59,7 @@ namespace minmod
             }
         }
 
-        void Linker::RemoveComponent(Id id)
+        void Linker::RemoveComponent(const Id id)
         {
             TRACE("Id: " << id);
             assert(id != INVALID_ID);
@@ -86,11 +86,9 @@ namespace minmod
             }
         }
 
-        void Linker::MoveLinks(Linker&& linker)
+        void Linker::MoveLinks(const Linker&& linker)
         {
             TRACE("");
-            // m_onAddMap.insert( linker.m_onAddMap.begin(), linker.m_onAddMap.end());
-            // m_onRemoveMap.insert( linker.m_onRemoveMap.begin(), linker.m_onRemoveMap.end());
             for (auto& pair : linker.m_entryMap)
             {
                 auto& ownedPairs = m_entryMap[pair.first];

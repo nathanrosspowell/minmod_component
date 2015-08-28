@@ -172,6 +172,7 @@
     <ClCompile Include="..\src\test_component.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\src\component_factory.inl" />
     <None Include="..\src\component_handle.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
