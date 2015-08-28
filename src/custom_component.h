@@ -1,6 +1,6 @@
 #pragma once
 #include "component_interface.h"
-#include "component_registrant.h"
+#include "component_static_registrant.h"
 #include "json11.hpp"
 
 namespace minmod

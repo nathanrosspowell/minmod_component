@@ -6,6 +6,8 @@
 #include "component_types.h"
 #include "component_manager.h"
 #include "component_handle.h"
+#include "component_static_registrant.h"
+#include "component_scoped_registrant.h"
 #include "custom_component.h"
 #include "linking_component.h"
 #include "test_component.h"
@@ -84,11 +86,11 @@ int main()
     {
         Id ohFive = 2005;
         Id ohNine = 2009;
-        CustomRegistrant custom1(ohFive, "oh-five", [](auto id, auto name)
+        ScopedRegistrant custom1(ohFive, "oh-five", [](auto id, auto name)
                                  {
                                      return std::make_unique<CustomComponent>(id, name, 5);
                                  });
-        CustomRegistrant custom2(ohNine, "oh-nine", [](auto id, auto name)
+        ScopedRegistrant custom2(ohNine, "oh-nine", [](auto id, auto name)
                                  {
                                      return std::make_unique<CustomComponent>(id, name, 9);
                                  });

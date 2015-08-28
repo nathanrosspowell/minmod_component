@@ -1,6 +1,6 @@
 #pragma once
 #include "component_interface.h"
-#include "component_registrant.h"
+#include "component_static_registrant.h"
 #include "json11.hpp"
 
 namespace minmod
@@ -48,7 +48,7 @@ namespace minmod
         }
 
     private:
-        static component::TypeRegistrant<LinkingComponent> ms_TypeRegistrant;
+        static component::StaticRegistrant<LinkingComponent> ms_StaticRegistrant;
 
     private:
         TestComponent* m_test;

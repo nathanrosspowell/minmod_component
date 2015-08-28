@@ -8,32 +8,20 @@ namespace minmod
 {
     namespace component
     {
-        template <class COMPONENT> class TypeRegistrant
+        template <class COMPONENT> class StaticRegistrant
         {
         public:
-            TypeRegistrant()
+            StaticRegistrant()
             {
                 TRACE("Insert component: " << COMPONENT::GetStaticName());
                 Factory::GetInstance().Insert<COMPONENT>();
             }
 
-            ~TypeRegistrant()
+            ~StaticRegistrant()
             {
                 TRACE("Erase component: " << COMPONENT::GetStaticName());
                 Factory::GetInstance().Erase<COMPONENT>();
             }
-        };
-
-        class CustomRegistrant
-        {
-        public:
-            using Func = std::function<UniquePtr(Id, std::string)>;
-            CustomRegistrant(Id id, std::string name, Func func);
-            ~CustomRegistrant();
-
-        private:
-            Id m_id;
-            std::string m_name;
         };
     }
 }

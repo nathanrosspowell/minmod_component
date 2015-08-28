@@ -6,7 +6,7 @@
 
 namespace minmod
 {
-    component::TypeRegistrant<TestComponent> TestComponent::ms_TypeRegistrant;
+    component::StaticRegistrant<TestComponent> TestComponent::ms_StaticRegistrant;
 
     TestComponent::TestComponent()
     {
