@@ -27,8 +27,19 @@ int main()
     OwnerId bob = 808; // Hook into id generator.
     OwnerId sam = 543; // Hook into id generator.
     // Pairs of id to json object.
-    Manager::InsertList bobsComponentMap = {{TestComponent::GetStaticId(), Json::object{{"x", 102}, {"z", 15}}},
-                                            {LinkingComponent::GetStaticId(), Json::object{}}};
+    Manager::InsertList bobsComponentMap = {// clang-format off
+		{
+			TestComponent::GetStaticId(),
+			Json::object{
+				{ "x", 102 },
+				{ "z", 15 }
+	        }
+		},
+		{
+			LinkingComponent::GetStaticId(),
+			Json::object{}
+		}
+	}; // clang-format on
     TRACE("Add bob");
     cm.Insert(bob, bobsComponentMap); // Insert list of componentMap.
     TRACE("Get bobs TestComponent");

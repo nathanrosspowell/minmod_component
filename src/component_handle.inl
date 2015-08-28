@@ -12,7 +12,7 @@ namespace minmod
             m_checked = true;
             return m_ptr != nullptr;
         }
-        
+
         template <class T> T& Handle<T>::Adapter::Get()
         {
             assert(m_checked == true);
@@ -35,12 +35,14 @@ namespace minmod
         {
         }
 
+        template <class T> auto Handle<T>::Get() const -> Adapter
         {
             auto ptr = m_manager.Get(m_ownerId, m_componentId);
             assert(dynamic_cast<T*>(ptr) != nullptr);
             return std::move(Adapter(static_cast<T*>(ptr)));
         }
 
+        template <class T> void Handle<T>::Do(std::function<void(T&)> func) const
         {
             if (auto adapter = Get())
             {
@@ -49,4 +51,3 @@ namespace minmod
         }
     }
 }
-
