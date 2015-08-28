@@ -32,11 +32,11 @@ namespace minmod
             template <class T> void Insert();
             void Insert(Id id, const Name& name, CreateFunction createFunc);
             template <class T> void Erase();
-            void Erase(Id id, const Name&  name);
+            void Erase(Id id, const Name& name);
             UniquePtr Create(Id id);
-            UniquePtr Create(const Name&  name);
+            UniquePtr Create(const Name& name);
             template <class T> auto Create();
-            Id GetId(const Name&  name);
+            Id GetId(const Name& name);
 
         private:
             std::unordered_map<Name, Id> m_stringMap;

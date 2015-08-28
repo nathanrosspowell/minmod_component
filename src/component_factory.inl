@@ -5,9 +5,9 @@ namespace minmod
         template <class T> void Factory::Insert()
         {
             Insert(T::GetStaticId(), T::GetStaticName(), []()
-            {
-                return std::make_unique<T>();
-            });
+                   {
+                       return std::make_unique<T>();
+                   });
         }
 
         template <class T> void Factory::Erase()
