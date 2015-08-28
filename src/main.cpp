@@ -56,17 +56,13 @@ int main()
     Handle<TestComponent> testHandle(cm, bob, TestComponent::GetStaticId());
     if (auto test = testHandle.Get())
     {
-        auto& testRef = test.Get();
-        UNUSED(testRef);
-        TRACE("Got: " << testRef.GetName());
+        TRACE("Got: " << testRef->GetName());
     }
     TRACE("Get bobs LinkingComponent via handle");
     Handle<LinkingComponent> linkHandle(cm, bob);
     if (auto link = linkHandle.Get())
     {
-        auto& linkRef = link.Get();
-        UNUSED(linkRef);
-        TRACE("Got: " << linkRef.GetName());
+        TRACE("Got: " << linkRef->GetName());
     }
     TRACE("Add sam");
     cm.Insert(sam, "../data/cool.json"); // Create from json file.

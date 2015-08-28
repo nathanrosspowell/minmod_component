@@ -30,6 +30,10 @@
 # Make output
 *.d
 
+# Build
+*.release_time
+*.debug_time
+
 # Vim swap files
 *.swp
 
