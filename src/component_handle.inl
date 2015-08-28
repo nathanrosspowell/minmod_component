@@ -13,14 +13,28 @@ namespace minmod
             return m_ptr != nullptr;
         }
 
-        template <class T> T& Handle<T>::Adapter::operator ->()
+        template <class T> T* Handle<T>::Adapter::operator ->()
+        {
+            assert(m_checked == true);
+            assert(m_ptr != nullptr);
+            return m_ptr;
+        }
+
+        template <class T> const T* Handle<T>::Adapter::operator ->() const
+        {
+            assert(m_checked == true);
+            assert(m_ptr != nullptr);
+            return m_ptr;
+        }
+
+        template <class T> T& Handle<T>::Adapter::Get()
         {
             assert(m_checked == true);
             assert(m_ptr != nullptr);
             return *m_ptr;
         }
 
-        template <class T> const T& Handle<T>::Adapter::operator ->() const
+        template <class T> const T& Handle<T>::Adapter::Get() const
         {
             assert(m_checked == true);
             assert(m_ptr != nullptr);

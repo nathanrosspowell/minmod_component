@@ -21,8 +21,10 @@ namespace minmod
             public:
                 explicit Adapter(T* ptr);
                 explicit operator bool() const;
-                T& operator ->();
-                const T& operator ->() const;
+                T* operator ->();
+                const T* operator ->() const;
+                T& Get();
+                const T& Get() const;
 
             private:
                 T* const m_ptr;

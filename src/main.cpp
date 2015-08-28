@@ -54,16 +54,20 @@ int main()
     TRACE("Got: " << bobsLink->GetName());
     TRACE("Get bobs TestComponent via handle");
     Handle<TestComponent> testHandle(cm, bob, TestComponent::GetStaticId());
-    if (auto test = testHandle.Get())
+    if (Handle<TestComponent>::Adapter test = testHandle.Get())
     {
-        TRACE("Got: " << testRef->GetName());
+		UNUSED(test);
+        TRACE("Got: " << test->GetName());
     }
     TRACE("Get bobs LinkingComponent via handle");
     Handle<LinkingComponent> linkHandle(cm, bob);
     if (auto link = linkHandle.Get())
     {
-        TRACE("Got: " << linkRef->GetName());
+        auto& linkRef = link.Get();
+		UNUSED(linkRef);
+        TRACE("Got: " << linkRef.GetName());
     }
+    linkHandle.Do([](auto& linkRef){ TRACE("Handle::Do Got: " << linkRef.GetName()); });
     TRACE("Add sam");
     cm.Insert(sam, "../data/cool.json"); // Create from json file.
     TRACE("Get sams TestComponent");
