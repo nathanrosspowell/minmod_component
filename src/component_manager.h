@@ -41,7 +41,7 @@ namespace minmod
                 return static_cast<COMPONENT*>(Get(ownerId, COMPONENT::GetStaticId()));
             }
             Interface* Get(OwnerId ownerId, Id comonentId);
-            Interface* Get(OwnerId ownerId, std::string componentName);
+            Interface* Get(OwnerId ownerId, Name componentName);
             void Erase(OwnerId ownerId, const EraseList& componentMap);
             void Erase(OwnerId ownerId);
             OwnerId Insert(OwnerId ownerId, const char* const filePath);

@@ -14,7 +14,7 @@ namespace minmod
         {
             return 0xd8f2a84d; // CRC32 of "link"
         }
-        static std::string GetStaticName()
+        static component::Name GetStaticName()
         {
             return "link";
         }
@@ -25,7 +25,7 @@ namespace minmod
         {
             return GetStaticId();
         }
-        virtual std::string GetName() const
+        virtual component::Name GetName() const
         {
             return GetStaticName();
         }

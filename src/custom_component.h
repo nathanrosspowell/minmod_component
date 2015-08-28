@@ -8,7 +8,7 @@ namespace minmod
     class CustomComponent : public component::Interface
     {
     public:
-        CustomComponent(component::Id id, std::string name, std::int32_t max);
+        CustomComponent(component::Id id, component::Name name, std::int32_t max);
         virtual ~CustomComponent()
         {
         }
@@ -21,7 +21,7 @@ namespace minmod
         {
             return m_id;
         }
-        virtual std::string GetName() const
+        virtual component::Name GetName() const
         {
             return m_name;
         }
@@ -42,7 +42,7 @@ namespace minmod
 
     private:
         component::Id m_id;
-        std::string m_name;
+        component::Name m_name;
         std::int32_t m_max;
         std::int32_t m_size;
     };

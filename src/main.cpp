@@ -85,7 +85,7 @@ int main()
     TRACE("Try and get sams Link");
     auto samsLink = cm.Get(sam, LinkingComponent::GetStaticId());
     assert(samsLink == nullptr);
-    std::string name = samsLink ? samsLink->GetName() : std::string("nullptr");
+    Name name = samsLink ? samsLink->GetName() : Name("nullptr");
     TRACE("Got: " << name);
     TRACE("Remove bob");
     cm.Erase(bob);

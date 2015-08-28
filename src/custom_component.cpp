@@ -6,7 +6,7 @@
 
 namespace minmod
 {
-    CustomComponent::CustomComponent(component::Id id, std::string name, std::int32_t max) : m_id(id), m_name(name), m_max(max), m_size(0)
+    CustomComponent::CustomComponent(component::Id id, component::Name name, std::int32_t max) : m_id(id), m_name(name), m_max(max), m_size(0)
     {
     }
 

@@ -18,7 +18,7 @@ namespace minmod
         public:
             // Id functions.
             virtual Id GetId() const = 0;
-            virtual std::string GetName() const = 0;
+            virtual Name GetName() const = 0;
 
         private:
             friend class Linker;

@@ -70,7 +70,7 @@ namespace minmod
             return nullptr;
         }
 
-        Interface* Manager::Get(OwnerId ownerId, std::string componentName)
+        Interface* Manager::Get(OwnerId ownerId, Name componentName)
         {
             Id id = Factory::GetInstance().GetId(componentName);
             if (id != INVALID_ID)
@@ -120,8 +120,8 @@ namespace minmod
             TRACE("For ownerId: " << ownerId << ". From filePath: " << filePath);
             assert(ownerId != INVALID_ID);
             std::ifstream in(filePath);
-            std::string file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
-            std::string err;
+            Name file((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+            Name err;
             json11::Json fileJson = json11::Json::parse(file, err);
             auto& jsonComponentMap = fileJson["components"];
             assert(jsonComponentMap.is_array());

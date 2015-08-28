@@ -36,22 +36,22 @@ namespace minmod
                            return std::make_unique<COMPONENT>();
                        });
             }
-            void Insert(Id id, std::string name, CreateFunction createFunc);
+            void Insert(Id id, Name name, CreateFunction createFunc);
             template <class COMPONENT> void Erase()
             {
                 Erase(COMPONENT::GetStaticId(), COMPONENT::GetStaticName());
             }
-            void Erase(Id id, std::string name);
+            void Erase(Id id, Name name);
             UniquePtr Create(Id id);
-            UniquePtr Create(std::string name);
+            UniquePtr Create(Name name);
             template <class COMPONENT> auto Create()
             {
                 return Create(COMPONENT::GetStaticId());
             }
-            Id GetId(std::string name);
+            Id GetId(Name name);
 
         private:
-            std::unordered_map<std::string, Id> m_stringMap;
+            std::unordered_map<Name, Id> m_stringMap;
             std::unordered_map<Id, CreateFunction> m_map;
 
         private:

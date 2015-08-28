@@ -6,6 +6,7 @@ namespace minmod
     {
         using OwnerId = std::int32_t;
         using Id = std::uint32_t;
+        using Name = std::string;
         static const Id INVALID_ID = 0;
     }
 }
