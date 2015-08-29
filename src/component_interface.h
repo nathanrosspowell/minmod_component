@@ -1,10 +1,10 @@
 #pragma once
-// stl
+//- stl.
 #include <cstdint>
 #include <string>
-// json
+//- json11.
 #include "json11.hpp"
-// minmod
+//- minmod.
 #include "component_types.h"
 #include "component_serializer.h"
 
@@ -22,8 +22,9 @@ namespace minmod
          */
         class Interface : public Serializer
         {
-        public: // Id functions.
-            /* Get a unique <Id> for this class type 
+        public: //- Id functions.
+
+            /* Get a unique <Id> for this class type.
              *
              * The <Id> has to be unique per type, not per instance.
              * It is adviced to use something like a CRC32 of the value used in <GetName>.
@@ -31,7 +32,8 @@ namespace minmod
              * @return A unique <Id> for this class.
              */
             virtual Id GetId() const = 0;
-            /* Get a unique <Name> for this class type 
+
+            /* Get a unique <Name> for this class type.
              *
              * The <Name> has to be unique per type, not per instance.
              * It is adviced to use something that matches the class name.
@@ -41,18 +43,35 @@ namespace minmod
              */
             virtual Name GetName() const = 0;
 
-        private: // Linker interface.
+        private: //- Linker interface.
+
             friend class Linker;
-            /* Where to define dependencies on other componentMap, may be called
-             * multiple times.
+
+            /* Where to define dependencies on other componentMap, may be called multiple times.
+             * @linker a <Linker> instance to record the links for this component.
+             *
+             * Each component has the opertunity to 'link' itself to others using the <Linker::Link> function.
+             * Two functions are passed to it:
+             *     1) A function taking the pointer to the component type when it's added
+             *     2) A function taking when the component is removed
+             *
+             * The basic usage of this is to safely store and invalidate a member pointer.
              */
             virtual void MakeLinks(Linker& linker) = 0;
 
-        private: // Manager interface.
+        private: //- Manager interface.
+
             friend class Manager;
-            // Constructor replacement. Only ever calle once.
+            /* Constructor replacement. 
+             *
+             * This will be called once on the component.
+             */
+
             virtual void Create() = 0;
-            // Destuctor replacement. Only ever calle once.
+            /* Destructor replacement. 
+             *
+             * This will be called once on the component.
+             */
             virtual void Destroy() = 0;
         };
 

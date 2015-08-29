@@ -14,10 +14,5 @@ namespace minmod
         {
             Erase(T::GetStaticId(), T::GetStaticName());
         }
-
-        template <class T> auto Factory::Create()
-        {
-            return Create(T::GetStaticId());
-        }
     }
 }
