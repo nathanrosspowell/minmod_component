@@ -62,12 +62,13 @@ namespace minmod
         private: //- Manager interface.
 
             friend class Manager;
+
             /* Constructor replacement. 
              *
              * This will be called once on the component.
              */
-
             virtual void Create() = 0;
+
             /* Destructor replacement. 
              *
              * This will be called once on the component.
