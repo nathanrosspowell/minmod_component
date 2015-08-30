@@ -41,11 +41,11 @@ namespace minmod
             return *m_ptr;
         }
 
-        template <class T> Handle<T>::Handle(Manager& manager, OwnerId ownerId) : m_manager(manager), m_ownerId(ownerId), m_componentId(T::GetStaticId())
+        template <class T> Handle<T>::Handle(Manager& manager, OwnerId ownerId, Id id) : m_manager(manager), m_ownerId(ownerId), m_componentId(id)
         {
         }
 
-        template <class T> Handle<T>::Handle(Manager& manager, OwnerId ownerId, Id id) : m_manager(manager), m_ownerId(ownerId), m_componentId(id)
+        template <class T> Handle<T>::Handle(Manager& manager, OwnerId ownerId) : m_manager(manager), m_ownerId(ownerId), m_componentId(T::GetStaticId())
         {
         }
 
