@@ -1,10 +1,10 @@
 #pragma once
-// stl
+//- stl.
 #include <cstdint>
 #include <unordered_map>
 #include <memory>
 #include <vector>
-// minmod
+//- minmod.
 #include "component_types.h"
 #include "component_interface.h"
 #include "component_linker.h"
@@ -14,44 +14,122 @@ namespace minmod
 {
     namespace component
     {
+        /* A mapping of <OwnerId> to many component <Interface> instances.
+         *
+         * All components will be added, retrieved and removed via this class.
+         */
         class Manager : public Serializer
         {
-        public:
-            // Types.
+        public: //- Types.
+
+            // List of <Id> that will be erased.
             using EraseList = std::vector<Id>;
+            
+            // List of <Id> to <json11::Json> pairs.
             using InsertList = std::vector<std::pair<Id, json11::Json>>;
+
+            // Map of <Id> to <UniquePtr>.
             using ComponentMap = std::unordered_map<Id, UniquePtr>;
 
-            struct Entry
-            {
-                ComponentMap m_componentMap;
-                Linker m_linker;
-            };
-            using Map = std::unordered_map<OwnerId, Entry>;
+        public: //- Serialization.
 
-        public:
-            // Serialization.
+            // @inherit
             virtual void Deserialize(const json11::Json& json) override;
+
+            // @inherit
             virtual json11::Json Serialize() const override;
 
-        public:
-            // Functions.
+        public: //- Public functions.
+
+            /* Get a <Interface> pointer for a component.
+             *
+             * This is a way to get a component pointer via a the static function <GetStaticId>.
+             * 
+             * @return an <Interface> pointer which can be `nullptr`.
+             */
             template <class T> T* Get(const OwnerId ownerId);
+
+            /* Get a <Interface> pointer for a component.
+             *
+             * This is a way to get a component pointer via it's <Id>.
+             * 
+             * @return an <Interface> pointer which can be `nullptr`.
+             */
             Interface* Get(const OwnerId ownerId, const Id comonentId);
+
+            /* Get a <Interface> pointer for a component.
+             *
+             * This is a way to get a component pointer via name.
+             * 
+             * @return an <Interface> pointer which can be `nullptr`.
+             */
             Interface* Get(const OwnerId ownerId, const Name& componentName);
+
+            /* Removal of one or many components.
+             *
+             * This is how to add remove components with an <EraseList>.
+             */
             void Erase(const OwnerId ownerId, const EraseList& componentMap);
+
+            /* Removal of an entire entry.
+             *
+             * This removes all components and the <OwnerId> from the class.
+             */
             void Erase(const OwnerId ownerId);
+
+            /* Insert of one or many components.
+             *
+             * This is how to add components via a JSON data filename.
+             *
+             * @return <OwnerId>
+             */
             OwnerId Insert(const OwnerId ownerId, const char* const filePath);
+
+            /* Insert of one or many components.
+             *
+             * This is how to add components via a <json11::Json>.
+             *
+             * @return <OwnerId>.
+             */
             OwnerId Insert(const OwnerId ownerId, const json11::Json& json);
+
+            /* Insert of one or many components.
+             *
+             * This is how to add components via an <InsertList>
+             *
+             * @return <OwnerId>.
+             */
             OwnerId Insert(const OwnerId ownerId, const InsertList& componentMap);
 
-        private:
-            // Functions.
+        private: //- Private functions.
+
+            /* Insert of one or many components.
+             *
+             * This is how to add components via a <ComponentMap> r-value.
+             * All other <Insert> functions call this one internally.
+             *
+             * @return <OwnerId>.
+             */
             OwnerId Insert(const OwnerId ownerId, ComponentMap&& componentMap);
 
-        private:
-            // Data.
-            Map m_map;
+        private: //- Private structures.
+
+            /* The entry for each <OwnerId> in the <Manager>.
+             *
+             */
+            struct Entry
+            {
+                // Storage of all the owners <UniquePtr>.
+                ComponentMap m_componentMap;
+
+                // The links between all of the owners components.
+                Linker m_linker;
+            };
+
+        private: //- Private members.
+
+            // A map of <OwnerId> to <Entry>.
+            std::unordered_map<OwnerId, Entry> m_map;
         };
     }
 }
