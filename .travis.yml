@@ -18,8 +18,4 @@ script:
   - clang --version
   - clang++ --version
   - clang++-3.5 --version
-  - cd src
-  - make debug
-  - ./minmod_component
-  - make
-  - ./minmod_component
+  - bash -c ./travis_build.sh
