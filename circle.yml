@@ -4,7 +4,7 @@ machine:
   node:
     version: 0.11.8
   pre:
-    - sudo apt-get install clang
+    - sudo apt-get install libclang-dev
     - sudo pip install --upgrade pip
     - sudo pip install pyparsing
     - sudo pip install cldoc
