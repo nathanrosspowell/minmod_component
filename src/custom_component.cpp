@@ -15,6 +15,7 @@ namespace test
 
     void CustomComponent::Print()
     {
+        UNUSED(m_max);
         TRACE("Size: " << m_size << " Max: " << m_max);
     }
 
