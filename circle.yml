@@ -4,9 +4,10 @@ machine:
   node:
     version: 0.11.8
   pre:
-    - pip install pyparsing
-    - pip install cldoc
-    - npm install -g cldoc-static
+    - sudo pip install --upgrade pip
+    - sudo pip install pyparsing
+    - sudo pip install cldoc
+    - sudo pm install -g cldoc-static
     - make deps
     - python setup.py generate
     - python setup.py install
