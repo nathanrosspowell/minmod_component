@@ -10,8 +10,8 @@ machine:
     - npm install -g cldoc-static
     - npm install coffee-script@1.9.2 inline-source@4.0.1
     - gem install --user-install sass
-    - python setup.py generate \ --coffee=node_modules/.bin/coffee \ --sass=~/.gem/ruby/1.8/bin/sass
-    - python setup.py install
+    #- python setup.py generate \ --coffee=node_modules/.bin/coffee \ --sass=~/.gem/ruby/1.8/bin/sass
+    #- python setup.py install
 general:
   branches:
     only:
