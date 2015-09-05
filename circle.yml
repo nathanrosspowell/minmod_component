@@ -1,0 +1,19 @@
+machine:
+  python:
+    version: 2.7.5
+  node:
+    version: 0.11.8
+  pre:
+    - pip install pyparsing
+    - pip install cldoc
+    - npm install -g cldoc-static
+    - make deps
+    - python setup.py generate
+    - python setup.py install
+general:
+  branches:
+    only:
+      - master
+test:
+  override:
+    - make static-doc
