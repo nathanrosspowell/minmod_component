@@ -3,35 +3,37 @@
 #include "component_static_registrant.h"
 #include "json11.hpp"
 
-namespace minmod
+namespace test
 {
+    namespace mmc = minmod::component;
+
     class TestComponent;
-    class LinkingComponent : public component::Interface
+    class LinkingComponent : public mmc::Interface
     {
     public:
-        // component::Factory Registration.
-        static component::Id GetStaticId()
+        // mmc::Factory Registration.
+        static mmc::Id GetStaticId()
         {
             return 0xd8f2a84d; // CRC32 of "link"
         }
-        static component::Name GetStaticName()
+        static mmc::Name GetStaticName()
         {
             return "link";
         }
 
     public:
-        // component::Interface.
-        virtual component::Id GetId() const
+        // mmc::Interface.
+        virtual mmc::Id GetId() const
         {
             return GetStaticId();
         }
-        virtual component::Name GetName() const
+        virtual mmc::Name GetName() const
         {
             return GetStaticName();
         }
 
     private:
-        // component::Interface.
+        // mmc::Interface.
         virtual void Deserialize(const json11::Json& /*json*/) override
         {
         }
@@ -39,7 +41,7 @@ namespace minmod
         {
             return json11::Json::object{};
         }
-        virtual void MakeLinks(component::Linker& liner) override;
+        virtual void MakeLinks(mmc::Linker& liner) override;
         virtual void Create() override
         {
         }
@@ -48,7 +50,7 @@ namespace minmod
         }
 
     private:
-        static component::StaticRegistrant<LinkingComponent> ms_StaticRegistrant;
+        static mmc::StaticRegistrant<LinkingComponent> ms_StaticRegistrant;
 
     private:
         TestComponent* m_test;

@@ -4,9 +4,11 @@
 // Debug
 #include <iostream>
 
-namespace minmod
+namespace test
 {
-    CustomComponent::CustomComponent(const component::Id id, const component::Name& name, const std::int32_t max)
+    namespace mmc = minmod::component;
+
+    CustomComponent::CustomComponent(const mmc::Id id, const mmc::Name& name, const std::int32_t max)
         : m_id(id), m_name(name), m_max(max), m_size(0)
     {
     }

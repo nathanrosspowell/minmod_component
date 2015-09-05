@@ -7,11 +7,13 @@
 // Debug
 #include <iostream>
 
-namespace minmod
+namespace test
 {
-    component::StaticRegistrant<LinkingComponent> LinkingComponent::ms_StaticRegistrant;
+    namespace mmc = minmod::component;
 
-    void LinkingComponent::MakeLinks(component::Linker& linker)
+    mmc::StaticRegistrant<LinkingComponent> LinkingComponent::ms_StaticRegistrant;
+
+    void LinkingComponent::MakeLinks(mmc::Linker& linker)
     {
         TRACE("Adding TestComponent");
         linker.Link<TestComponent>(

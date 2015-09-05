@@ -18,6 +18,7 @@
 int main()
 {
     // Using statements just for the main scope block.
+    using namespace test;
     using namespace minmod;
     using namespace minmod::component;
     using namespace json11;

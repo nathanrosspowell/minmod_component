@@ -4,9 +4,11 @@
 // Debug
 #include <iostream>
 
-namespace minmod
+namespace test
 {
-    component::StaticRegistrant<TestComponent> TestComponent::ms_StaticRegistrant;
+    namespace mmc = minmod::component;
+
+    mmc::StaticRegistrant<TestComponent> TestComponent::ms_StaticRegistrant;
 
     TestComponent::TestComponent()
     {
