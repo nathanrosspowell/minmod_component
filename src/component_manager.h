@@ -14,6 +14,8 @@ namespace minmod
 {
     namespace component
     {
+        class Factory;
+
         /* A mapping of <OwnerId> to many component <Interface> instances.
          *
          * All components will be added, retrieved and removed via this class.
@@ -40,6 +42,12 @@ namespace minmod
             virtual json11::Json Serialize() const override;
 
         public: //- Public functions.
+
+            /* Constructor
+             *
+             * Every <Manager> needs to have a factory refference.
+             */
+            explicit Manager(Factory& factory);
 
             /* Get a <Interface> pointer for a component.
              *
@@ -130,6 +138,9 @@ namespace minmod
 
             // A map of <OwnerId> to <Entry>.
             std::unordered_map<OwnerId, Entry> m_map;
+
+            // <Factory> refference.
+            Factory& m_factory;
         };
     }
 }

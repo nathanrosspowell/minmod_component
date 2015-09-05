@@ -8,6 +8,7 @@ namespace minmod
 {
     namespace component
     {
+        class Factory;
 
         /* Helper class for registering a class in the <Factory>.
          *
@@ -34,13 +35,14 @@ namespace minmod
         public: //- Public functions.
 
             /* Constructor.
-             * @Id the <Id> for the registration.
+             * @factory the <Factory> used for registering.
+             * @id the <Id> for the registration.
              * @name the <Name> for the registration.
              * @func the <Func> for the registration.
              *
              * Inserts the component variation into the static <Factory>.
              */
-            ScopedRegistrant(const Id id, const Name& name, Func func);
+            ScopedRegistrant(Factory& factory, const Id id, const Name& name, Func func);
 
             /* Destructor.
              *
@@ -49,6 +51,9 @@ namespace minmod
             ~ScopedRegistrant();
 
         private: //- Private members.
+
+            // The <Factory> to use for registration.
+            Factory& m_factory;
 
             // The <Id> of the registration.
             const Id m_id;

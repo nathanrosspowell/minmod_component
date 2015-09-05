@@ -20,21 +20,6 @@ namespace minmod
          */
         class Factory
         {
-        public: //-Singleton code.
-
-            /* Singleton interface
-             *
-             * To allow static registration before the <main> function runs, 
-             * there is a static getter function.
-             *
-             * @return a refference to the <Factory> singleton
-             */
-            static Factory& GetInstance()
-            {
-                static Factory instance;
-                return instance;
-            }
-
         public: //- Typedefs.
             
             /* The stored create function.

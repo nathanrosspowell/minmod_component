@@ -1,6 +1,6 @@
 #pragma once
 // minmod
-#include "component_factory.h"
+#include "component_static_factory.h"
 // Debug
 #include <iostream>
 
@@ -24,7 +24,7 @@ namespace minmod
             StaticRegistrant()
             {
                 TRACE("Insert component: " << COMPONENT::GetStaticName());
-                Factory::GetInstance().Insert<COMPONENT>();
+                StaticFactory::GetInstance().Insert<COMPONENT>();
             }
 
             /* Destructor.
@@ -34,7 +34,7 @@ namespace minmod
             ~StaticRegistrant()
             {
                 TRACE("Erase component: " << COMPONENT::GetStaticName());
-                Factory::GetInstance().Erase<COMPONENT>();
+                StaticFactory::GetInstance().Erase<COMPONENT>();
             }
         };
     }

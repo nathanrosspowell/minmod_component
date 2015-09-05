@@ -23,7 +23,8 @@ int main()
     using namespace json11;
     TRACE("Start main()"); // There will be some logs from static constructors before this line.
     TRACE("Create Component::Manager");
-    Manager cm;
+    Factory& factory = StaticFactory::GetInstance();
+    Manager cm(factory);
     OwnerId bob = 808; // Hook into id generator.
     OwnerId sam = 543; // Hook into id generator.
     // Pairs of id to json object.
@@ -94,25 +95,25 @@ int main()
     TRACE("Remove bob");
     cm.Erase(bob);
     TRACE("Clone Manager");
-    Manager cloneManager;
+    Manager cloneManager(factory);
     cloneManager.Deserialize(cmJson);
     TRACE("Dump Clone Manager" << cloneManager.Serialize().dump());
     TRACE("Custom types test, open scope");
     {
         Id ohFive = 2005;
         Id ohNine = 2009;
-        ScopedRegistrant custom1(ohFive, "oh-five", [](auto id, auto name)
+        ScopedRegistrant custom1(factory, ohFive, "oh-five", [](auto id, auto name)
                                  {
                                      return std::make_unique<CustomComponent>(id, name, 5);
                                  });
-        ScopedRegistrant custom2(ohNine, "oh-nine", [](auto id, auto name)
+        ScopedRegistrant custom2(factory, ohNine, "oh-nine", [](auto id, auto name)
                                  {
                                      return std::make_unique<CustomComponent>(id, name, 9);
                                  });
 
         OwnerId ned = 232;
         Manager::InsertList nedsComponents = {{ohFive, Json::object{{"size", 3}}}, {ohNine, Json::object{{"size", 9}}}};
-        Manager nedsManager;
+        Manager nedsManager(factory);
         nedsManager.Insert(ned, nedsComponents);
     }
     TRACE("Custom types test, close scope");

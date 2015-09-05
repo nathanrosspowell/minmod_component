@@ -16,6 +16,10 @@ namespace minmod
 {
     namespace component
     {
+        Manager::Manager(Factory& factory) : m_factory(factory)
+        {
+        }
+
         void Manager::Deserialize(const json11::Json& json)
         {
             TRACE("Deserialize " << json.dump());
@@ -72,7 +76,7 @@ namespace minmod
 
         Interface* Manager::Get(const OwnerId ownerId, const Name& componentName)
         {
-            Id id = Factory::GetInstance().GetId(componentName);
+            Id id = m_factory.GetId(componentName);
             if (id != INVALID_ID)
             {
                 return Get(ownerId, id);
@@ -137,7 +141,7 @@ namespace minmod
             {
                 auto name = jsonComponent["name"];
                 assert(name.is_string());
-                auto component = Factory::GetInstance().Create(name.string_value());
+                auto component = m_factory.Create(name.string_value());
                 if (component)
                 {
                     auto& data = jsonComponent["data"];
@@ -159,11 +163,11 @@ namespace minmod
             ComponentMap componentMap;
             for (const auto& pair : insertList)
             {
-                auto component = Factory::GetInstance().Create(pair.first);
+                auto component = m_factory.Create(pair.first);
                 if (component)
                 {
                     assert(component->GetId() == pair.first);
-                    assert(Factory::GetInstance().GetId(component->GetName()) == pair.first);
+                    assert(m_factory.GetId(component->GetName()) == pair.first);
                     component->Deserialize(pair.second);
                     TRACE("  Deserialize of: " << component->GetName());
                     TRACE("    " << component->Serialize().dump());

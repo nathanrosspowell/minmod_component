@@ -13,15 +13,17 @@ namespace minmod
         Linker::~Linker()
         {
             TRACE("Clean up Linker");
-            std::vector<Id> toRemove;
+            // Correctly call all of the 'on remove' functions.
             for (const auto& pair : m_entryMap)
             {
-                toRemove.push_back(pair.first);
                 RemoveComponent(pair.first);
             }
-            for (const auto& id : toRemove)
+            // Loop all of the entries until they are all gone.
+            auto it = m_entryMap.begin();
+            while (it != m_entryMap.end())
             {
-                UnLink(id);
+                UnLink(it->first);
+                it = m_entryMap.erase(it);
             }
         }
 
@@ -29,6 +31,7 @@ namespace minmod
         {
             assert(interfacePtr != nullptr);
             TRACE("Name: " << interfacePtr->GetName() << ", Id: " << interfacePtr->GetId());
+            // Set the current Id so that it's one less paramter to pass.
             m_currentlyLinking = interfacePtr->GetId();
             interfacePtr->MakeLinks(*this);
             m_currentlyLinking = INVALID_ID;
@@ -72,7 +75,7 @@ namespace minmod
                     removeFunc();
                 }
             }
-            // Unlink anything this component linked against.
+            // Unlink anything this component is linked against.
             for (const auto& pair : m_entryMap)
             {
                 for (const auto& ownedPair : pair.second)
