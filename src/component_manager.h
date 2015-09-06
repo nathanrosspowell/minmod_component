@@ -26,7 +26,7 @@ namespace minmod
 
             // List of <Id> that will be erased.
             using EraseList = std::vector<Id>;
-            
+
             // List of <Id> to <json11::Json> pairs.
             using InsertList = std::vector<std::pair<Id, json11::Json>>;
 

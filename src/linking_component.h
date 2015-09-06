@@ -51,14 +51,14 @@ namespace test
         /* @inherit */
         virtual mmc::Id GetId() const
 
-        /* @inherit */
-        virtual mmc::Id GetId() const
+            /* @inherit */
+            virtual mmc::Id GetId() const
 
-        /* @inherit */
-        virtual mmc::Id GetId() const
+            /* @inherit */
+            virtual mmc::Id GetId() const
 
-        /* @inherit */
-        virtual mmc::Name GetName() const
+            /* @inherit */
+            virtual mmc::Name GetName() const
         {
             return GetStaticName();
         }

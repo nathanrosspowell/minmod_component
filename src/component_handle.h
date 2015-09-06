@@ -44,7 +44,7 @@ namespace minmod
                  *
                  * This provides a built in 'is valid' check.
                  * When an <Adapter> is set in an `if` statement, it will be checked. e.g.
-                 *     
+                 *
                  *     if ( auto adapter = handle.Get())
                  *     {
                  *         // m_ptr must be true here.
