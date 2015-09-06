@@ -17,7 +17,6 @@ namespace test
     class LinkingComponent : public mmc::Interface
     {
     public: //- minmod::component::Factory Registration.
-
         /* Static <Id>.
          *
          * Needed for <StaticRegistrant> to work.
@@ -41,7 +40,6 @@ namespace test
         }
 
     public: //- minmod::component::Interface.
-
         /* @inherit */
         virtual mmc::Id GetId() const
         {
@@ -49,44 +47,41 @@ namespace test
         }
 
         /* @inherit */
-        virtual mmc::Id GetId() const
-
-            /* @inherit */
-            virtual mmc::Id GetId() const
-
-            /* @inherit */
-            virtual mmc::Id GetId() const
-
-            /* @inherit */
-            virtual mmc::Name GetName() const
+        virtual mmc::Name GetName() const
         {
             return GetStaticName();
         }
 
     private: //- minmod::component::Interface.
+        /* @inherit */
+        virtual void Deserialize(const json11::Json& /*json*/) override
+        {
+        }
 
         /* @inherit */
-        virtual void Deserialize(const json11::Json& /*json*/) override { }
-
-        /* @inherit */
-        virtual json11::Json Serialize() const override { return json11::Json::object{}; }
+        virtual json11::Json Serialize() const override
+        {
+            return json11::Json::object{};
+        }
 
         /* @inherit */
         virtual void MakeLinks(mmc::Linker& liner) override;
 
         /* @inherit */
-        virtual void Create() override { }
+        virtual void Create() override
+        {
+        }
 
         /* @inherit */
-        virtual void Destroy() override { }
+        virtual void Destroy() override
+        {
+        }
 
     private: //- Private static members.
-
         // Static scoped typed registraion.
         static mmc::StaticRegistrant<LinkingComponent> ms_StaticRegistrant;
 
     private: //- Private members.
-
         // Pointer to another component on this <Id>, tests the linking.
         TestComponent* m_test;
     };
