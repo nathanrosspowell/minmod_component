@@ -54,6 +54,9 @@
     <ClInclude Include="..\src\component_static_registrant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\component_static_factory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\component_factory.cpp">
@@ -92,6 +95,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\src\component_manager.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\src\component_linker.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
