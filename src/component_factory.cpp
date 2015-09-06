@@ -10,12 +10,13 @@ namespace minmod
         {
             TRACE("Component: " << id << ", " << name);
             m_stringMap.insert(std::make_pair(name, id));
-            m_map.insert(std::make_pair(id, createFunc));
+            m_map.insert(std::make_pair(id, std::move(createFunc)));
         }
 
         void Factory::Erase(const Id id, const Name& name)
         {
             TRACE("Component: " << id << ", " << name);
+            assert(m_stringMap.find(name) != m_stringMap.end());
             assert(m_stringMap[name] == id);
             m_stringMap.erase(name);
             m_map.erase(id);

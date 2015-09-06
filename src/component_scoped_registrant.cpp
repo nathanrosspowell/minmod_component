@@ -10,7 +10,7 @@ namespace minmod
     {
         ScopedRegistrant::ScopedRegistrant(Factory& factory, const Id id, const Name& name, Func func) : m_factory(factory), m_id(id), m_name(name)
         {
-            m_factory.Insert(m_id, m_name, [func, this]()
+            m_factory.Insert(m_id, m_name, [func = std::move(func), this]()
                                           {
                                               return func(m_id, m_name);
                                           });
