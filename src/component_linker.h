@@ -25,13 +25,24 @@ namespace minmod
          * The oposite case is <RemoveComponent>.
          * All the stored <RemoveFunc> assositated with the copmonent being removed are called.
          * Then, the <m_entryMap> is cleaned of all of all <AddFunc> and <RemoveFunc> owned by that component.
-         *
-         * Currently in the destructor all <RemoveFunc> are called to make sure things are shut down properly.
-         * In the future, we will only call the ones which had the matching <AddFunc> called.
          */
         class Linker
         {
-        public://- Public fuctions.
+        public: //- Public enums.
+
+            enum class Requirement : std::uint8_t
+            {
+                Needed,
+                Optional
+            };
+
+            enum class State : std::uint8_t
+            {
+                Ready,
+                WaitingForRequirements
+            };
+
+        public: //- Public fuctions.
 
             /* Destructor.
              *
@@ -46,7 +57,7 @@ namespace minmod
              * The function is templated to allow the conversion of pointers to the desired component type.
              * Internally, the <add> function is wrapped in a lambda which does a static_cast on the pointer.
              */
-            template <class COMPONENT> void Link(std::function<void(COMPONENT* const)> add, std::function<void()> remove);
+            template <class COMPONENT> void Link(std::function<void(COMPONENT* const)> add, std::function<void()> remove, Requirement requirement = Requirement::Optional);
 
         private: //- Private types.
 
@@ -56,11 +67,19 @@ namespace minmod
             // 'On Remove' callback.
             using RemoveFunc = std::function<void()>;
         
-            // Pair of <AddFunc> and <RemoveFunc>.
-            using FuncPair = std::pair<AddFunc, RemoveFunc>;
+            struct Linkage
+            {
+                Linkage(AddFunc&& add, RemoveFunc&& remove, Requirement requirement);
 
-            // Map of <Id> to <FuncPair>.
-            using OwnedPairs = std::unordered_map<Id, FuncPair>;
+                AddFunc m_addFunc = nullptr;
+                RemoveFunc m_removeFunc = nullptr;
+                Requirement m_requirement = Requirement::Optional;
+            };
+
+            using UniqueLinkage = std::unique_ptr<Linkage>;
+
+            // Map of <Id> to <Linkage>.
+            using OwnedPairs = std::unordered_map<Id, UniqueLinkage>;
 
         private: //- Manager interface.
 

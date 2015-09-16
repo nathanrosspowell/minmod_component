@@ -10,6 +10,13 @@ namespace minmod
 {
     namespace component
     {
+        Linker::Linkage::Linkage(AddFunc&& add, RemoveFunc&& remove, Requirement requirement)
+            : m_addFunc(add)
+            , m_removeFunc(remove)
+            , m_requirement(requirement)
+        {
+        }
+
         Linker::~Linker()
         {
             TRACE("Clean up Linker");
@@ -56,8 +63,8 @@ namespace minmod
             {
                 for (const auto& ownedPair : it->second)
                 {
-                    auto& addFun = ownedPair.second.first;
-                    addFun(interfacePtr);
+                    auto& addFunc = ownedPair.second->m_addFunc;
+                    addFunc(interfacePtr);
                 }
             }
         }
@@ -71,7 +78,7 @@ namespace minmod
             {
                 for (const auto& funcPair : it->second)
                 {
-                    auto& removeFunc = funcPair.second.second;
+                    auto& removeFunc = funcPair.second->m_removeFunc;
                     removeFunc();
                 }
             }
@@ -82,7 +89,7 @@ namespace minmod
                 {
                     if (ownedPair.first == id)
                     {
-                        auto& removeFunc = ownedPair.second.second;
+                        auto& removeFunc = ownedPair.second->m_removeFunc;
                         removeFunc();
                     }
                 }
@@ -95,7 +102,10 @@ namespace minmod
             for (auto& pair : linker.m_entryMap)
             {
                 auto& ownedPairs = m_entryMap[pair.first];
-                ownedPairs.insert(pair.second.begin(), pair.second.end());
+                for (auto& item : ownedPairs )
+                {
+                    ownedPairs.insert(std::move(item));
+                }
             }
         }
     }
