@@ -73,16 +73,3 @@ Builds the code as a library and link against it.
 ### Build against `GCC`
 
 The current `makefile` only uses `clang`.
-
-### Load/Save
-
-Add a mechanism to dump everything in the `component::Manager` to a JSON file.
-Have an optimal way to read that file back in and make the needed changes - something smarter than destroying everything to then rebuild the same components from scratch.
-
-### Have a component handle 
-
-There should be a safe way to store a 'pointer' to specific component.
-A raw pointer would become junk if the component is deleted, this is what we want to avoid.
-A weak pointer is an option, but this would need the underlying `unique_ptr` to be changed to a `shared_ptr`.
-
-
