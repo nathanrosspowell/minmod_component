@@ -4,7 +4,7 @@ namespace minmod
     {
         template <class COMPONENT> void Linker::Link(std::function<void(COMPONENT*)> add, std::function<void()> remove, Requirement requirement) {
             assert(m_currentlyLinking != INVALID_ID);
-            auto& ownedPairs = m_entryMap[COMPONENT::GetStaticId()];
+            auto& ownedPairs = m_entryMap[COMPONENT::GetStaticId()].m_pairs;
             auto addfunc = [add = std::move(add)](auto ptr)
                 {
                     assert(dynamic_cast<COMPONENT*>(ptr) != nullptr);

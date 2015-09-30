@@ -67,6 +67,10 @@ namespace minmod
             // 'On Remove' callback.
             using RemoveFunc = std::function<void()>;
         
+            /* The linking of one component
+             *
+             * All the needed functions and state to know how to link/unlink a component.
+             */
             struct Linkage
             {
                 Linkage(AddFunc&& add, RemoveFunc&& remove, Requirement requirement);
@@ -80,6 +84,14 @@ namespace minmod
 
             // Map of <Id> to <Linkage>.
             using OwnedPairs = std::unordered_map<Id, UniqueLinkage>;
+
+            struct Owned
+            {
+                void VerifyState();
+
+                State m_state = State::WaitingForRequirements;
+                OwnedPairs m_pairs;
+            };
 
         private: //- Manager interface.
 
@@ -124,8 +136,8 @@ namespace minmod
 
         private: //- Private members.
 
-            // Map of <Id> to <OwnedPairs>.
-            std::unordered_map<Id, OwnedPairs> m_entryMap;
+            // Map of <Id> to <Owned>.
+            std::unordered_map<Id, Owned> m_entryMap;
 
             // <Id> of the component that is currently being linked.
             Id m_currentlyLinking = INVALID_ID;

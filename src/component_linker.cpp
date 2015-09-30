@@ -50,7 +50,7 @@ namespace minmod
             TRACE("Id: " << id);
             for (auto& pair : m_entryMap)
             {
-                pair.second.erase(id);
+                pair.second.m_pairs.erase(id);
             }
         }
 
@@ -61,7 +61,7 @@ namespace minmod
             auto it = m_entryMap.find(interfacePtr->GetId());
             if (it != m_entryMap.end())
             {
-                for (const auto& ownedPair : it->second)
+                for (const auto& ownedPair : it->second.m_pairs)
                 {
                     auto& addFunc = ownedPair.second->m_addFunc;
                     addFunc(interfacePtr);
@@ -76,7 +76,7 @@ namespace minmod
             auto it = m_entryMap.find(id);
             if (it != m_entryMap.end())
             {
-                for (const auto& funcPair : it->second)
+                for (const auto& funcPair : it->second.m_pairs)
                 {
                     auto& removeFunc = funcPair.second->m_removeFunc;
                     removeFunc();
@@ -85,7 +85,7 @@ namespace minmod
             // Unlink anything this component is linked against.
             for (const auto& pair : m_entryMap)
             {
-                for (const auto& ownedPair : pair.second)
+                for (const auto& ownedPair : pair.second.m_pairs)
                 {
                     if (ownedPair.first == id)
                     {
@@ -101,7 +101,7 @@ namespace minmod
             TRACE("");
             for (auto& pair : linker.m_entryMap)
             {
-                auto& ownedPairs = m_entryMap[pair.first];
+                auto& ownedPairs = m_entryMap[pair.first].m_pairs;
                 for (auto& item : ownedPairs )
                 {
                     ownedPairs.insert(std::move(item));
