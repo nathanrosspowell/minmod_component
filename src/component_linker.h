@@ -39,6 +39,7 @@ namespace minmod
             enum class State : std::uint8_t
             {
                 Ready,
+                NotReady,
                 WaitingForRequirements
             };
 
@@ -78,6 +79,7 @@ namespace minmod
                 AddFunc m_addFunc = nullptr;
                 RemoveFunc m_removeFunc = nullptr;
                 Requirement m_requirement = Requirement::Optional;
+                State m_state = State::NotReady;
             };
 
             using UniqueLinkage = std::unique_ptr<Linkage>;
@@ -118,7 +120,7 @@ namespace minmod
              *
              * This get's the <OwnedPairs> 
              */
-            void AddComponent(Interface* const interfacePtr) const;
+            void AddComponent(Interface* const interfacePtr);
 
             /* <Manager> interface for when a new component is removed.
              * @id the <Id> of the component being removed, the pointer isn't needed.

@@ -17,6 +17,28 @@ namespace minmod
         {
         }
 
+        void Linker::Owned::VerifyState()
+        {
+            if (m_state == State::Ready )
+            {
+                return;
+            }
+            bool ready = true;
+            for ( const auto& pair : m_pairs)
+            {
+                const auto linkage = pair.second.get();
+                if ( linkage->m_requirement == Requirement::Needed && linkage->m_state != State::Ready )
+                {
+                    ready = false;
+                    break;
+                }
+            }
+            if (ready)
+            {
+                m_state = State::Ready;
+            }
+        }
+
         Linker::~Linker()
         {
             TRACE("Clean up Linker");
@@ -54,7 +76,7 @@ namespace minmod
             }
         }
 
-        void Linker::AddComponent(Interface* const interfacePtr) const
+        void Linker::AddComponent(Interface* const interfacePtr) 
         {
             assert(interfacePtr != nullptr);
             TRACE("Name: " << interfacePtr->GetName() << ", Id: " << interfacePtr->GetId());
@@ -66,6 +88,7 @@ namespace minmod
                     auto& addFunc = ownedPair.second->m_addFunc;
                     addFunc(interfacePtr);
                 }
+                it->second.VerifyState();
             }
         }
 
@@ -83,7 +106,7 @@ namespace minmod
                 }
             }
             // Unlink anything this component is linked against.
-            for (const auto& pair : m_entryMap)
+            for (auto& pair : m_entryMap)
             {
                 for (const auto& ownedPair : pair.second.m_pairs)
                 {
@@ -93,6 +116,7 @@ namespace minmod
                         removeFunc();
                     }
                 }
+                pair.second.VerifyState();
             }
         }
 
