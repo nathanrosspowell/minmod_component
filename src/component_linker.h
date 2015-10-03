@@ -90,7 +90,7 @@ namespace minmod
                 void VerifyState();
 
                 State m_state = State::WaitingForRequirements;
-                LinkMap m_pairs;
+                LinkMap m_linkMap;
             };
 
         private: //- Manager interface.

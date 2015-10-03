@@ -24,9 +24,9 @@ namespace minmod
                 return;
             }
             bool ready = true;
-            for ( const auto& pair : m_pairs)
+            for ( const auto& linkPair : m_linkMap)
             {
-                const auto linkage = pair.second.get();
+                const auto linkage = linkPair.second.get();
                 if ( linkage->m_requirement == Requirement::Needed && linkage->m_state != State::Ready )
                 {
                     ready = false;
@@ -43,9 +43,9 @@ namespace minmod
         {
             TRACE("Clean up Linker");
             // Correctly call all of the 'on remove' functions.
-            for (const auto& pair : m_linksForIdMap)
+            for (const auto& linkPair : m_linksForIdMap)
             {
-                RemoveComponent(pair.first);
+                RemoveComponent(linkPair.first);
             }
             // Loop all of the entries until they are all gone.
             auto it = m_linksForIdMap.begin();
@@ -72,7 +72,7 @@ namespace minmod
             TRACE("Id: " << id);
             for (auto& pair : m_linksForIdMap)
             {
-                pair.second.m_pairs.erase(id);
+                pair.second.m_linkMap.erase(id);
             }
         }
 
@@ -83,9 +83,9 @@ namespace minmod
             auto it = m_linksForIdMap.find(interfacePtr->GetId());
             if (it != m_linksForIdMap.end())
             {
-                for (const auto& ownedPair : it->second.m_pairs)
+                for (const auto& linkPair : it->second.m_linkMap)
                 {
-                    auto& addFunc = ownedPair.second->m_addFunc;
+                    auto& addFunc = linkPair.second->m_addFunc;
                     addFunc(interfacePtr);
                 }
                 it->second.VerifyState();
@@ -99,20 +99,20 @@ namespace minmod
             auto it = m_linksForIdMap.find(id);
             if (it != m_linksForIdMap.end())
             {
-                for (const auto& funcPair : it->second.m_pairs)
+                for (const auto& linkPair : it->second.m_linkMap)
                 {
-                    auto& removeFunc = funcPair.second->m_removeFunc;
+                    auto& removeFunc = linkPair.second->m_removeFunc;
                     removeFunc();
                 }
             }
             // Unlink anything this component is linked against.
             for (auto& pair : m_linksForIdMap)
             {
-                for (const auto& ownedPair : pair.second.m_pairs)
+                for (const auto& linkPair : pair.second.m_linkMap)
                 {
-                    if (ownedPair.first == id)
+                    if (linkPair.first == id)
                     {
-                        auto& removeFunc = ownedPair.second->m_removeFunc;
+                        auto& removeFunc = linkPair.second->m_removeFunc;
                         removeFunc();
                     }
                 }
@@ -125,7 +125,7 @@ namespace minmod
             TRACE("");
             for (auto& pair : linker.m_linksForIdMap)
             {
-                auto& ownedPairs = m_linksForIdMap[pair.first].m_pairs;
+                auto& ownedPairs = m_linksForIdMap[pair.first].m_linkMap;
                 for (auto& item : ownedPairs )
                 {
                     ownedPairs.insert(std::move(item));

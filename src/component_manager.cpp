@@ -108,14 +108,14 @@ namespace minmod
             auto& entry = m_map[ownerId];
             for (const auto& removeId : eraseList)
             {
-                const auto& pair = entry.m_componentMap.find(removeId);
-                assert(pair != entry.m_componentMap.end());
-                entry.m_linker.RemoveComponent(pair->first);
-                entry.m_linker.UnLink(pair->first);
+                const auto& linkPair = entry.m_componentMap.find(removeId);
+                assert(linkPair != entry.m_componentMap.end());
+                entry.m_linker.RemoveComponent(linkPair->first);
+                entry.m_linker.UnLink(linkPair->first);
                 TRACE("Removing: " << removeId << " from " << ownerId);
-                pair->second.reset();
+                linkPair->second.reset();
                 TRACE("Removing: " << removeId << " from " << ownerId);
-                entry.m_componentMap.erase(pair);
+                entry.m_componentMap.erase(linkPair);
             }
         }
 
@@ -161,14 +161,14 @@ namespace minmod
             assert(ownerId != INVALID_ID);
             assert(insertList.size() > 0);
             ComponentMap componentMap;
-            for (const auto& pair : insertList)
+            for (const auto& linkPair : insertList)
             {
-                auto component = m_factory.Create(pair.first);
+                auto component = m_factory.Create(linkPair.first);
                 if (component)
                 {
-                    assert(component->GetId() == pair.first);
-                    assert(m_factory.GetId(component->GetName()) == pair.first);
-                    component->Deserialize(pair.second);
+                    assert(component->GetId() == linkPair.first);
+                    assert(m_factory.GetId(component->GetName()) == linkPair.first);
+                    component->Deserialize(linkPair.second);
                     TRACE("  Deserialize of: " << component->GetName());
                     TRACE("    " << component->Serialize().dump());
                     componentMap[component->GetId()] = std::move(component);
