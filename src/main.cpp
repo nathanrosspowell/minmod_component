@@ -88,7 +88,7 @@ int main()
     };
     TRACE("Remove sams LinkingComponent");
     cm.Erase(sam, samsComponentMap); // Erase list of componentMap.
-    TRACE("Try and get sams Link");
+    TRACE("Try and get sams AddLink");
     auto samsLink = cm.Get(sam, LinkingComponent::GetStaticId());
     assert(samsLink == nullptr);
     Name name = samsLink ? samsLink->GetName() : Name("nullptr");

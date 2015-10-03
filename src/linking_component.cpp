@@ -16,7 +16,7 @@ namespace test
     void LinkingComponent::MakeLinks(mmc::Linker& linker)
     {
         TRACE("Adding TestComponent");
-        linker.Link<TestComponent>(
+        linker.AddLink<TestComponent>(
             [this](auto ptr)
             {
                 TRACE("Linking pointer for TestComponent");

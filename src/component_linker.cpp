@@ -56,7 +56,7 @@ namespace minmod
             }
         }
 
-        void Linker::Link(Interface* const interfacePtr)
+        void Linker::AddLink(Interface* const interfacePtr)
         {
             assert(interfacePtr != nullptr);
             TRACE("Name: " << interfacePtr->GetName() << ", Id: " << interfacePtr->GetId());

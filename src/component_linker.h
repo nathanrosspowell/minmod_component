@@ -16,7 +16,7 @@ namespace minmod
         /* Componment link management.
          *
          * This stores 'on add' and 'on remove' functions all the components that an <Id> can own.
-         * These functions are added via the <Link> functions.
+         * These functions are added via the <AddLink> functions.
          *
          * When a component is added to an <Id> the <AddComponent> function is called,
          * which will call all of the stored <AddFunc> that are assosiated with it.
@@ -58,7 +58,7 @@ namespace minmod
              * The function is templated to allow the conversion of pointers to the desired component type.
              * Internally, the <add> function is wrapped in a lambda which does a static_cast on the pointer.
              */
-            template <class COMPONENT> void Link(std::function<void(COMPONENT* const)> add, std::function<void()> remove, Requirement requirement = Requirement::Optional);
+            template <class COMPONENT> void AddLink(std::function<void(COMPONENT* const)> add, std::function<void()> remove, Requirement requirement = Requirement::Optional);
 
         private: //- Private types.
 
@@ -103,9 +103,9 @@ namespace minmod
              * @interface the component to link.
              *
              * The <Linker> class need to get the interface point so it can cache it's <Id> into <m_currentlyLinking>.
-             * This is don't so that when the templated <Link> funciton is called it doesn't have to pass it's own <Id> as a parameter.
+             * This is don't so that when the templated <AddLink> funciton is called it doesn't have to pass it's own <Id> as a parameter.
              */
-            void Link(Interface* const interfacePtr);
+            void AddLink(Interface* const interfacePtr);
 
 
             /* <Manager> call to link a component.

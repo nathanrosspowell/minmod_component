@@ -50,7 +50,7 @@ namespace minmod
             /* Where to define dependencies on other componentMap, may be called multiple times.
              * @linker a <Linker> instance to record the links for this component.
              *
-             * Each component has the opertunity to 'link' itself to others using the <Linker::Link> function.
+             * Each component has the opertunity to 'link' itself to others using the <Linker::AddLink> function.
              * Two functions are passed to it:
              *     1) A function taking the pointer to the component type when it's added
              *     2) A function taking when the component is removed

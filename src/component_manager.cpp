@@ -182,7 +182,7 @@ namespace minmod
             assert(ownerId != INVALID_ID);
             assert(componentMap.size() > 0);
             auto& entry = m_map[ownerId]; // Get or create an entry.
-            // Link all the existing copmonents against the new ones.
+            // AddLink all the existing copmonents against the new ones.
             for (auto& pair : componentMap)
             {
                 entry.m_linker.AddComponent(pair.second.get());
@@ -191,9 +191,9 @@ namespace minmod
             Linker tempLinker;
             for (auto& pair : componentMap)
             {
-                tempLinker.Link(pair.second.get());
+                tempLinker.AddLink(pair.second.get());
             }
-            // Link all the old,
+            // AddLink all the old,
             for (auto& pair : entry.m_componentMap)
             {
                 tempLinker.AddComponent(pair.second.get());
