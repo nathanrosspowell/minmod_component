@@ -24,7 +24,7 @@ namespace minmod
          *
          * The oposite case is <RemoveComponent>.
          * All the stored <RemoveFunc> assositated with the copmonent being removed are called.
-         * Then, the <m_entryMap> is cleaned of all of all <AddFunc> and <RemoveFunc> owned by that component.
+         * Then, the <m_linksForIdMap> is cleaned of all of all <AddFunc> and <RemoveFunc> owned by that component.
          */
         class Linker
         {
@@ -72,9 +72,9 @@ namespace minmod
              *
              * All the needed functions and state to know how to link/unlink a component.
              */
-            struct Linkage
+            struct Link
             {
-                Linkage(AddFunc&& add, RemoveFunc&& remove, Requirement requirement);
+                Link(AddFunc&& add, RemoveFunc&& remove, Requirement requirement);
 
                 AddFunc m_addFunc = nullptr;
                 RemoveFunc m_removeFunc = nullptr;
@@ -82,17 +82,15 @@ namespace minmod
                 State m_state = State::NotReady;
             };
 
-            using UniqueLinkage = std::unique_ptr<Linkage>;
+            // Map of <Id> to <Link>.
+            using LinkMap = std::unordered_map<Id, std::unique_ptr<Link>>;
 
-            // Map of <Id> to <Linkage>.
-            using OwnedPairs = std::unordered_map<Id, UniqueLinkage>;
-
-            struct Owned
+            struct Links
             {
                 void VerifyState();
 
                 State m_state = State::WaitingForRequirements;
-                OwnedPairs m_pairs;
+                LinkMap m_pairs;
             };
 
         private: //- Manager interface.
@@ -118,7 +116,7 @@ namespace minmod
             /* <Manager> interface for when a new component is added.
              * @interfacePtr the component being added.
              *
-             * This get's the <OwnedPairs> 
+             * This get's the <LinkMap> 
              */
             void AddComponent(Interface* const interfacePtr);
 
@@ -138,8 +136,8 @@ namespace minmod
 
         private: //- Private members.
 
-            // Map of <Id> to <Owned>.
-            std::unordered_map<Id, Owned> m_entryMap;
+            // Map of <Id> to <Links>.
+            std::unordered_map<Id, Links> m_linksForIdMap;
 
             // <Id> of the component that is currently being linked.
             Id m_currentlyLinking = INVALID_ID;

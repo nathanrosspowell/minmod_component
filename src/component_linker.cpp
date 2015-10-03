@@ -10,14 +10,14 @@ namespace minmod
 {
     namespace component
     {
-        Linker::Linkage::Linkage(AddFunc&& add, RemoveFunc&& remove, Requirement requirement)
+        Linker::Link::Link(AddFunc&& add, RemoveFunc&& remove, Requirement requirement)
             : m_addFunc(add)
             , m_removeFunc(remove)
             , m_requirement(requirement)
         {
         }
 
-        void Linker::Owned::VerifyState()
+        void Linker::Links::VerifyState()
         {
             if (m_state == State::Ready )
             {
@@ -43,16 +43,16 @@ namespace minmod
         {
             TRACE("Clean up Linker");
             // Correctly call all of the 'on remove' functions.
-            for (const auto& pair : m_entryMap)
+            for (const auto& pair : m_linksForIdMap)
             {
                 RemoveComponent(pair.first);
             }
             // Loop all of the entries until they are all gone.
-            auto it = m_entryMap.begin();
-            while (it != m_entryMap.end())
+            auto it = m_linksForIdMap.begin();
+            while (it != m_linksForIdMap.end())
             {
                 UnLink(it->first);
-                it = m_entryMap.erase(it);
+                it = m_linksForIdMap.erase(it);
             }
         }
 
@@ -70,7 +70,7 @@ namespace minmod
         {
             assert(id != INVALID_ID);
             TRACE("Id: " << id);
-            for (auto& pair : m_entryMap)
+            for (auto& pair : m_linksForIdMap)
             {
                 pair.second.m_pairs.erase(id);
             }
@@ -80,8 +80,8 @@ namespace minmod
         {
             assert(interfacePtr != nullptr);
             TRACE("Name: " << interfacePtr->GetName() << ", Id: " << interfacePtr->GetId());
-            auto it = m_entryMap.find(interfacePtr->GetId());
-            if (it != m_entryMap.end())
+            auto it = m_linksForIdMap.find(interfacePtr->GetId());
+            if (it != m_linksForIdMap.end())
             {
                 for (const auto& ownedPair : it->second.m_pairs)
                 {
@@ -96,8 +96,8 @@ namespace minmod
         {
             TRACE("Id: " << id);
             assert(id != INVALID_ID);
-            auto it = m_entryMap.find(id);
-            if (it != m_entryMap.end())
+            auto it = m_linksForIdMap.find(id);
+            if (it != m_linksForIdMap.end())
             {
                 for (const auto& funcPair : it->second.m_pairs)
                 {
@@ -106,7 +106,7 @@ namespace minmod
                 }
             }
             // Unlink anything this component is linked against.
-            for (auto& pair : m_entryMap)
+            for (auto& pair : m_linksForIdMap)
             {
                 for (const auto& ownedPair : pair.second.m_pairs)
                 {
@@ -123,9 +123,9 @@ namespace minmod
         void Linker::MoveLinks(const Linker&& linker)
         {
             TRACE("");
-            for (auto& pair : linker.m_entryMap)
+            for (auto& pair : linker.m_linksForIdMap)
             {
-                auto& ownedPairs = m_entryMap[pair.first].m_pairs;
+                auto& ownedPairs = m_linksForIdMap[pair.first].m_pairs;
                 for (auto& item : ownedPairs )
                 {
                     ownedPairs.insert(std::move(item));
