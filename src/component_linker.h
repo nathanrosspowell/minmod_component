@@ -60,6 +60,15 @@ namespace minmod
              */
             template <class COMPONENT> void AddLink(std::function<void(COMPONENT* const)> add, std::function<void()> remove, Requirement requirement = Requirement::Optional);
 
+            /* Linking 'on add' and 'on remove' functions for a component class.
+             * @componentId the id passed explicitly, not taked form the template parameters
+             * @add take the exact component type as a parameter
+             * @remove callback for when that component is removed
+             *
+             * The same as th other AddLink, but without the static id function dependency.
+             */
+            template <class COMPONENT> void AddLink(Id componentId, std::function<void(COMPONENT* const)> add, std::function<void()> remove, Requirement requirement = Requirement::Optional);
+
         private: //- Private types.
 
             // 'On Add' callback, taking an <Interface> pointer.

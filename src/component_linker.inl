@@ -2,9 +2,15 @@ namespace minmod
 {
     namespace component
     {
-        template <class COMPONENT> void Linker::AddLink(std::function<void(COMPONENT*)> add, std::function<void()> remove, Requirement requirement) {
+        template <class COMPONENT> void Linker::AddLink(std::function<void(COMPONENT*)> add, std::function<void()> remove, Requirement requirement)
+        {
+            AddLink(COMPONENT::GetStaticId(), add, remove, requirement);
+        }
+
+        template <class COMPONENT> void Linker::AddLink(Id componentId, std::function<void(COMPONENT*)> add, std::function<void()> remove, Requirement requirement)
+        {
             assert(m_currentlyLinking != INVALID_ID);
-            auto& ownedPairs = m_linksForIdMap[COMPONENT::GetStaticId()].m_linkMap;
+            auto& ownedPairs = m_linksForIdMap[componentId].m_linkMap;
             auto addfunc = [add = std::move(add)](auto ptr)
                 {
                     assert(dynamic_cast<COMPONENT*>(ptr) != nullptr);
