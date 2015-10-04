@@ -109,7 +109,25 @@ namespace minmod
              */
             OwnerId Insert(const OwnerId ownerId, const InsertList& componentMap);
 
+        private: //- Private structures.
+
+            /* The entry for each <OwnerId> in the <Manager>.
+             *
+             */
+            struct Entry
+            {
+                Entry(Manager& manager) : m_linker(manager) {}
+
+                // The links between all of the owners components.
+                Linker m_linker;
+
+                // Storage of all the owners <UniquePtr>.
+                ComponentMap m_componentMap;
+            };
+
         private: //- Private functions.
+
+            friend class Linker;
 
             /* Insert of one or many components.
              *
@@ -120,24 +138,16 @@ namespace minmod
              */
             OwnerId Insert(const OwnerId ownerId, ComponentMap&& componentMap);
 
-        private: //- Private structures.
+            Entry& GetOrCreateEntry(OwnerId ownerId);
 
-            /* The entry for each <OwnerId> in the <Manager>.
-             *
-             */
-            struct Entry
-            {
-                // Storage of all the owners <UniquePtr>.
-                ComponentMap m_componentMap;
+            void SetReady(Id componentId);
 
-                // The links between all of the owners components.
-                Linker m_linker;
-            };
+            void SetNotReady(Id componentId);
 
         private: //- Private members.
 
             // A map of <OwnerId> to <Entry>.
-            std::unordered_map<OwnerId, Entry> m_map;
+            std::unordered_map<OwnerId, std::unique_ptr<Entry>> m_entryMap;
 
             // <Factory> refference.
             Factory& m_factory;

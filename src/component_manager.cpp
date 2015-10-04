@@ -39,10 +39,10 @@ namespace minmod
         {
             using namespace json11;
             Json::array entriesArray;
-            for (const auto& entryPair : m_map)
+            for (const auto& entryPair : m_entryMap)
             {
                 Json::array componentArray;
-                const auto& componentMap = entryPair.second.m_componentMap;
+                const auto& componentMap = entryPair.second->m_componentMap;
                 for (const auto& componentPair : componentMap)
                 {
                     const auto component = componentPair.second.get();
@@ -61,10 +61,10 @@ namespace minmod
 
         Interface* Manager::Get(const OwnerId ownerId, const Id comonentId)
         {
-            const auto ownerIt = m_map.find(ownerId);
-            if (ownerIt != m_map.end())
+            const auto ownerIt = m_entryMap.find(ownerId);
+            if (ownerIt != m_entryMap.end())
             {
-                const auto& componentMap = ownerIt->second.m_componentMap;
+                const auto& componentMap = ownerIt->second->m_componentMap;
                 const auto compIt = componentMap.find(comonentId);
                 if (compIt != componentMap.end())
                 {
@@ -87,17 +87,17 @@ namespace minmod
         void Manager::Erase(const OwnerId ownerId)
         {
             TRACE("For ownerId: " << ownerId);
-            const auto& entryIt = m_map.find(ownerId);
-            if (entryIt != m_map.end())
+            const auto& entryIt = m_entryMap.find(ownerId);
+            if (entryIt != m_entryMap.end())
             {
                 EraseList eraseList;
-                const auto& componentMap = entryIt->second.m_componentMap;
+                const auto& componentMap = entryIt->second->m_componentMap;
                 for (const auto& component : componentMap)
                 {
                     eraseList.push_back(component.first);
                 }
                 Erase(ownerId, eraseList);
-                m_map.erase(entryIt);
+                m_entryMap.erase(entryIt);
             }
         }
 
@@ -105,7 +105,9 @@ namespace minmod
         {
             TRACE("For ownerId: " << ownerId << ". " << eraseList.size() << " to remove");
             assert(ownerId != INVALID_ID);
-            auto& entry = m_map[ownerId];
+            auto it = m_entryMap.find(ownerId);
+            assert(it != m_entryMap.end());
+            auto& entry = *(it->second.get());
             for (const auto& removeId : eraseList)
             {
                 const auto& linkPair = entry.m_componentMap.find(removeId);
@@ -181,14 +183,14 @@ namespace minmod
         {
             assert(ownerId != INVALID_ID);
             assert(componentMap.size() > 0);
-            auto& entry = m_map[ownerId]; // Get or create an entry.
+            auto& entry = GetOrCreateEntry(ownerId);
             // AddLink all the existing copmonents against the new ones.
             for (auto& pair : componentMap)
             {
                 entry.m_linker.AddComponent(pair.second.get());
             }
             // Make a temp linker for the new components.
-            Linker tempLinker;
+            Linker tempLinker(*this);
             for (auto& pair : componentMap)
             {
                 tempLinker.AddLink(pair.second.get());
@@ -217,6 +219,28 @@ namespace minmod
             // Add the new links to the stored linker.
             entry.m_linker.MoveLinks(std::move(tempLinker));
             return ownerId;
+        }
+
+        auto Manager::GetOrCreateEntry(OwnerId ownerId) -> Entry&
+        {
+            auto it = m_entryMap.find(ownerId);
+            if (it == m_entryMap.end())
+            {
+                auto pair = m_entryMap.insert(std::make_pair(ownerId, std::make_unique<Entry>(*this)));
+                assert(pair.second == true);
+                it = pair.first;
+            }
+            return *(it->second.get());
+        }
+
+        void Manager::SetReady(Id componentId)
+        {
+            TRACE(componentId);
+        }
+
+        void Manager::SetNotReady(Id componentId)
+        {
+            TRACE(componentId);
         }
     }
 }

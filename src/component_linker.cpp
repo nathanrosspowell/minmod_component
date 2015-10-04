@@ -3,6 +3,7 @@
 #include <algorithm>
 // minmod
 #include "component_interface.h"
+#include "component_manager.h"
 // Debug
 #include <iostream>
 
@@ -17,26 +18,10 @@ namespace minmod
         {
         }
 
-        void Linker::Links::VerifyState()
+
+        Linker::Linker(Manager& manager)
+            : m_manager(manager)
         {
-            if (m_state == State::Ready )
-            {
-                return;
-            }
-            bool ready = true;
-            for ( const auto& linkPair : m_linkMap)
-            {
-                const auto linkage = linkPair.second.get();
-                if ( linkage->m_requirement == Requirement::Needed && linkage->m_state != State::Ready )
-                {
-                    ready = false;
-                    break;
-                }
-            }
-            if (ready)
-            {
-                m_state = State::Ready;
-            }
         }
 
         Linker::~Linker()
@@ -88,8 +73,8 @@ namespace minmod
                     auto& addFunc = linkPair.second->m_addFunc;
                     addFunc(interfacePtr);
                 }
-                it->second.VerifyState();
             }
+            VerifyLinks();
         }
 
         void Linker::RemoveComponent(const Id id)
@@ -116,8 +101,8 @@ namespace minmod
                         removeFunc();
                     }
                 }
-                pair.second.VerifyState();
             }
+            VerifyLinks();
         }
 
         void Linker::MoveLinks(const Linker&& linker)
@@ -129,6 +114,45 @@ namespace minmod
                 for (auto& item : ownedPairs )
                 {
                     ownedPairs.insert(std::move(item));
+                }
+            }
+        }
+
+        void Linker::VerifyLinks()
+        {
+            for (auto& pair : m_linksForIdMap)
+            {
+                auto id = pair.first;
+                auto& links = pair.second;
+                State newState = State::Ready;
+                for (auto& componentId : links.m_ownedLinks)
+                {
+                    auto it = m_linksForIdMap.find(componentId);
+                    if ( it == m_linksForIdMap.end())
+                    {
+                        newState = State::NotReady;
+                        break;
+                    }
+                }
+                if ( newState != links.m_state )
+                {
+
+                    if ( links.m_state == State::WaitingForRequirements)
+                    {
+                        break;
+                    }
+                    else 
+                    {
+                        links.m_state = newState;
+                        if ( newState == State::Ready )
+                        {
+                           m_manager.SetReady( id );
+                        }
+                        else
+                        {
+                           m_manager.SetNotReady(id);
+                        }
+                    }
                 }
             }
         }

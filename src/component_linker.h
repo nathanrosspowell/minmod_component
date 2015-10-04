@@ -4,6 +4,7 @@
 #include <functional>
 #include <cassert>
 #include <memory>
+#include <vector>
 //- minmod.
 #include "component_types.h"
 
@@ -12,6 +13,7 @@ namespace minmod
     namespace component
     {
         class Interface;
+        class Manager;
 
         /* Componment link management.
          *
@@ -44,6 +46,12 @@ namespace minmod
             };
 
         public: //- Public fuctions.
+
+            /* Constructor.
+             *
+             * This has to be made with a reference to it's manager.
+             */
+            explicit Linker(Manager& manager);
 
             /* Destructor.
              *
@@ -91,15 +99,16 @@ namespace minmod
                 State m_state = State::NotReady;
             };
 
-            // Map of <Id> to <Link>.
-            using LinkMap = std::unordered_map<Id, std::unique_ptr<Link>>;
-
             struct Links
             {
-                void VerifyState();
-
+                // <State> of the links for this component.
                 State m_state = State::WaitingForRequirements;
-                LinkMap m_linkMap;
+                
+                // Map of <Id> to <Link>.
+                std::unordered_map<Id, std::unique_ptr<Link>> m_linkMap;
+
+                // List of <Id> to verify the state of the component.
+                std::vector<Id> m_ownedLinks;
             };
 
         private: //- Manager interface.
@@ -143,7 +152,15 @@ namespace minmod
              */
             void MoveLinks(const Linker&& linker);
 
+            /*
+             *
+             */
+            void VerifyLinks();
+
         private: //- Private members.
+
+            // Refference to the <Manager> that owns this.
+            Manager& m_manager;
 
             // Map of <Id> to <Links>.
             std::unordered_map<Id, Links> m_linksForIdMap;
