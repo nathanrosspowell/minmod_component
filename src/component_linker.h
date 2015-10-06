@@ -32,17 +32,25 @@ namespace minmod
         {
         public: //- Public enums.
 
+            /* Requiremnt levels.
+             *
+             * Some links might be optional, some might be needed.
+             */
             enum class Requirement : std::uint8_t
             {
-                Needed,
-                Optional
+                Needed, //- This link is important for functionality of the component.
+                Optional //- Not needed for main function.
             };
 
+            /* A state of readyness.
+             *
+             * Options for readyness state.
+             */
             enum class State : std::uint8_t
             {
-                Ready,
-                NotReady,
-                WaitingForRequirements
+                Ready, //- 100% ready.
+                NotReady, //- Was ready, but now is not.
+                WaitingForRequirements //- Never been ready.
             };
 
         public: //- Public fuctions.
@@ -91,14 +99,32 @@ namespace minmod
              */
             struct Link
             {
+                /* Construct all the data of a link between components.
+                 * @add function to call on add.
+                 * @remove function to call on remove.
+                 * @requirement if this link is <Requirement::Needed> or not.
+                 *
+                 * Holds how to add and remove the link and the current state of the link.
+                 */
                 Link(AddFunc&& add, RemoveFunc&& remove, Requirement requirement);
 
+                // Function to call when the needed <Interface> is added.
                 AddFunc m_addFunc = nullptr;
+
+                // Function to call when the needed <Interface> is removed.
                 RemoveFunc m_removeFunc = nullptr;
+
+                // If this link is a <Requirement> for the owning component to function.
                 Requirement m_requirement = Requirement::Optional;
+
+                // The current <State> of this link.
                 State m_state = State::NotReady;
             };
 
+            /* Wrapper for the link data for an <Interface>.
+             *
+             * 
+             */
             struct Links
             {
                 // <State> of the links for this component.
