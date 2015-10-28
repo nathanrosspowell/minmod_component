@@ -92,7 +92,7 @@ namespace minmod
 
             // 'On Remove' callback.
             using RemoveFunc = std::function<void()>;
-        
+
             /* The linking of one component
              *
              * All the needed functions and state to know how to link/unlink a component.
@@ -123,13 +123,13 @@ namespace minmod
 
             /* Wrapper for the link data for an <Interface>.
              *
-             * 
+             *
              */
             struct Links
             {
                 // <State> of the links for this component.
                 State m_state = State::WaitingForRequirements;
-                
+
                 // Map of <Id> to <Link>.
                 std::unordered_map<Id, std::unique_ptr<Link>> m_linkMap;
 
@@ -145,7 +145,8 @@ namespace minmod
              * @interface the component to link.
              *
              * The <Linker> class need to get the interface point so it can cache it's <Id> into <m_currentlyLinking>.
-             * This is don't so that when the templated <AddLink> funciton is called it doesn't have to pass it's own <Id> as a parameter.
+             * This is don't so that when the templated <AddLink> funciton is called it doesn't have to pass it's own <Id>
+             * as a parameter.
              */
             void AddLink(Interface* const interfacePtr);
 
@@ -160,7 +161,7 @@ namespace minmod
             /* <Manager> interface for when a new component is added.
              * @interfacePtr the component being added.
              *
-             * This get's the <LinkMap> 
+             * This get's the <LinkMap>
              */
             void AddComponent(Interface* const interfacePtr);
 

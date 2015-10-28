@@ -61,7 +61,7 @@ namespace minmod
             }
         }
 
-        void Linker::AddComponent(Interface* const interfacePtr) 
+        void Linker::AddComponent(Interface* const interfacePtr)
         {
             assert(interfacePtr != nullptr);
             TRACE("Name: " << interfacePtr->GetName() << ", Id: " << interfacePtr->GetId());
@@ -136,12 +136,11 @@ namespace minmod
                 }
                 if ( newState != links.m_state )
                 {
-
                     if ( links.m_state == State::WaitingForRequirements)
                     {
-                        break;
+                        break; // Cannot be verified.
                     }
-                    else 
+                    else
                     {
                         links.m_state = newState;
                         if ( newState == State::Ready )
