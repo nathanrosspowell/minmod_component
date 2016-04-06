@@ -33,12 +33,6 @@ namespace minmod
             {
             public: //- Public functions.
 
-                /* Constructor.
-                 * @ptr the typed component pointer.
-                 *
-                 * These will always be created with a pointer, even if it's `nullptr`.
-                 */
-                explicit Adapter(T* const ptr);
 
                 /* If check operater.
                  *
@@ -83,6 +77,18 @@ namespace minmod
                  * @return const component refference.
                  */
                 const T& Get() const;
+
+            private: //- Private members.
+
+                /* Constructor.
+                 * @ptr the typed component pointer.
+                 *
+                 * These will always be created with a pointer, even if it's `nullptr`.
+                 *
+                 * Only <Handle::Get> class can access the private constructor.
+                 */
+                explicit Adapter(T* const ptr);
+                friend Adapter Handle::Get() const;
 
             private: //- Private members.
 

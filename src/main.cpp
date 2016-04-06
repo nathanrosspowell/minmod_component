@@ -15,7 +15,7 @@
 // Debug
 #include <iostream>
 
-int main()
+void test_minmod()
 {
     // Using statements just for the main scope block.
     using namespace test;
@@ -119,5 +119,14 @@ int main()
     }
     TRACE("Custom types test, close scope");
     TRACE("End main()");
+}
+
+int main()
+{
+    const size_t c = 100000;
+    for (size_t i = 0; i < c; ++i)
+    {
+        test_minmod();
+    }
     return 0;
 }

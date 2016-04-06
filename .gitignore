@@ -47,6 +47,7 @@ src/minmod_component
 # Visual studio
 /visual_studio/[Dd]ebug/
 /visual_studio/[Rr]elease/
+/visual_studio/[Xx]64/
 *.suo
 *.user
 *.userosscache
