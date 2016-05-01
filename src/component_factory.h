@@ -42,11 +42,23 @@ namespace minmod
              */
             Factory(Factory const&) = delete;
 
+            /* Move constructor.
+             *
+             * Explicitly deleted to stop duplicate <Factory> instances.
+             */
+            Factory(Factory const&&) = delete;
+
             /* Assignment operator.
              *
              * Explicitly deleted to stop duplicate <Factory> instances.
              */
             void operator=(Factory const&) = delete;
+
+            /* Move operator.
+             *
+             * Explicitly deleted to stop duplicate <Factory> instances.
+             */
+            void operator=(Factory const&&) = delete;
 
             /* Templated addition of a component.
              *

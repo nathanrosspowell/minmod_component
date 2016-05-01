@@ -24,6 +24,11 @@ namespace minmod
         {
         public: //- Id functions.
 
+            /* Virtual desctruction.
+             *
+             */
+            virtual ~Interface() {}
+
             /* Get a unique <Id> for this class type.
              *
              * The <Id> has to be unique per type, not per instance.

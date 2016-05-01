@@ -55,6 +55,7 @@ namespace minmod
              * 
              * @return an <Interface> pointer which can be `nullptr`.
              */
+            template <class T> const T* Get(const OwnerId ownerId) const;
             template <class T> T* Get(const OwnerId ownerId);
 
             /* Get a <Interface> pointer for a component.
@@ -63,6 +64,7 @@ namespace minmod
              * 
              * @return an <Interface> pointer which can be `nullptr`.
              */
+            const Interface* Get(const OwnerId ownerId, const Id comonentId) const;
             Interface* Get(const OwnerId ownerId, const Id comonentId);
 
             /* Get a <Interface> pointer for a component.
@@ -71,6 +73,7 @@ namespace minmod
              * 
              * @return an <Interface> pointer which can be `nullptr`.
              */
+            const Interface* Get(const OwnerId ownerId, const Name& componentName) const;
             Interface* Get(const OwnerId ownerId, const Name& componentName);
 
             /* Removal of one or many components.

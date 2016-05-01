@@ -59,14 +59,14 @@ namespace minmod
             });
         }
 
-        Interface* Manager::Get(const OwnerId ownerId, const Id comonentId)
+        const Interface* Manager::Get(const OwnerId ownerId, const Id componentId) const
         {
             const auto ownerIt = m_entryMap.find(ownerId);
-            if (ownerIt != m_entryMap.end())
+            if (ownerIt != m_entryMap.cend())
             {
                 const auto& componentMap = ownerIt->second->m_componentMap;
-                const auto compIt = componentMap.find(comonentId);
-                if (compIt != componentMap.end())
+                const auto compIt = componentMap.find(componentId);
+                if (compIt != componentMap.cend())
                 {
                     return compIt->second.get();
                 }
@@ -74,14 +74,24 @@ namespace minmod
             return nullptr;
         }
 
-        Interface* Manager::Get(const OwnerId ownerId, const Name& componentName)
+        Interface* Manager::Get(const OwnerId ownerId, const Id componentId)
         {
-            Id id = m_factory.GetId(componentName);
+            return const_cast<Interface*>(static_cast<const Manager*>(this)->Get(ownerId, componentId));
+        }
+
+        const Interface* Manager::Get(const OwnerId ownerId, const Name& componentName) const
+        {
+            const Id id = m_factory.GetId(componentName);
             if (id != INVALID_ID)
             {
                 return Get(ownerId, id);
             }
             return nullptr;
+        }
+
+        Interface* Manager::Get(const OwnerId ownerId, const Name& componentName)
+        {
+            return const_cast<Interface*>(static_cast<const Manager*>(this)->Get(ownerId, componentName));
         }
 
         void Manager::Erase(const OwnerId ownerId)
