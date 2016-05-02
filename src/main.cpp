@@ -123,7 +123,7 @@ void test_minmod()
 
 int main()
 {
-    const size_t c = 100000;
+    const size_t c = 100; //100000;
     for (size_t i = 0; i < c; ++i)
     {
         test_minmod();
