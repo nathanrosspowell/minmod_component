@@ -73,3 +73,11 @@ Builds the code as a library and link against it.
 ### Build against `GCC`
 
 The current `makefile` only uses `clang`.
+
+### Add Ready and Not Ready callbacks
+
+The linking of the components needs to have a final function call to set 'is ready' on components that need to wait for others to be present.
+
+### Make allocation of components come from the registration classes
+
+Figure out how to make strongly typed memory pools for each component type. These should live in the registration classes. That would allow for non-component framework update loops to be added via the registration class.
