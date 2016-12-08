@@ -1,6 +1,4 @@
 #include "test_component.h"
-// minmod
-#include "component_linker.h"
 // Debug
 #include <iostream>
 

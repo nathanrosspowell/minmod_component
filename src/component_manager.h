@@ -7,7 +7,6 @@
 //- minmod.
 #include "component_types.h"
 #include "component_interface.h"
-#include "component_linker.h"
 #include "component_serializer.h"
 
 namespace minmod
@@ -119,11 +118,6 @@ namespace minmod
              */
             struct Entry
             {
-                Entry(Manager& manager) : m_linker(manager) {}
-
-                // The links between all of the owners components.
-                Linker m_linker;
-
                 // Storage of all the owners <UniquePtr>.
                 ComponentMap m_componentMap;
             };

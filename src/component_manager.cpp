@@ -122,10 +122,6 @@ namespace minmod
             {
                 const auto& linkPair = entry.m_componentMap.find(removeId);
                 assert(linkPair != entry.m_componentMap.end());
-                entry.m_linker.RemoveComponent(linkPair->first);
-                entry.m_linker.UnLink(linkPair->first);
-                TRACE("Removing: " << removeId << " from " << ownerId);
-                linkPair->second.reset();
                 TRACE("Removing: " << removeId << " from " << ownerId);
                 entry.m_componentMap.erase(linkPair);
             }
@@ -194,27 +190,6 @@ namespace minmod
             assert(ownerId != INVALID_ID);
             assert(componentMap.size() > 0);
             auto& entry = GetOrCreateEntry(ownerId);
-            // AddLink all the existing copmonents against the new ones.
-            for (auto& pair : componentMap)
-            {
-                entry.m_linker.AddComponent(pair.second.get());
-            }
-            // Make a temp linker for the new components.
-            Linker tempLinker(*this);
-            for (auto& pair : componentMap)
-            {
-                tempLinker.AddLink(pair.second.get());
-            }
-            // AddLink all the old,
-            for (auto& pair : entry.m_componentMap)
-            {
-                tempLinker.AddComponent(pair.second.get());
-            }
-            // and the new components.
-            for (auto& pair : componentMap)
-            {
-                tempLinker.AddComponent(pair.second.get());
-            }
             // Call create on the new components now they are linked.
             for (auto& pair : componentMap)
             {
@@ -226,8 +201,6 @@ namespace minmod
                 assert(entry.m_componentMap.find(pair.first) == entry.m_componentMap.end());
                 entry.m_componentMap[pair.first] = std::move(pair.second);
             }
-            // Add the new links to the stored linker.
-            entry.m_linker.MoveLinks(std::move(tempLinker));
             return ownerId;
         }
 
@@ -236,7 +209,7 @@ namespace minmod
             auto it = m_entryMap.find(ownerId);
             if (it == m_entryMap.end())
             {
-                auto pair = m_entryMap.insert(std::make_pair(ownerId, std::make_unique<Entry>(*this)));
+                auto pair = m_entryMap.insert(std::make_pair(ownerId, std::make_unique<Entry>()));
                 assert(pair.second == true);
                 it = pair.first;
             }

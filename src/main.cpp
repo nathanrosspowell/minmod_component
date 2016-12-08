@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cassert>
 // minmod
 #include "component_types.h"
 #include "component_manager.h"
@@ -62,7 +63,6 @@ void test_minmod()
     TRACE("Dump Manager" << cmJson.dump());
     Manager::EraseList samsComponentMap = {};
     cm.Erase(sam, samsComponentMap); // Erase list of componentMap.
-    TRACE("Try and get sams AddLink");
     TRACE("Remove bob");
     cm.Erase(bob);
     TRACE("Clone Manager");
