@@ -9,7 +9,6 @@
 #include "component_static_registrant.h"
 #include "component_scoped_registrant.h"
 #include "custom_component.h"
-#include "linking_component.h"
 #include "test_component.h"
 #include "json11.hpp"
 // Debug
@@ -36,10 +35,6 @@ void test_minmod()
                 { "x", 102 },
                 { "z", 15 }
             }
-        },
-        {
-            LinkingComponent::GetStaticId(),
-            Json::object{}
         }
     }; // clang-format on
     TRACE("Add bob");
@@ -49,11 +44,6 @@ void test_minmod()
     UNUSED(bobsTest);
     assert(bobsTest != nullptr);
     TRACE("Got: " << bobsTest->GetName());
-    TRACE("Get bobs LinkingComponent");
-    auto bobsLink = cm.Get(bob, "link");
-    UNUSED(bobsLink);
-    assert(bobsLink != nullptr);
-    TRACE("Got: " << bobsLink->GetName());
     TRACE("Get bobs TestComponent via handle");
     Handle<TestComponent> testHandle(cm, bob, TestComponent::GetStaticId());
     if (Handle<TestComponent>::Adapter test = testHandle.Get())
@@ -61,19 +51,6 @@ void test_minmod()
         UNUSED(test);
         TRACE("Got: " << test->GetName());
     }
-    TRACE("Get bobs LinkingComponent via handle");
-    Handle<LinkingComponent> linkHandle(cm, bob);
-    if (auto link = linkHandle.Get())
-    {
-        auto& linkRef = link.Get();
-        UNUSED(linkRef);
-        TRACE("Got: " << linkRef.GetName());
-    }
-    linkHandle.Do([](auto& linkRef)
-                  {
-                      UNUSED(linkRef);
-                      TRACE("Handle::Do Got: " << linkRef.GetName());
-                  });
     TRACE("Add sam");
     cm.Insert(sam, "../data/cool.json"); // Create from json file.
     TRACE("Get sams TestComponent");
@@ -83,16 +60,9 @@ void test_minmod()
     TRACE("Got: " << samsTest->GetName());
     Json cmJson = cm.Serialize();
     TRACE("Dump Manager" << cmJson.dump());
-    Manager::EraseList samsComponentMap = {
-        LinkingComponent::GetStaticId() // Erase by number.
-    };
-    TRACE("Remove sams LinkingComponent");
+    Manager::EraseList samsComponentMap = {};
     cm.Erase(sam, samsComponentMap); // Erase list of componentMap.
     TRACE("Try and get sams AddLink");
-    auto samsLink = cm.Get(sam, LinkingComponent::GetStaticId());
-    assert(samsLink == nullptr);
-    Name name = samsLink ? samsLink->GetName() : Name("nullptr");
-    TRACE("Got: " << name);
     TRACE("Remove bob");
     cm.Erase(bob);
     TRACE("Clone Manager");
