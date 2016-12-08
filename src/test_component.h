@@ -76,9 +76,7 @@ namespace test
         virtual json11::Json Serialize() const override;
 
         /* @inherit */
-        virtual void MakeLinks(mmc::Linker& /*liner*/) override
-        {
-        }
+        //virtual void MakeLinks(mmc::Linker& /*liner*/) override {}
 
         /* @inherit */
         virtual void Create() override

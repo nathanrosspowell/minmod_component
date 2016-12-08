@@ -65,7 +65,7 @@ namespace test
         }
 
         /* @inherit */
-        virtual void MakeLinks(mmc::Linker& liner) override;
+        //virtual void MakeLinks(mmc::Linker& liner) override;
 
         /* @inherit */
         virtual void Create() override

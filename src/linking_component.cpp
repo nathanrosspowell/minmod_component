@@ -13,6 +13,7 @@ namespace test
 
     mmc::StaticRegistrant<LinkingComponent> LinkingComponent::ms_StaticRegistrant;
 
+    /*
     void LinkingComponent::MakeLinks(mmc::Linker& linker)
     {
         TRACE("Adding TestComponent");
@@ -31,4 +32,5 @@ namespace test
                 m_test = nullptr;
             });
     }
+    */
 }

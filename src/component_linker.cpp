@@ -47,7 +47,7 @@ namespace minmod
             TRACE("Name: " << interfacePtr->GetName() << ", Id: " << interfacePtr->GetId());
             // Set the current Id so that it's one less paramter to pass.
             m_currentlyLinking = interfacePtr->GetId();
-            interfacePtr->MakeLinks(*this);
+            //interfacePtr->MakeLinks(*this);
             m_currentlyLinking = INVALID_ID;
         }
 
