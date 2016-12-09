@@ -42,7 +42,7 @@ namespace minmod
              *
              * Inserts the component variation into the static <Factory>.
              */
-            ScopedRegistrant(Factory& factory, const Id id, const Name& name, Func func);
+            ScopedRegistrant(Factory& factory, const Id id, const Name& name, Func&& func);
 
             /* Destructor.
              *

@@ -215,15 +215,5 @@ namespace minmod
             }
             return *(it->second.get());
         }
-
-        void Manager::SetReady(Id componentId)
-        {
-            TRACE(componentId);
-        }
-
-        void Manager::SetNotReady(Id componentId)
-        {
-            TRACE(componentId);
-        }
     }
 }

@@ -8,7 +8,7 @@ namespace minmod
 {
     namespace component
     {
-        ScopedRegistrant::ScopedRegistrant(Factory& factory, const Id id, const Name& name, Func func) : m_factory(factory), m_id(id), m_name(name)
+        ScopedRegistrant::ScopedRegistrant(Factory& factory, const Id id, const Name& name, Func&& func) : m_factory(factory), m_id(id), m_name(name)
         {
             m_factory.Insert(m_id, m_name, [func = std::move(func), this]()
                                           {

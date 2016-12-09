@@ -142,7 +142,7 @@ namespace minmod
              *
              * Uses <Get> internally.
              */
-            void Do(std::function<void(T&)> func) const;
+            void Do(std::function<void(T&)>&& func) const;
 
         private: //- Private members.
 

@@ -6,7 +6,7 @@ namespace minmod
 {
     namespace component
     {
-        void Factory::Insert(const Id id, const Name& name, CreateFunction createFunc)
+        void Factory::Insert(const Id id, const Name& name, CreateFunction&& createFunc)
         {
             TRACE("Component: " << id << ", " << name);
             m_stringMap.insert(std::make_pair(name, id));

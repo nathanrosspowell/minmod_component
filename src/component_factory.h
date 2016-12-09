@@ -88,7 +88,7 @@ namespace minmod
              * This is used internally by the templated version of <Insert>.
              * Unlike that version, this one has no dependecies on static functions.
              */
-            void Insert(Id id, const Name& name, CreateFunction createFunc);
+            void Insert(Id id, const Name& name, CreateFunction&& createFunc);
 
             /* Templated removal of a component.
              *

@@ -124,8 +124,6 @@ namespace minmod
 
         private: //- Private functions.
 
-            friend class Linker;
-
             /* Insert of one or many components.
              *
              * This is how to add components via a <ComponentMap> r-value.
@@ -136,10 +134,6 @@ namespace minmod
             OwnerId Insert(const OwnerId ownerId, ComponentMap&& componentMap);
 
             Entry& GetOrCreateEntry(OwnerId ownerId);
-
-            void SetReady(Id componentId);
-
-            void SetNotReady(Id componentId);
 
         private: //- Private members.
 

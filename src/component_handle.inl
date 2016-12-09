@@ -56,7 +56,7 @@ namespace minmod
             return std::move(Adapter(static_cast<T*>(ptr)));
         }
 
-        template <class T> void Handle<T>::Do(std::function<void(T&)> func) const
+        template <class T> void Handle<T>::Do(std::function<void(T&)>&& func) const
         {
             if (auto adapter = Get())
             {
